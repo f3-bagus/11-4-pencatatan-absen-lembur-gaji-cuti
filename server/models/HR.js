@@ -13,7 +13,9 @@ const HRSchema = new mongoose.Schema({
     },
     email: String,
     phone: String,
-    profile_photo: String
+    profile_photo: String,
+    created_at: Date,
+    updated_at: Date
 }, {
     collection: 'tbl_hrs' 
 });

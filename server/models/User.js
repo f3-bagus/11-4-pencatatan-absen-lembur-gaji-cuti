@@ -9,15 +9,24 @@ const UserSchema = new mongoose.Schema({
     password: String,
     role: { 
         type: String, 
-        enum: ["admin", "employee", "hr"] ,
+        enum: ["admin", "employee", "hr"],
         default: "employee"
     },
-    verified: { 
-        type: Boolean, 
-        default: false 
+    created_at: { 
+        type: Date, 
+        default: Date.now 
+    },
+    updated_at: { 
+        type: Date, 
+        default: Date.now 
     }
 }, { 
     collection: 'tbl_users' 
+});
+
+UserSchema.pre('save', function(next) {
+    this.updated_at = Date.now();
+    next();
 });
 
 const UserModel = mongoose.model("User", UserSchema);

@@ -17,10 +17,21 @@ const SalarySchema = new mongoose.Schema({
     deduction_sick: Number,
     deduction_absent: Number,
     total_salary: Number,
-    created_at: Date,
-    updated_at: Date
+    created_at: { 
+        type: Date, 
+        default: Date.now 
+    },
+    updated_at: { 
+        type: Date, 
+        default: Date.now 
+    }
 }, { 
     collection: 'tbl_salarys' 
+});
+
+SalarySchema.pre('save', function(next) {
+    this.updated_at = Date.now();
+    next();
 });
 
 const SalaryModel = mongoose.model("Salary", SalarySchema);

@@ -22,9 +22,22 @@ const EmployeeSchema = new mongoose.Schema({
         type: String, 
         enum: ["IT", "Sales", "Marketing", "Accounting"]
     },
-    profile_photo: String
+    profile_photo: String,
+    created_at: { 
+        type: Date, 
+        default: Date.now 
+    },
+    updated_at: { 
+        type: Date, 
+        default: Date.now 
+    }
 }, { 
     collection: 'tbl_employees' 
+});
+
+EmployeeSchema.pre('save', function(next) {
+    this.updated_at = Date.now();
+    next();
 });
 
 const EmployeeModel = mongoose.model("Employee", EmployeeSchema);

@@ -22,9 +22,22 @@ const LeaveSchema = new mongoose.Schema({
         type: String, 
         enum: ["approved", "rejected", "pending"],
         default: "pending" 
+    },
+    created_at: { 
+        type: Date, 
+        default: Date.now 
+    },
+    updated_at: { 
+        type: Date, 
+        default: Date.now 
     }
 }, { 
     collection: 'tbl_leaves' 
+});
+
+LeaveSchema.pre('save', function(next) {
+    this.updated_at = Date.now();
+    next();
 });
 
 const LeaveModel = mongoose.model("Leave", LeaveSchema);

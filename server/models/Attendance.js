@@ -1,21 +1,25 @@
 const mongoose = require('mongoose');
 
 const AttendanceSchema = new mongoose.Schema({    
-    id: { 
-        type: String, 
-        unique: true, 
-        required: true 
+    employee: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Employee'
     },
     nip: { 
         type: String, 
         required: true 
     },
-    date: date,
-    check_in: time,
-    check_out: time,
+    clock_in: {
+        type: Date,
+        default: null
+    },
+    clock_out: {
+        type: Date,
+        default: null
+    },
     status_attendance: { 
         type: String, 
-        enum: ["present", "late", "absent", "sick", "leave", "permission", "early", "late_and_early"],
+        enum: ["present", "late", "absent", "sick", "leave", "permission"],
     },
     created_at: { 
         type: Date, 

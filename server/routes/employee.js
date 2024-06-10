@@ -8,7 +8,11 @@ const employeeController = require('../controllers/EmployeeController');
 
 //* Routes *//
 /* : All Employee Data */
-router.get('/employee', employeeController.getEmployees); 
+
+/* Employee: Clock-In */
+router.post('/clock-in/:nip', employeeController.clockIn);
+
+/* Employee: Clock-Out */
 
 
 module.exports = router;

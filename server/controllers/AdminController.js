@@ -1,32 +1,97 @@
 const bcrypt = require('bcrypt');
 const UserModel = require('../models/User');
+const EmployeeModel = require('../models/Employee');
 
-// Admin: Create User Account
-const createUser = async (req, res) => {
-    const { nip, password, role } = req.body;
+// Admin: Create Employee Account
+const createEmployee = async (req, res) => {
+    const { nip, name, gender, email, phone, type, division } = req.body;
 
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash('user12345', 10);
 
         const newUser = new UserModel({
             nip,
             password: hashedPassword,
-            role
-        });
-        
-        await newUser.save();
-        res.status(201).json({ 
-            message: 'User created successfully', user: newUser 
+            role: 'employee'
         });
 
-    } catch (error) {
+        await newUser.save();
+
+        const newEmployee = new EmployeeModel({
+            nip,
+            name,
+            gender,
+            email,
+            phone,
+            type,
+            division
+        });
+
+        
+        await newEmployee.validate();
+        await newEmployee.save();
+
+        res.status(201).json({ 
+            message: 'Employee created successfully',
+            user: {
+                nip: newUser.nip,
+                role: newUser.role
+            },
+            employee: newEmployee 
+        });
+
+    } catch (error) {        
+        await UserModel.findOneAndDelete({ nip })
+        
         res.status(500).json({ 
-          message: error.message 
+            message: error.message 
         });
     }
 };
 
-// Admin: Reset User Password
+// Admin: Create HR Account
+const createHR = async (req, res) => {
+    const { nip, name, gender, email, phone } = req.body;
+
+    try {
+        const hashedPassword = await bcrypt.hash('user12345', 10);
+
+        const newUser = new UserModel({
+            nip,
+            password: hashedPassword,
+            role: 'hr'
+        });
+
+        await newUser.save();
+
+        const newHR = new HRModel({
+            nip,
+            name,
+            gender,
+            email,
+            phone
+        });
+
+        await newHR.validate();
+        await newHR.save();
+
+        res.status(201).json({ 
+            message: 'HR created successfully', 
+            user: {
+                nip: newUser.nip,
+                role: newUser.role
+            }, 
+            hr: newHR 
+        });
+
+    } catch (error) {
+        await UserModel.findOneAndDelete({ nip });
+
+        res.status(500).json({ message: error.message });
+    }
+};
+
+/* Admin: Reset User Password */
 const resetUserPassword = async (req, res) => {
     const { nip } = req.params;
     const defaultPassword = 'user12345';
@@ -49,7 +114,25 @@ const resetUserPassword = async (req, res) => {
     }
 };
 
+/* Admin: Delete User */
+const deleteUser = async (req, res) => {
+    const { nip } = req.params;
+
+    try {
+        const user = await UserModel.findOneAndDelete({ nip });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
-    createUser,
-    resetUserPassword
+    createEmployee,
+    createHR,
+    resetUserPassword,
+    deleteUser
 };

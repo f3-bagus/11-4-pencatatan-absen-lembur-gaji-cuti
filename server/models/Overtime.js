@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
 
 const OvertimeSchema = new mongoose.Schema({    
-    id: { 
+    employee: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Employee'
+    },
+    nip: { 
         type: String, 
-        unique: true, 
         required: true 
     },
-    nip: String,
     division: { 
         type: String, 
         enum: ["IT", "Sales", "Marketing", "Accounting"]

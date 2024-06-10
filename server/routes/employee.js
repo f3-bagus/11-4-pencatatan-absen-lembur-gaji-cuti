@@ -9,9 +9,6 @@ const employeeController = require('../controllers/EmployeeController');
 //* Routes *//
 /* : All Employee Data */
 
-/* Employee: Clock-In */
-router.post('/clock-in/:nip', employeeController.clockIn);
-
 /* Employee: Clock-Out */
 
 

@@ -6,6 +6,9 @@ const auth = require('../controllers/AuthController');
 const adminController = require('../controllers/AdminController');
 
 //* Routes *//
+/* authorize */
+router.use(auth.authorizeRole('admin'));
+
 /* Admin: create employee account */
 router.post('/create-employee', adminController.createEmployee);
 

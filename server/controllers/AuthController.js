@@ -43,13 +43,13 @@ const authenticateToken = async (req, res, next) => {
 };
 
 // Authorization Role
-const authorizeRole = async (req, res, next) => {
+const authorizeRole = (requiredRole) => async (req, res, next) => {
     try {
         const { nip } = req.user;
     
         const user = await UserModel.findOne({ nip });
     
-        if (!user || !user.role || !allowedRoles.includes(user.role)) {
+        if (!user || !user.role || user.role !== requiredRole) {
             return res.status(403).json({ 
                 message: 'Not Permitted' 
             });

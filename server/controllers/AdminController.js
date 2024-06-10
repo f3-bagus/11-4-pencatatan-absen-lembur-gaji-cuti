@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const UserModel = require('../models/User');
 const EmployeeModel = require('../models/Employee');
+const HRModel = require('../models/HR');
 
 // Admin: Create Employee Account
 const createEmployee = async (req, res) => {

@@ -10,52 +10,57 @@ import {
 import {
   MdOutlineSpaceDashboard,
 } from "react-icons/md";
+import { AiOutlineDollarCircle } from "react-icons/ai";
+import { LuMonitorCheck } from "react-icons/lu";
+import { FaRegClock } from "react-icons/fa";
+import { PiAirplaneTilt } from "react-icons/pi";
+import { TbReportAnalytics } from "react-icons/tb";
 
 const items = [
   {
     type: "link",
-    label: "Hr",
+    label: "Dashboard",
     icon: MdOutlineSpaceDashboard,
-    path: "/",
+    path: "/hr/dashboard",
   },
 
   {
     type: "header",
-    label: "Hr",
+    label: "Employee",
   },
   {
     type: "link",
-    label: "Hr",
-    icon: MdOutlineSpaceDashboard,
+    label: "Attedance",
+    icon: LuMonitorCheck,
     path: "/",
   },
   {
     type: "link",
-    label: "Hr",
-    icon: MdOutlineSpaceDashboard,
+    label: "Salary",
+    icon: AiOutlineDollarCircle,
     path: "/",
   },
   
   {
     type: "header",
-    label: "Hr",
+    label: "Time Management",
   },
   {
     type: "link",
-    label: "Hr",
-    icon: MdOutlineSpaceDashboard,
+    label: "Overtime",
+    icon: FaRegClock,
     path: "/",
   },
   {
     type: "link",
-    label: "Hr",
-    icon: MdOutlineSpaceDashboard,
+    label: "Leave",
+    icon: PiAirplaneTilt,
     path: "/",
   },
   {
     type: "link",
-    label: "Hr",
-    icon: MdOutlineSpaceDashboard,
+    label: "Report",
+    icon: TbReportAnalytics,
     path: "/",
   },
 ];

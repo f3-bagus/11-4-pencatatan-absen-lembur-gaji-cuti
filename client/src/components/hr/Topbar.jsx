@@ -86,7 +86,9 @@ export default function Topbar() {
                   <br />
                   <Center flexDirection="column">
                     <Text>username</Text>
-                    <Text color="gray.400" fontSize="sm">Employee</Text>
+                    <Text color="gray.400" fontSize="sm">
+                      Employee
+                    </Text>
                   </Center>
                   <MenuDivider />
                   <MenuItem
@@ -127,11 +129,14 @@ export default function Topbar() {
               fontSize="2xl"
               color={colorMode === "light" ? "green.500" : "green.200"}
             >
-              <Text as="span" fontStyle="italic">A</Text>bsentee
+              <Text as="span" fontStyle="italic">
+                A
+              </Text>
+              bsentee
             </Heading>
           </DrawerHeader>
           <DrawerBody>
-            <SidebarNav collapse={false}/>
+            <SidebarNav collapse={false} />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

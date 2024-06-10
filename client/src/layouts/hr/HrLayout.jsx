@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Flex, HStack, Button, Text, useColorModeValue } from "@chakra-ui/react";
+import { Flex, HStack, Button, useColorModeValue } from "@chakra-ui/react";
 import { MdMenu } from "react-icons/md";
 import { Sidebar } from "../../components/hr/Sidebar";
 import Topbar from "../../components/hr/Topbar";
@@ -37,11 +37,11 @@ const HrLayout = ({children}) => {
             padding={4}
             borderRadius="2xl"
           >
-            <Button
+            {/* <Button
               display={{ base: "none", md: "block" }}
               aria-label="Menu Collapse"
               onClick={() => setCollapse(!collapse)}
-            ><MdMenu /></Button>
+            ><MdMenu /></Button> */}
             <Topbar/>
           </Flex>
   
@@ -50,16 +50,12 @@ const HrLayout = ({children}) => {
             as="main"
             w="full"
             h="full"
-            bg={useColorModeValue("white", "green.800")}
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
+            flexDirection="row"
+            bg={useColorModeValue("gray.100", "green.900")}
             borderRadius="2xl"
             overflow="scroll"
           >
-            <Text fontSize={100} color="gray.500">
-              {children}
-            </Text>
+            {children}
           </Flex>
   
         </Flex>

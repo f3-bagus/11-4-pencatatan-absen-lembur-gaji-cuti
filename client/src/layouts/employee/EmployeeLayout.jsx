@@ -37,11 +37,11 @@ const EmployeeLayout = ({children}) => {
             padding={4}
             borderRadius="2xl"
           >
-            <Button
+            {/* <Button
               display={{ base: "none", md: "block" }}
               aria-label="Menu Collapse"
               onClick={() => setCollapse(!collapse)}
-            ><MdMenu /></Button>
+            ><MdMenu /></Button> */}
             <Topbar/>
           </Flex>
   
@@ -50,7 +50,7 @@ const EmployeeLayout = ({children}) => {
             as="main"
             w="full"
             h="full"
-            bg={useColorModeValue("white", "green.800")}
+            bg={useColorModeValue("gray.100", "green.900")}
             flexDirection="column"
             alignItems="center"
             justifyContent="center"

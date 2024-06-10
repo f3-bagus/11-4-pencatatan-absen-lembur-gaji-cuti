@@ -12,7 +12,6 @@ import {
   FormErrorMessage,
   Stack,
   Image,
-  useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
@@ -26,7 +25,7 @@ const LoginPage = () => {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const initialValues = {
-    email: "",
+    nip: "",
     password: "",
   };
 
@@ -57,7 +56,7 @@ const LoginPage = () => {
             <Text color={"gray.500"}>Sign in to your account</Text>
           </Flex>
           {success ? (
-            <h1>you are login</h1>
+            <h1>You are logged in</h1>
           ) : (
             <Formik
               initialValues={initialValues}
@@ -66,28 +65,28 @@ const LoginPage = () => {
             >
               {({ isSubmitting, isValid }) => (
                 <Form>
-                  <Field name="email">
+                  <Field name="nip">
                     {({ field, form }) => (
                       <FormControl
-                        isInvalid={form.errors.email && form.touched.email}
+                        isInvalid={form.errors.nip && form.touched.nip}
                       >
-                        <FormLabel htmlFor="email">
-                          Email
+                        <FormLabel htmlFor="nip">
+                          NIP
                           <Text as="span" color="red.500">
                             *
                           </Text>
                         </FormLabel>
                         <Input
                           {...field}
-                          id="email"
-                          type="email"
+                          id="nip"
+                          type="text"
                           focusBorderColor="green.500"
                           _autofill={{
                             boxShadow: "0 0 0 30px #9AE6B4 inset !important",
                             textFillColor: "black !important",
                           }}
                         />
-                        <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                        <FormErrorMessage>{form.errors.nip}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>

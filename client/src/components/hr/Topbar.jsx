@@ -1,4 +1,5 @@
 import React from "react";
+import Swal from 'sweetalert2';
 import {
   Box,
   Flex,
@@ -104,6 +105,27 @@ export default function Topbar() {
                     bg={useColorModeValue("white", "green.900")}
                     _hover={{
                       bg: useColorModeValue("gray.100", "green.600"),
+                    }}
+                    onClick={() => {
+                      Swal.fire({
+                        title: "Logout",
+                        text: "Are you sure you want to logout?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, logout!",
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          // Tambahkan aksi logout di sini
+                          // Misalnya, melakukan redirect atau menjalankan fungsi logout
+                          Swal.fire(
+                            "Logged Out!",
+                            "You have been logged out.",
+                            "success"
+                          );
+                        }
+                      });
                     }}
                   >
                     Logout

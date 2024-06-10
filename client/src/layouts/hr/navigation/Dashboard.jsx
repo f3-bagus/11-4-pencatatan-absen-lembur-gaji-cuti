@@ -128,7 +128,7 @@ const Dashboard = () => {
             p="3"
           >
             <Stack direction="row" justifyContent="space-between">
-              <Heading as="h1" size="sm" mb={6} mt={3}>
+              <Heading as="h1" size="sm" mb={6}>
                 Overtime Overview
               </Heading>
               {/* <Menu>
@@ -159,7 +159,7 @@ const Dashboard = () => {
             p="3"
           >
             <Stack direction="row" justifyContent="space-between">
-              <Heading as="h1" size="sm" mb={6} mt={3}>
+              <Heading as="h1" size="sm" mb={6}>
                 Leave Overview
               </Heading>
               {/* <Menu>

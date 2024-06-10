@@ -10,8 +10,11 @@ create hr account : /api/admin/create-hr
 
 3. Hr:
 create-overtime : http://localhost:3000/api/hr/overtime
+acc-leave : http://localhost:3000/api/leave/approve/:id
+reject-leave : http://localhost:3000/api/leave/reject/:id
 
 4. Employee:
 clock-in : http://localhost:3000/api/attendance/clock-in/:nip
 accept-overtime : http://localhost:3000/api/employee/accept-overtime
+pengajuan-leave : 
 

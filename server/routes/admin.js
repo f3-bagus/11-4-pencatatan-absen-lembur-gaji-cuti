@@ -13,9 +13,7 @@ router.post('/create-user', adminController.createUser);
 router.post('/reset-password/:nip', adminController.resetUserPassword);
 
 /* Admin: Edit user */
-router.put('/:nip', userController.editUser);
 
 /* Admin: Delete user */
-router.delete('/:userId', userController.deleteUser);
 
 module.exports = router;

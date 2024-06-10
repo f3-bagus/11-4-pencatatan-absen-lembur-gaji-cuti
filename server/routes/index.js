@@ -9,6 +9,9 @@ router.use('/auth', require('./auth'));
 /* Protected Routes */
 router.use(auth.authenticateToken);
 router.use('/users', require('./users'));
+router.use('/admin', require('./admin'));
+router.use('/hr', require('./hr'));
+router.use('/employee', require('./employee'));
 router.use('/attendance', require('./attendance'));
 router.use('/overtime', require('./overtime'));
 router.use('/salary', require('./salary'));

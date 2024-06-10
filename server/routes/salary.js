@@ -7,6 +7,6 @@ const salaryController = require('../controllers/SalaryController');
 
 //* Routes *//
 /* Admin || Hr : All Employee Salary Data */
-router.get('/salary', authenticate.authenticateToken, salaryController.getSalarys);
+router.get('/salary', salaryController.getSalarys);
 
 module.exports = router;

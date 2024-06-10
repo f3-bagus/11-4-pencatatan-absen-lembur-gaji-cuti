@@ -8,7 +8,7 @@ const employeeController = require('../controllers/EmployeeController');
 
 //* Routes *//
 /* : All Employee Data */
-router.get('/employee', auth.authenticateToken, employeeController.getEmployees); 
+router.get('/employee', employeeController.getEmployees); 
 
 
 module.exports = router;

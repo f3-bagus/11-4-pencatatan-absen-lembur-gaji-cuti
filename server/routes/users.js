@@ -7,9 +7,6 @@ const userController = require('../controllers/UserController');
 const adminController = require('../controllers/AdminController');
 
 //* Routes *//
-
-
 /* All User: Update profile */
-router.put('/profile', userController.updateProfile);
 
 module.exports = router;

@@ -1,0 +1,9 @@
+api:
+1. All User:
+login : /api/auth/login
+logout : /api/auth/logout
+
+2. Admin:
+reset password : /api/admin/reset-password/:nip
+create account : /api/admin/create-user
+

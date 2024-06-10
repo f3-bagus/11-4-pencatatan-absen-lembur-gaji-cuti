@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Import Routes
 const routes = require('./routes');
-const routes = require('./routes');
+
 app.use('/api/', routes);
 app.use('/api/users', usersRouter);
 app.use('/api/hr', hrRoutes);

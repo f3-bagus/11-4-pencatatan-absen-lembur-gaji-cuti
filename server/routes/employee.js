@@ -17,7 +17,7 @@ router.post('/clock-in/:nip', employeeController.clockIn);
 /* Employee: Clock-Out */
 
 //employee accept overtime
-router.get('/employees', getEmployees);
-router.post('/employees/accept-overtime', acceptOvertime);
+router.get('/employee', getEmployees);
+router.post('/accept-overtime', acceptOvertime);
 
 module.exports = router;

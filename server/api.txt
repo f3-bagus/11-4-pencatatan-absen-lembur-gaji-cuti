@@ -8,5 +8,10 @@ reset password : /api/admin/reset-password/:nip
 create employee account : /api/admin/create-employee
 create hr account : /api/admin/create-hr
 
-2. Employee:
+3. Hr:
+create-overtime : http://localhost:3000/api/hr/overtime
+
+4. Employee:
 clock-in : http://localhost:3000/api/attendance/clock-in/:nip
+accept-overtime : http://localhost:3000/api/employee/accept-overtime
+

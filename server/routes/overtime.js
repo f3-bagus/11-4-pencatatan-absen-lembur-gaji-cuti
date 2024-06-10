@@ -10,6 +10,6 @@ const authenticate = require('../controllers/AuthController');
 
 //* Routes *//
 router.get('/overtime', authenticate.authenticateToken, overtimeController.getOvertimes);
-router.get('/overtimes', getOvertimes);
+router.get('/overtime', getOvertimes);
 
 module.exports = router;

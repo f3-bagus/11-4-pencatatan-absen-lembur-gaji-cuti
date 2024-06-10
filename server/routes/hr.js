@@ -7,6 +7,6 @@ const hrController = require('../controllers/HRController');
 
 //* Routes *//
 /* : All HR Data */
-router.get('/hr', auth.authenticateToken, hrController.getAllHR);
+router.get('/hr', hrController.getAllHR);
 
 module.exports = router;

@@ -2,14 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 //* Import Controller *//
-const userController = require('../controllers/UserController');
-const employeeController = require('../controllers/EmployeeController');
-const hrController = require('../controllers/HRController');
-const adminController = require('../controllers/AdminController');
-const authenticate = require('../middleware/authenticate');
+const auth = require('../controllers/AuthController');
 
 //* Routes *//
 router.use('/auth', require('./auth'));
+/* Protected Routes */
+router.use(auth.authenticateToken);
 router.use('/users', require('./users'));
 router.use('/attendance', require('./attendance'));
 router.use('/overtime', require('./overtime'));

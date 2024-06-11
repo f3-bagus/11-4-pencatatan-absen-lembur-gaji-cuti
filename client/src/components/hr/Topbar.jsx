@@ -1,5 +1,5 @@
 import React from "react";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import {
   Box,
   Flex,
@@ -27,11 +27,13 @@ import {
 import { FaMoon, FaSun } from "react-icons/fa";
 import { MdMenu } from "react-icons/md";
 import { SidebarNav } from "./SidebarNav";
+import { useNavigate } from "react-router-dom";
 
 export default function Topbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -93,9 +95,13 @@ export default function Topbar() {
                   </Center>
                   <MenuDivider />
                   <MenuItem
+                    as="button"
                     bg={useColorModeValue("white", "green.900")}
                     _hover={{
                       bg: useColorModeValue("gray.100", "green.600"),
+                    }}
+                    onClick={() => {
+                      navigate("/hr/profile");
                     }}
                   >
                     Profile

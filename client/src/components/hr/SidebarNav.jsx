@@ -1,3 +1,5 @@
+import React from "react";
+import { useLocation } from "react-router-dom";
 import {
   ListIcon,
   Heading,
@@ -7,9 +9,7 @@ import {
   List,
   ListItem,
 } from "@chakra-ui/react";
-import {
-  MdOutlineSpaceDashboard,
-} from "react-icons/md";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { LuMonitorCheck } from "react-icons/lu";
 import { FaRegClock } from "react-icons/fa";
@@ -23,24 +23,22 @@ const items = [
     icon: MdOutlineSpaceDashboard,
     path: "/hr/dashboard",
   },
-
   {
     type: "header",
     label: "Employee",
   },
   {
     type: "link",
-    label: "Attedance",
+    label: "Attendance",
     icon: LuMonitorCheck,
-    path: "/",
+    path: "/hr/attendance",
   },
   {
     type: "link",
     label: "Salary",
     icon: AiOutlineDollarCircle,
-    path: "/",
+    path: "/hr/salary",
   },
-  
   {
     type: "header",
     label: "Time Management",
@@ -49,24 +47,26 @@ const items = [
     type: "link",
     label: "Overtime",
     icon: FaRegClock,
-    path: "/",
+    path: "/hr/overtime",
   },
   {
     type: "link",
     label: "Leave",
     icon: PiAirplaneTilt,
-    path: "/",
+    path: "/hr/leave",
   },
   {
     type: "link",
     label: "Report",
     icon: TbReportAnalytics,
-    path: "/",
+    path: "/hr/report",
   },
 ];
 
 const NavItem = ({ item, collapse }) => {
+  const location = useLocation();
   const { label, icon, path, type } = item;
+  const isActive = location.pathname === path;
 
   if (type === "link") {
     return (
@@ -87,6 +87,7 @@ const NavItem = ({ item, collapse }) => {
           justifyContent={collapse ? "center" : ""}
           borderRadius={5}
           _hover={{ textDecoration: "none", color: "green.500" }}
+          color={isActive ? "green.500" : ""}
         >
           <ListIcon as={icon} fontSize={22} m="0" />
           {!collapse && <Text>{label}</Text>}
@@ -113,7 +114,7 @@ const NavItem = ({ item, collapse }) => {
 
 export const SidebarNav = ({ collapse }) => {
   return (
-    <List w="full" mt={{ base: 0, md: 8}}>
+    <List w="full" mt={{ base: 0, md: 8 }}>
       {items.map((item, index) => (
         <ListItem key={index}>
           <NavItem item={item} collapse={collapse} />

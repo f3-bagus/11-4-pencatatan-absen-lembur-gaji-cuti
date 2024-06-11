@@ -35,7 +35,7 @@ const Dashboard = () => {
             w="full"
             h="100px"
             bg={useColorModeValue("white", "green.800")}
-            borderRadius="xl"
+            borderRadius="2xl"
             shadow="lg"
             p="3"
           >
@@ -61,7 +61,7 @@ const Dashboard = () => {
             w="full"
             h="100px"
             bg={useColorModeValue("white", "green.800")}
-            borderRadius="xl"
+            borderRadius="2xl"
             shadow="lg"
             p="3"
           >
@@ -87,7 +87,7 @@ const Dashboard = () => {
             w="full"
             h="100px"
             bg={useColorModeValue("white", "green.800")}
-            borderRadius="xl"
+            borderRadius="2xl"
             shadow="lg"
             p="3"
           >
@@ -123,7 +123,7 @@ const Dashboard = () => {
             w="full"
             h="auto"
             bg={useColorModeValue("white", "green.800")}
-            borderRadius="xl"
+            borderRadius="2xl"
             shadow="lg"
             p="3"
           >
@@ -154,7 +154,7 @@ const Dashboard = () => {
             w="full"
             h="auto"
             bg={useColorModeValue("white", "green.800")}
-            borderRadius="xl"
+            borderRadius="2xl"
             shadow="lg"
             p="3"
           >

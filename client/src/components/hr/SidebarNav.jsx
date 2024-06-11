@@ -8,6 +8,7 @@ import {
   Text,
   List,
   ListItem,
+  useColorModeValue
 } from "@chakra-ui/react";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { AiOutlineDollarCircle } from "react-icons/ai";
@@ -86,8 +87,10 @@ const NavItem = ({ item, collapse }) => {
           fontWeight="medium"
           justifyContent={collapse ? "center" : ""}
           borderRadius={5}
-          _hover={{ textDecoration: "none", color: "green.500" }}
-          color={isActive ? "green.500" : ""}
+          p="1"
+          _hover={{ textDecoration: "none", color: "green.300" }}
+          bg={isActive ? useColorModeValue("green.500", "green.900") : ""}
+          color={isActive ? "white" : ""}
         >
           <ListIcon as={icon} fontSize={22} m="0" />
           {!collapse && <Text>{label}</Text>}

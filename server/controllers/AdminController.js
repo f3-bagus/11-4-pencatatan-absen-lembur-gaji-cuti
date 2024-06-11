@@ -3,7 +3,7 @@ const UserModel = require('../models/User');
 const EmployeeModel = require('../models/Employee');
 const HRModel = require('../models/HR');
 
-// Admin: Create Employee Account
+/* Admin: Create Employee Account */
 const createEmployee = async (req, res) => {
     const { nip, name, gender, email, phone, type, division } = req.body;
 
@@ -50,7 +50,7 @@ const createEmployee = async (req, res) => {
     }
 };
 
-// Admin: Create HR Account
+/* Admin: Create HR Account */
 const createHR = async (req, res) => {
     const { nip, name, gender, email, phone } = req.body;
 
@@ -88,7 +88,9 @@ const createHR = async (req, res) => {
     } catch (error) {
         await UserModel.findOneAndDelete({ nip });
 
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ 
+            message: error.message 
+        });
     }
 };
 
@@ -99,8 +101,10 @@ const resetUserPassword = async (req, res) => {
 
     try {
         const user = await UserModel.findOne({ nip });
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+        if (!user || user.archived !== 0) {
+            return res.status(404).json({ 
+                message: 'User not found' 
+            });
         }
 
         const hashedPassword = await bcrypt.hash(defaultPassword, 10);
@@ -111,7 +115,9 @@ const resetUserPassword = async (req, res) => {
             message: 'User password reset to default successfully' 
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ 
+            message: error.message 
+        });
     }
 };
 
@@ -120,14 +126,180 @@ const deleteUser = async (req, res) => {
     const { nip } = req.params;
 
     try {
-        const user = await UserModel.findOneAndDelete({ nip });
+        const user = await UserModel.findOneAndUpdate(
+            { nip },
+            { archived: 1 },
+            { new: true }
+        );
+        
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ 
+                message: 'User not found' 
+            });
         }
 
-        res.json({ message: 'User deleted successfully' });
+        res.json({ 
+            message: 'User deleted successfully' 
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ 
+            message: error.message 
+        });
+    }
+};
+
+/* Admin : Get all user data */
+const getAllUser = async (req, res) => {
+    try {
+        const hrData = await HRModel.aggregate([
+            {
+                $lookup: {
+                    from: 'tbl_users',
+                    localField: 'nip',
+                    foreignField: 'nip',
+                    as: 'user'
+                }
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $match: {
+                    'user.archived': { $ne: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    nip: '$nip',
+                    name: '$name',
+                    role: '$user.role'
+                }
+            }
+        ]);
+
+        const employeeData = await EmployeeModel.aggregate([
+            {
+                $lookup: {
+                    from: 'tbl_users',
+                    localField: 'nip',
+                    foreignField: 'nip',
+                    as: 'user'
+                }
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $match: {
+                    'user.archived': { $ne: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    nip: '$nip',
+                    name: '$name',
+                    role: '$user.role'
+                }
+            }
+        ]);
+
+        const allUser = hrData.concat(employeeData);
+
+        if (allUser.length === 0) {
+            return res.status(404).json({ 
+                message: 'User not found' 
+            });
+        }
+
+        res.status(200).json({
+            message: 'Success',
+            data: allUser
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            message: error.message 
+        });
+    }
+};
+
+const getUser = async (req, res) => {
+    const { nip } = req.params;
+
+    try {
+        const hrData = await HRModel.aggregate([
+            {
+                $lookup: {
+                    from: 'tbl_users',
+                    localField: 'nip',
+                    foreignField: 'nip',
+                    as: 'user'
+                }
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $match: {
+                    'user.nip': nip,
+                    'user.archived': { $ne: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    nip: '$nip',
+                    name: '$name',
+                    role: '$user.role'
+                }
+            }
+        ]);
+
+        const employeeData = await EmployeeModel.aggregate([
+            {
+                $lookup: {
+                    from: 'tbl_users',
+                    localField: 'nip',
+                    foreignField: 'nip',
+                    as: 'user'
+                }
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $match: {
+                    'user.nip': nip,
+                    'user.archived': { $ne: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    nip: '$nip',
+                    name: '$name',
+                    role: '$user.role'
+                }
+            }
+        ]);
+
+        const userData = hrData.concat(employeeData);
+
+        if (userData.length === 0) {
+            return res.status(404).json({ 
+                message: 'User not found' 
+            });
+        }
+
+        res.status(200).json({
+            message: 'Success',
+            data: userData[0]
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            message: error.message 
+        });
     }
 };
 
@@ -135,5 +307,7 @@ module.exports = {
     createEmployee,
     createHR,
     resetUserPassword,
-    deleteUser
+    deleteUser,
+    getAllUser,
+    getUser
 };

@@ -2,7 +2,7 @@ const EmployeeModel = require('../models/Employee');
 const AttendanceModel = require('../models/Attendance');
 const OvertimeModel = require('../models/Overtime');
 
-/* Employee : Clock-In */
+/* Employee : clock In */
 const clockIn = async (req, res) => {
     const { nip } = req.params;
 
@@ -10,23 +10,41 @@ const clockIn = async (req, res) => {
         const employee = await EmployeeModel.findOne({ nip });
         if (!employee) {
             return res.status(404).json({ 
-              message: 'Employee not found' 
+              message: 'Data not found' 
             });
         }
 
         const now = new Date();
         const clockIn = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
+        
+        if (now.getHours() < 6) {
+          return res.status(400).json({ 
+            message: `It is not yet time to clock in today. Date : ${now}`
+          });
+        }
 
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+        const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+
+        const attendanceToday = await AttendanceModel.findOne({ 
+            nip, 
+            clock_in: { $gte: startOfToday, $lte: endOfToday } 
+        }).sort({ clock_in: -1 });
+        if (!attendanceToday) {
+          res.status(400).json({
+              message: "You have already clocked in"
+          });
+        }
+        
         const attendance = new AttendanceModel({ 
-          nip, 
-          date: now, 
+          nip,
           clock_in: clockIn 
         });
 
         if (now.getHours() < 8) {
-            attendance.status_attendance = 'present';
+            attendance.status_attendance = 'clock in ok';
         } else {
-            attendance.status_attendance = 'late';
+            attendance.status_attendance = 'clock in late';
         }
 
         await attendance.save();
@@ -35,7 +53,7 @@ const clockIn = async (req, res) => {
         await employee.save();
 
         res.status(200).json({ 
-          message: 'Clock-in successful', 
+          message: 'clock in successful', 
           clockIn: attendance.clock_in, 
           statusAttendance: attendance.
           status_attendance 
@@ -47,34 +65,64 @@ const clockIn = async (req, res) => {
     }
 };
 
-/* Employee: Clock-Out */
+/* Employee: clock Out */
 const clockOut = async (req, res) => {
   const { nip } = req.params;
 
   try {
-      const employee = await EmployeeModel.findOne({ nip });
-      if (!employee) {
-          return res.status(404).json({ message: 'Employee not found' });
-      }
+    const employee = await EmployeeModel.findOne({ nip });
+    if (!employee) {
+        return res.status(404).json({ 
+          message: 'Employee not found' 
+        });
+    }
 
-      const lastAttendance = employee.attendances[employee.attendances.length - 1];
-      if (!lastAttendance || lastAttendance.clock_out) {
-          return res.status(400).json({ 
-            message: 'Employee has not clocked in or has already clocked out' 
-          });
-      }
+    const now = new Date();
+    const clockOut = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
 
-      lastAttendance.clock_out = new Date();
-      await lastAttendance.save();
+    const cutoffHour = 16;
+    const cutoffMinute = 30;
+    if (now.getHours() < cutoffHour || (now.getHours() === cutoffHour && now.getMinutes() < cutoffMinute)) {
+        return res.status(400).json({ 
+          message: `It is not yet time to clock out today. Date : ${now}`
+        });
+    }
+
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+
+    const attendanceToday = await AttendanceModel.findOne({ 
+        nip, 
+        clock_in: { $gte: startOfToday, $lte: endOfToday } 
+    });
+    
+    if (!attendanceToday) {
+        res.status(400).json({
+            message: "You haven't been clock in yet. Please clock in first before clock out!"
+        });
+    } else if (attendanceToday.clock_out) {
+        return res.status(400).json({ 
+            message: 'You have already clocked out'
+        });
+    } else {
+      attendanceToday.clock_out = clockOut;
+      if (attendanceToday.status_attendance === "clock in late"){
+        attendanceToday.status_attendance = 'late';
+      } else {
+        attendanceToday.status_attendance = 'present';
+      }
+      await attendanceToday.save();
 
       res.status(200).json({ 
-        message: 'Clock-out successful', 
-        clockOutTime: lastAttendance.clock_out 
+          message: 'clock out successful', 
+          clockOut: attendanceToday.clock_out,
+          statusAttendance: attendanceToday.status_attendance 
       });
+    }
   } catch (error) {
-      res.status(500).json({ 
+    res.status(500).json({ 
         message: error.message 
-      });
+    });
   }
 };
 

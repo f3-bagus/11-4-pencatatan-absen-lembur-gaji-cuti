@@ -13,14 +13,19 @@ const LeaveSchema = new mongoose.Schema({
     end_date: Date,
     type: { 
         type: String, 
-        enum: ["izin", "sakit", "cuti"],
-        default: "cuti" 
+        enum: ["permit", "sick", "leave"],
+        default: "leave" 
     },
     reason: String,
     status_leave: { 
         type: String, 
         enum: ["approved", "rejected", "pending"],
         default: "pending" 
+    },
+    archived: { 
+        type: Number,
+        enum: [0, 1], 
+        default: 0 
     },
     created_at: { 
         type: Date, 

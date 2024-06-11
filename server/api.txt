@@ -1,20 +1,62 @@
 api:
 1. All User:
+-> GET
+get info user login : /api/users/
+
+-> POST
 login : /api/auth/login
 logout : /api/auth/logout
+reset own password : /api/users/reset-password
+
+-> PUT
+
+-> DELETE
+
+
 
 2. Admin:
-reset password : /api/admin/reset-password/:nip
+-> GET 
+get all user data : /api/users/data
+get all employee attendance data : /api/attendance/data
+get employee attendance data by nip : /api/attendance/data/:nip
+
+-> POST
 create employee account : /api/admin/create-employee
 create hr account : /api/admin/create-hr
+reset password by nip : /api/admin/reset-password/:nip
 
-3. Hr:
-create-overtime : http://localhost:3000/api/hr/overtime
-acc-leave : http://localhost:3000/api/leave/approve/:id
-reject-leave : http://localhost:3000/api/leave/reject/:id
+-> PUT
+
+-> DELETE
+delete user by nip : /api/admin/delete-user/:nip
+
+
+
+3. HR:
+-> GET
+get all employee attendance data : /api/attendance/data
+get employee attendance data by nip : /api/attendance/data/:nip
+
+-> POST
+create-overtime : /api/hr/overtime
+
+-> PUT
+acc-leave : /api/leave/approve/:id
+reject-leave : /api/leave/reject/:id
+
+->DELETE
+
+
 
 4. Employee:
-clock-in : http://localhost:3000/api/attendance/clock-in/:nip
-accept-overtime : http://localhost:3000/api/employee/accept-overtime
+-> GET
+
+-> POST
+clock-in by nip : /api/attendance/clock-in/:nip
+clock-out by nip : /api/attendance/clock-out/:nip
+accept-overtime : /api/employee/accept-overtime
 pengajuan-leave : 
 
+-> PUT
+
+-> DELETE

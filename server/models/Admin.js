@@ -15,9 +15,20 @@ const AdminSchema = new mongoose.Schema({
         type: String, 
         enum: ["Male", "Female"]
     },
-    email: String,
-    phone: String,
+    email: { 
+        type: String, 
+        unique: true, 
+    },
+    phone: { 
+        type: String, 
+        unique: true, 
+    },
     profile_photo: String,
+    archived: { 
+        type: Number,
+        enum: [0, 1],
+        default: 0 
+    },
     created_at: { 
         type: Date, 
         default: Date.now 

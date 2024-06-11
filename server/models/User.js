@@ -12,6 +12,11 @@ const UserSchema = new mongoose.Schema({
         enum: ["admin", "employee", "hr"],
         default: "employee"
     },
+    archived: { 
+        type: Number,
+        enum: [0, 1], 
+        default: 0 
+    },
     created_at: { 
         type: Date, 
         default: Date.now 

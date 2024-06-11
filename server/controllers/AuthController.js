@@ -43,13 +43,13 @@ const authenticateToken = async (req, res, next) => {
 };
 
 // Authorization Role
-const authorizeRole = (requiredRole) => async (req, res, next) => {
+const authorizeRole = (requiredRoles) => async (req, res, next) => {
     try {
         const { nip } = req.user;
     
         const user = await UserModel.findOne({ nip });
     
-        if (!user || !user.role || user.role !== requiredRole) {
+        if (!user || !user.role || !requiredRoles.includes(user.role)) {
             return res.status(403).json({ 
                 message: 'Not Permitted' 
             });
@@ -60,6 +60,31 @@ const authorizeRole = (requiredRole) => async (req, res, next) => {
         res.status(500).json({ 
             message: error.message 
         });
+    }
+};
+
+// Verify Login
+const isLogin = async (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+        try {
+            const token = authHeader.split(' ')[1];
+            jwt.verify(token, secretKey, (err, decoded) => {
+                if (err) {
+                    return next();
+                } else {
+                    return res.status(403).json({ 
+                        message: 'You have already login',
+                        user: decoded
+                    });
+                }
+            });
+        } catch (error) {
+            return next();
+        }
+    } else {
+        return next();
     }
 };
 
@@ -140,5 +165,6 @@ module.exports = {
     authorizeRole,
     login,
     logout,
+    isLogin,
     secretKey
 };

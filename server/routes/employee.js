@@ -8,13 +8,14 @@ const { getEmployees, acceptOvertime } = require('../controllers/EmployeeControl
 const authenticate = require('../controllers/AuthController');
 
 //* Routes *//
-/* : All Employee Data */
-router.get('/employee', authenticate.authenticateToken, employeeController.getEmployees);
+/* Admin & HR : All Employee Data */
+router.get('/employee', authenticate.authenticateToken, auth.authorizeRole(['hr', 'admin']), employeeController.getEmployees);
 
 /* Employee: Clock-In */
-router.post('/clock-in/:nip', employeeController.clockIn);
+router.post('/clock-in/:nip', auth.authorizeRole('employee'), employeeController.clockIn);
 
 /* Employee: Clock-Out */
+
 
 //employee accept overtime
 router.get('/employee', getEmployees);

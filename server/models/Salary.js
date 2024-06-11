@@ -16,6 +16,11 @@ const SalarySchema = new mongoose.Schema({
     deduction_sick: Number,
     deduction_absent: Number,
     total_salary: Number,
+    archived: { 
+        type: Number,
+        enum: [0, 1], 
+        default: 0 
+    },
     created_at: { 
         type: Date, 
         default: Date.now 
@@ -25,7 +30,7 @@ const SalarySchema = new mongoose.Schema({
         default: Date.now 
     }
 }, { 
-    collection: 'tbl_salarys' 
+    collection: 'tbl_salaries' 
 });
 
 SalarySchema.pre('save', function(next) {

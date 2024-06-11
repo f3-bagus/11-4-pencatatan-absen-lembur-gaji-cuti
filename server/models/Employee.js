@@ -15,8 +15,14 @@ const EmployeeSchema = new mongoose.Schema({
         type: String, 
         enum: ["Male", "Female"]
     },
-    email: String,
-    phone: String,
+    email: { 
+        type: String, 
+        unique: true, 
+    },
+    phone: { 
+        type: String, 
+        unique: true, 
+    },
     type: { 
         type: String, 
         enum: ["permanent", "contract", "intern", "part_time"],
@@ -27,6 +33,11 @@ const EmployeeSchema = new mongoose.Schema({
         enum: ["IT", "Sales", "Marketing", "Accounting"]
     },
     profile_photo: String,
+    archived: { 
+        type: Number,
+        enum: [0, 1], 
+        default: 0 
+    },
     created_at: { 
         type: Date, 
         default: Date.now 

@@ -19,6 +19,6 @@ router.post('/create-hr', adminController.createHR);
 router.post('/reset-password/:nip', adminController.resetUserPassword);
 
 /* Admin: Delete user */
-// router.delete('/deleteUser/:nip', deleteUser);
+router.delete('/delete-user/:nip', adminController.deleteUser);
 
 module.exports = router;

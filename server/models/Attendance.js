@@ -19,7 +19,12 @@ const AttendanceSchema = new mongoose.Schema({
     },
     status_attendance: { 
         type: String, 
-        enum: ["present", "late", "absent", "sick", "leave", "permission"],
+        enum: ["present", "late", "absent", "sick", "leave", "permit", "clock-in ok", "clock in late", "clock in without clock out"],
+    },
+    archived: { 
+        type: Number,
+        enum: [0, 1], 
+        default: 0 
     },
     created_at: { 
         type: Date, 

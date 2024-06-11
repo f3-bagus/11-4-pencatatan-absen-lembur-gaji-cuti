@@ -5,11 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var app = express();
-var usersRouter = require('./routes/users');
-const hrRoutes = require('./routes/hr');
-const overtimeRoutes = require('./routes/overtime');
-const employeeRoutes = require('./routes/employee');
-const leaveRoutes = require('./routes/leave');
 
 // Connect to MongoDB
 const connectToDatabase = require('./library/dbconfig');
@@ -27,13 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Import Routes
 const routes = require('./routes');
-
 app.use('/api/', routes);
-app.use('/api/users', usersRouter);
-app.use('/api/hr', hrRoutes);
-app.use('/api/overtime', overtimeRoutes);
-app.use('/api/employees/accept-overtime', employeeRoutes);
-app.use('/api/leaves', leaveRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

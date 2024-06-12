@@ -13,15 +13,18 @@ const EmployeeSchema = new mongoose.Schema({
     name: String,
     gender: { 
         type: String, 
-        enum: ["Male", "Female"]
+        enum: ["Male", "Female"],
+        default: "Male"
     },
     email: { 
         type: String, 
         unique: true, 
+        default: null
     },
     phone: { 
         type: String, 
-        unique: true, 
+        unique: true,
+        default: null
     },
     type: { 
         type: String, 
@@ -30,9 +33,13 @@ const EmployeeSchema = new mongoose.Schema({
     },
     division: { 
         type: String, 
-        enum: ["IT", "Sales", "Marketing", "Accounting"]
+        enum: ["IT", "Sales", "Marketing", "Accounting"],
+        default: "Sales"
     },
-    profile_photo: String,
+    profile_photo: {
+        type: String,
+        default: null
+    },
     archived: { 
         type: Number,
         enum: [0, 1], 

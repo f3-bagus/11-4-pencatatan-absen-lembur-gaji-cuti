@@ -1,12 +1,13 @@
 api:
 1. All User:
 -> GET
-get info user login : /api/users/
+get info user account : /api/user/
+get info user profile : /api/user/profile
 
 -> POST
 login : /api/auth/login
 logout : /api/auth/logout
-reset own password : /api/users/reset-password
+reset own password : /api/user/reset-password/
 
 -> PUT
 
@@ -16,7 +17,7 @@ reset own password : /api/users/reset-password
 
 2. Admin:
 -> GET 
-get all user data : /api/users/data
+get all user data : /api/user/data
 get all employee attendance data : /api/attendance/data
 get employee attendance data by nip : /api/attendance/data/:nip
 
@@ -52,8 +53,8 @@ reject-leave : /api/leave/reject/:id
 -> GET
 
 -> POST
-clock-in by nip : /api/attendance/clock-in/:nip
-clock-out by nip : /api/attendance/clock-out/:nip
+clock-in : /api/attendance/clock-in
+clock-out : /api/attendance/clock-out
 accept-overtime : /api/employee/accept-overtime
 pengajuan-leave : 
 

@@ -8,7 +8,7 @@ const auth = require('../controllers/AuthController');
 router.use('/auth', require('./auth'));
 /* Protected Routes */
 router.use(auth.authenticateToken);
-router.use('/users', require('./users'));
+router.use('/user', require('./users'));
 router.use('/admin', require('./admin'));
 router.use('/hr', require('./hr'));
 router.use('/employee', require('./employee'));

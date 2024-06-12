@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Fungsi untuk menghubungkan ke database MongoDB
+/* All User : Making connection to database MongoDB */
 const connectToDatabase = async () => {
   try {
     await mongoose.connect('mongodb://localhost:27017/TestCapstone');

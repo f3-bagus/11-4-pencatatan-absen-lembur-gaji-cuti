@@ -10,20 +10,29 @@ const HRSchema = new mongoose.Schema({
         unique: true, 
         required: true 
     },
-    name: String,
+    name: {
+        type: String,
+        default: null
+    },
     gender: { 
         type: String, 
-        enum: ["Male", "Female"]
+        enum: ["Male", "Female"],
+        default: "Male"
     },
     email: { 
         type: String, 
         unique: true, 
+        default: null
     },
     phone: { 
         type: String, 
         unique: true, 
+        default: null
     },
-    profile_photo: String,
+    profile_photo: {
+        type: String,
+        default: null
+    },
     archived: { 
         type: Number,
         enum: [0, 1], 

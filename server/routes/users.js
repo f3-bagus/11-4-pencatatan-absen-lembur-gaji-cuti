@@ -8,10 +8,16 @@ const adminController = require('../controllers/AdminController');
 
 //* Routes *//
 /* All User: get info user login */
-router.get('/', auth.isLogin);
+router.get('/', userController.getUserData);
+
+/* All User: get info own user profile */
+router.get('/profile', userController.getUserProfileData);
+
+/* All User: update user profile */
+router.put('/update-profile', userController.updateProfile);
 
 /* All User: reset own user password */
-router.get('/reset-password', userController.resetPassword);
+router.put('/reset-password', userController.resetPassword);
 
 /* Admin: get all user (hr and employee) */
 router.get('/data', auth.authorizeRole('admin'), adminController.getAllUser);

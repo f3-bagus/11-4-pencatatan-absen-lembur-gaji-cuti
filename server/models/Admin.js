@@ -10,18 +10,24 @@ const AdminSchema = new mongoose.Schema({
         unique: true, 
         required: true 
     },
-    name: String,
+    name: {
+        type: String,
+        default: null
+    },
     gender: { 
         type: String, 
-        enum: ["Male", "Female"]
+        enum: ["Male", "Female"],
+        default: "Male"
     },
     email: { 
         type: String, 
         unique: true, 
+        default: null
     },
     phone: { 
         type: String, 
-        unique: true, 
+        unique: true,
+        default: null 
     },
     profile_photo: String,
     archived: { 

@@ -4,7 +4,7 @@ const OvertimeModel = require('../models/Overtime');
 
 /* Employee : clock In */
 const clockIn = async (req, res) => {
-    const { nip } = req.params;
+    const { nip } = req.user;
 
     try {
         const employee = await EmployeeModel.findOne({ nip });
@@ -29,7 +29,7 @@ const clockIn = async (req, res) => {
         const attendanceToday = await AttendanceModel.findOne({ 
             nip, 
             clock_in: { $gte: startOfToday, $lte: endOfToday } 
-        }).sort({ clock_in: -1 });
+        });
         if (!attendanceToday) {
           res.status(400).json({
               message: "You have already clocked in"
@@ -67,7 +67,7 @@ const clockIn = async (req, res) => {
 
 /* Employee: clock Out */
 const clockOut = async (req, res) => {
-  const { nip } = req.params;
+  const { nip } = req.user;
 
   try {
     const employee = await EmployeeModel.findOne({ nip });

@@ -9,13 +9,34 @@ const SalarySchema = new mongoose.Schema({
         type: String, 
         required: true 
     },
-    month: String,
-    basic_salary: Number,
-    overtime_salary: Number,
-    deduction_permission: Number,
-    deduction_sick: Number,
-    deduction_absent: Number,
-    total_salary: Number,
+    month: {
+        type: String,
+        default: null
+    },
+    basic_salary: {
+        type: Number,
+        default: null
+    },
+    overtime_salary: {
+        type: Number,
+        default: null
+    },
+    deduction_permission: {
+        type: Number,
+        default: null
+    },
+    deduction_sick: {
+        type: Number,
+        default: null
+    },
+    deduction_absent: {
+        type: Number,
+        default: null
+    },
+    total_salary: {
+        type: Number,
+        default: null
+    },
     archived: { 
         type: Number,
         enum: [0, 1], 

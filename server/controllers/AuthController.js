@@ -8,7 +8,7 @@ const blacklist = new Set();
 // Authentication Token JWT
 const authenticateToken = async (req, res, next) => {
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader) {
         return res.status(401).json({ 
             message: 'Token required' 
@@ -23,21 +23,26 @@ const authenticateToken = async (req, res, next) => {
                 message: 'Invalid Token'
             });
         }
-    
-        // Verifikasi token JWT
+
         jwt.verify(token, secretKey, (err, decoded) => {
             if (err) {
-                return res.status(403).json({ 
-                    message: 'Invalid Token' 
-                });
+                if (err.name === 'TokenExpiredError') {
+                    return res.status(401).json({
+                        message: 'Token expired'
+                    });
+                } else {
+                    return res.status(403).json({
+                        message: 'Invalid Token'
+                    });
+                }
             }
-            
+
             req.user = decoded;
             next();
         });
     } catch (error) {
         res.status(500).json({ 
-            message: error.message 
+            message: 'Failed to authenticate token' 
         });
     }
 };
@@ -90,8 +95,9 @@ const isLogin = async (req, res, next) => {
 
 /* All User: login */
 const login = async (req, res) => {
+    const { nip, password } = req.body;
+
     try {
-        const { nip, password } = req.body;
         const user = await UserModel.findOne({ nip });
     
         if (!user) {

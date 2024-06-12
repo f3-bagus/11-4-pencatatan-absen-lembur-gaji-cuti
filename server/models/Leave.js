@@ -9,8 +9,22 @@ const LeaveSchema = new mongoose.Schema({
         type: String, 
         required: true 
     },
-    start_date: Date,
-    end_date: Date,
+    start_date: {
+        type: Date,
+        default: () => {
+            const startOfDay = new Date();
+            startOfDay.setHours(0, 0, 0, 0); 
+            return startOfDay;
+        }
+    },
+    end_date: {
+        type: Date,
+        default: () => {
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999); 
+            return endOfDay;
+        }
+    },
     type: { 
         type: String, 
         enum: ["permit", "sick", "leave"],

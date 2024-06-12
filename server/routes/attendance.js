@@ -5,6 +5,7 @@ const router = express.Router();
 const auth = require('../controllers/AuthController');
 const employeeController = require('../controllers/EmployeeController');
 const attendanceController = require('../controllers/AttendanceController');
+const { addLeaveAttendance } = require('../controllers/AttendanceController');
 
 //* Routes *//
 
@@ -20,5 +21,7 @@ router.get('/data', auth.authorizeRole(['admin', 'hr']), attendanceController.ge
 /* Admin & HR: Get employee attendance data */
 router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), attendanceController.getEmployeeAttendance);
 
+// attendance leave employee
+router.post('/leave/:nip', addLeaveAttendance);
 
 module.exports = router;

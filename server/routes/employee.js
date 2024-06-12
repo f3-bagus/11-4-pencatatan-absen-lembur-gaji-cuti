@@ -9,7 +9,7 @@ const authenticate = require('../controllers/AuthController');
 
 //* Routes *//
 /* Admin & HR : All Employee Data */
-router.get('/employee', authenticate.authenticateToken, auth.authorizeRole(['hr', 'admin']), employeeController.getEmployees);
+router.get('/employees', authenticate.authenticateToken, auth.authorizeRole(['hr', 'admin']), employeeController.getEmployees);
 
 /* Employee: Clock-In */
 router.post('/clock-in/:nip', auth.authorizeRole('employee'), employeeController.clockIn);
@@ -18,7 +18,7 @@ router.post('/clock-in/:nip', auth.authorizeRole('employee'), employeeController
 
 
 //employee accept overtime
-router.get('/employee', getEmployees);
+router.get('/employe', getEmployees);
 router.post('/accept-overtime', acceptOvertime);
 
 module.exports = router;

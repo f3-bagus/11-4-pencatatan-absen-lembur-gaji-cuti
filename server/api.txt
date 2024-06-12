@@ -19,6 +19,7 @@ reset own password : /api/users/reset-password
 get all user data : /api/users/data
 get all employee attendance data : /api/attendance/data
 get employee attendance data by nip : /api/attendance/data/:nip
+get all employee :/api/employee/employees
 
 -> POST
 create employee account : /api/admin/create-employee

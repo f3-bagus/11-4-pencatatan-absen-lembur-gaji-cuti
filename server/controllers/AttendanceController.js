@@ -97,33 +97,8 @@ const getEmployeeAttendance = async (req, res) => {
     }
 };
 
-// Method attendance cuti employee use nip
-const addLeaveAttendance = async (req, res) => {
-    const { nip } = req.params; // Mengambil `nip` dari URL
-    const { start_date, end_date, reason } = req.body;
-
-    try {
-        const newAttendance = new AttendanceModel({
-            nip: nip,
-            status_attendance: 'leave',
-            clock_in: start_date,
-            clock_out: end_date,
-            reason: reason,
-            created_at: new Date(),
-            updated_at: new Date()
-        });
-        await newAttendance.save();
-        res.status(201).json(newAttendance);
-    } catch (error) {
-        res.status(500).json({
-            message: 'Failed to add leave attendance',
-            error: error.message
-        });
-    }
-};
 
 module.exports = {
     getAllEmployeeAttendance,
-    getEmployeeAttendance,
-    addLeaveAttendance
+    getEmployeeAttendance
 };

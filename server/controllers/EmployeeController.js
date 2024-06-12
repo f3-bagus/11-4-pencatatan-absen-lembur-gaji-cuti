@@ -1,6 +1,7 @@
 const EmployeeModel = require('../models/Employee');
 const AttendanceModel = require('../models/Attendance');
 const OvertimeModel = require('../models/Overtime');
+const LeaveModel = require('../models/Leave');
 
 /* Employee : clock In */
 const clockIn = async (req, res) => {
@@ -165,9 +166,39 @@ const acceptOvertime = async (req, res) => {
   }
 };
 
+//history leave employee
+const getLeaveHistory = async (req, res) => {
+  const { nip } = req.params;
+  
+  try {
+    const leaves = await LeaveModel.find({ nip }).sort({ start_date: -1 });
+    res.status(200).json(leaves);
+  } catch (error) {
+    res.status(500).json({ 
+        message: error.message 
+    });
+  }
+};
+
+//overtime history employee
+const getOvertimeHistory = async (req, res) => {
+  const { nip } = req.params;
+  
+  try {
+    const overtimes = await OvertimeModel.find({ nip }).sort({ date: -1 });
+    res.status(200).json(overtimes);
+  } catch (error) {
+    res.status(500).json({ 
+        message: error.message 
+    });
+  }
+};
+
 module.exports = {
   clockIn,
   clockOut,
   getEmployees,
-  acceptOvertime
+  acceptOvertime,
+  getLeaveHistory,
+  getOvertimeHistory
 };

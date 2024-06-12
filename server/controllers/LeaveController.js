@@ -1,4 +1,5 @@
 const LeaveModel = require('../models/Leave');
+const AttendanceModel = require('../models/Attendance');
 
 // Method untuk mengambil data cuti
 const getLeave = async (req, res) => {
@@ -35,7 +36,7 @@ const applyLeave = async (req, res) => {
   }
 };
 
-// Method untuk menyetujui cuti
+// Method untuk menyetujui cuti dan memperbarui tabel Attendance
 const approveLeave = async (req, res) => {
   try {
     const leaveId = req.params.id;
@@ -44,7 +45,27 @@ const approveLeave = async (req, res) => {
       { status_leave: 'approved' },
       { new: true }
     );
-    res.status(200).json(updatedLeave);
+
+    if (!updatedLeave) {
+      return res.status(404).json({ message: 'Leave not found' });
+    }
+
+    // Perbarui data Attendance
+    const attendanceData = {
+      employee: updatedLeave.employee,
+      nip: updatedLeave.nip,
+      clock_in: updatedLeave.start_date,
+      clock_out: updatedLeave.end_date,
+      status_attendance: updatedLeave.type
+    };
+
+    await AttendanceModel.create(attendanceData);
+
+    res.status(200).json({
+      message: 'Leave approved and attendance updated',
+      leave: updatedLeave,
+      attendance: attendanceData
+    });
   } catch (error) {
     res.status(500).json({ 
         message: error.message 

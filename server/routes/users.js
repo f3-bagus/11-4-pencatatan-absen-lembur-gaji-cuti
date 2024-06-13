@@ -3,6 +3,7 @@ const router = express.Router();
 
 //* Import Controller *//
 const auth = require('../controllers/AuthController');
+const { upload } = require('../controllers/StorageController');
 const userController = require('../controllers/UserController');
 const adminController = require('../controllers/AdminController');
 
@@ -14,7 +15,7 @@ router.get('/', userController.getUserData);
 router.get('/profile', userController.getUserProfileData);
 
 /* All User: update user profile */
-router.put('/update-profile', userController.updateProfile);
+router.put('/update-profile', upload.single('profile_photo'), userController.updateProfile);
 
 /* All User: reset own user password */
 router.put('/reset-password', userController.resetPassword);

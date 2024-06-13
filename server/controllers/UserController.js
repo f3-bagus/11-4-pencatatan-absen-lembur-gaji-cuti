@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt');
+const path = require('path');
+const fs = require('fs');
 
 const UserModel = require('../models/User');
 const AdminModel = require('../models/Admin');
@@ -118,6 +120,7 @@ const getUserProfileData = async (req, res) => {
 const updateProfile = async (req, res) => {
     const { nip } = req.user;
     const { name, gender, email, phone } = req.body;
+    const profilePhoto = req.file;
 
     try {
         const user = await UserModel.findOne({ nip });
@@ -150,12 +153,15 @@ const updateProfile = async (req, res) => {
             });
         }
 
-        // Update user profile in the appropriate model
-        userData.name = name || userData.name;
-        userData.gender = gender || userData.gender;
-        userData.email = email || userData.email;
-        userData.phone = phone || userData.phone;
+        userData.name = name ? name : userData.name;
+        userData.gender = gender ? gender : userData.gender;
+        userData.email = email ? email : userData.email;
+        userData.phone = phone ? phone : userData.phone;
 
+        if (profilePhoto) {
+            userData.profile_photo = `/uploads/profile_photo/${profilePhoto.filename}`;
+        }
+        
         await userData.save();
 
         res.status(200).json({
@@ -169,7 +175,6 @@ const updateProfile = async (req, res) => {
         });
     }
 };
-
 
 
 module.exports = { 

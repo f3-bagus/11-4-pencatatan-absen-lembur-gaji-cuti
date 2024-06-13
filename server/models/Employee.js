@@ -10,7 +10,10 @@ const EmployeeSchema = new mongoose.Schema({
         unique: true, 
         required: true 
     },
-    name: String,
+    name: {
+        type: String,
+        default: null
+    },
     gender: { 
         type: String, 
         enum: ["Male", "Female"],

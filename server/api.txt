@@ -21,6 +21,8 @@ get all user data (all info): /api/user/data
 get user data by nip (all info): /api/user/data/:nip
 get all employee attendance data : /api/attendance/data
 get employee attendance data by nip : /api/attendance/data/:nip
+get all employee payroll : /api/payroll/data/employee
+get employee payroll by nip : /api/payroll/data/employee/:nip
 get all employee :/api/employee/employees
 
 -> POST
@@ -39,6 +41,8 @@ delete user by nip : /api/admin/delete-user/:nip
 -> GET
 get all employee attendance data : /api/attendance/data
 get employee attendance data by nip : /api/attendance/data/:nip
+get all employee payroll : /api/payroll/data/employee
+get employee payroll by nip : /api/payroll/data/employee/:nip
 
 -> POST
 create-overtime : /api/hr/overtime

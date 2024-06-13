@@ -6,10 +6,13 @@ const auth = require('../controllers/AuthController');
 const payrollController = require('../controllers/PayrollController');
 
 //* Routes *//
-/* Admin & Hr : All Employee Payroll Data */
-router.get('/data', auth.authorizeRole(['admin', 'hr']), payrollController.getAllEmployeePayroll);
+/* Admin & Hr : Get All Employee Payroll Data */
+router.get('/data/employee', auth.authorizeRole(['admin', 'hr']), payrollController.getAllEmployeePayroll);
 
-/* Admin & Hr : Employee Salary Data by nip */
-router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), payrollController.getAllEmployeePayroll);
+/* Admin & Hr : Get Employee Salary Data by nip */
+router.get('/data/employee/:nip', auth.authorizeRole(['admin', 'hr']), payrollController.getEmployeePayroll);
+
+/* Employee : Get Self Salary Data */
+router.get('/data', auth.authorizeRole('employee'), payrollController.getSelfPayroll);
 
 module.exports = router;

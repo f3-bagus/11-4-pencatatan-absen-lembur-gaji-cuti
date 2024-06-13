@@ -8,7 +8,7 @@ const getAllEmployeePayroll = async (req, res) => {
       const employeePayrollData = await PayrollModel.aggregate([
           {
               $lookup: {
-                  from: "employees",
+                  from: "tbl_employees",
                   localField: "nip",
                   foreignField: "nip",
                   as: "employee"
@@ -25,9 +25,12 @@ const getAllEmployeePayroll = async (req, res) => {
           {
               $project: {
                   _id: 0,
-                  employee_id: "$employee._id",
-                  employee_name: "$employee.name",
-                  employee_nip: "$employee.nip",
+                  nip: "$employee.nip",
+                  name: "$employee.name",
+                  email: "$employee.email",
+                  phone: "$employee.phone",
+                  division: "$employee.division",
+                  type: "$employee.type",
                   date: "$date",
                   basic_salary: "$basic_salary",
                   overtime_salary: "$overtime_salary",
@@ -58,12 +61,11 @@ const getEmployeePayroll = async (req, res) => {
   try {
       const employeePayrollData = await PayrollModel.aggregate([
           {
-              $match: { nip: nip },
-              'employee.archived': { $ne: 1 }
+              $match: { nip: nip }
           },
           {
               $lookup: {
-                  from: "employees",
+                  from: "tbl_employees",
                   localField: "nip",
                   foreignField: "nip",
                   as: "employee"
@@ -73,11 +75,17 @@ const getEmployeePayroll = async (req, res) => {
               $unwind: "$employee"
           },
           {
+              $match: { "employee.archived": { $ne: 1 } }
+          },
+          {
               $project: {
                   _id: 0,
-                  employee_id: "$employee._id",
-                  employee_name: "$employee.name",
-                  employee_nip: "$employee.nip",
+                  nip: "$employee.nip",
+                  name: "$employee.name",
+                  email: "$employee.email",
+                  phone: "$employee.phone",
+                  division: "$employee.division",
+                  type: "$employee.type",
                   date: "$date",
                   basic_salary: "$basic_salary",
                   overtime_salary: "$overtime_salary",
@@ -91,7 +99,7 @@ const getEmployeePayroll = async (req, res) => {
 
       if (employeePayrollData.length === 0) {
           return res.status(404).json({
-              message: 'Data not found for the specified employee'
+              message: 'Data not found'
           });
       }
 
@@ -101,7 +109,68 @@ const getEmployeePayroll = async (req, res) => {
       });
   } catch (error) {
       res.status(500).json({
-          message: `Failed to get payroll data for employee with NIP '${nip}'`,
+          message: `Failed to get data for employee with NIP '${nip}'`,
+          error: error.message
+      });
+  }
+};
+
+/* Employee : Get employee payroll data */
+const getSelfPayroll = async (req, res) => {
+  const { nip } = req.user;
+
+  try {
+      const employeePayrollData = await PayrollModel.aggregate([
+          {
+              $match: { nip: nip }
+          },
+          {
+              $lookup: {
+                  from: "tbl_employees",
+                  localField: "nip",
+                  foreignField: "nip",
+                  as: "employee"
+              }
+          },
+          {
+              $unwind: "$employee"
+          },
+          {
+              $match: { "employee.archived": { $ne: 1 } }
+          },
+          {
+              $project: {
+                  _id: 0,
+                  nip: "$employee.nip",
+                  name: "$employee.name",
+                  email: "$employee.email",
+                  phone: "$employee.phone",
+                  division: "$employee.division",
+                  type: "$employee.type",
+                  date: "$date",
+                  basic_salary: "$basic_salary",
+                  overtime_salary: "$overtime_salary",
+                  deduction_permission: "$deduction_permission",
+                  deduction_sick: "$deduction_sick",
+                  deduction_absent: "$deduction_absent",
+                  total_salary: "$total_salary"
+              }
+          }
+      ]);
+
+      if (employeePayrollData.length === 0) {
+          return res.status(404).json({
+              message: 'Data not found'
+          });
+      }
+
+      res.status(200).json({
+          message: 'Success',
+          data: employeePayrollData[0]
+      });
+  } catch (error) {
+      res.status(500).json({
+          message: `Failed to get data for employee with NIP '${nip}'`,
           error: error.message
       });
   }
@@ -110,5 +179,6 @@ const getEmployeePayroll = async (req, res) => {
 
 module.exports = {
   getAllEmployeePayroll,
-  getEmployeePayroll
+  getEmployeePayroll,
+  getSelfPayroll
 };

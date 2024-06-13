@@ -14,6 +14,7 @@ import HrOvertime from "./layouts/hr/navigation/Overtime";
 import HrLeave from "./layouts/hr/navigation/Leave";
 import HrReport from "./layouts/hr/navigation/Report";
 import HrProfile from "./layouts/hr/navigation/Profile";
+import NotFound from "./layouts/NotFound";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route element={<ProtectedRoute role="employee" />}>
             <Route path="/employee" element={<EmpDashboard />} />
           </Route>
+          <Route path="*" element={<NotFound />}/>
         </Routes>
       </AuthProvider>
     </Router>

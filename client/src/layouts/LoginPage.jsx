@@ -14,7 +14,6 @@ import {
   Checkbox,
   Image,
   useColorModeValue,
-  useToast,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
 import { BiShow, BiHide } from "react-icons/bi";

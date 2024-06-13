@@ -1,14 +1,16 @@
 const bcrypt = require('bcrypt');
 const path = require('path');
 const fs = require('fs');
+const mongoose = require('mongoose');
 
+//* Import Controller *//
 const UserModel = require('../models/User');
 const AdminModel = require('../models/Admin');
 const EmployeeModel = require('../models/Employee');
 const HRModel = require('../models/HR');
-const mongoose = require('mongoose');
 
-/* All User : Reset own account password */
+//* All Method *//
+/* All User : Reset Self Account Password */
 const resetPassword = async (req, res) => {
     const { nip } = req.user;
     const { oldPassword, newPassword } = req.body;
@@ -42,12 +44,12 @@ const resetPassword = async (req, res) => {
     }
 };
 
-/* All User : Get User Data */
-const getUserData = async (req, res) => {
+/* All User : Get Self User Data */
+const getSelfData = async (req, res) => {
     const { nip } = req.user;
     try {
         const user = await UserModel.findOne({ nip });
-        if (!user) {
+        if (!user || user.archived !== 0) {
             return res.status(404).json({
                 message: 'User not found'
             });
@@ -75,7 +77,7 @@ const getUserProfileData = async (req, res) => {
 
     try {
         const user = await UserModel.findOne({ nip });
-        if (!user) {
+        if (!user || user.archived !== 0) {
             return res.status(404).json({
                 message: 'User not found'
             });
@@ -124,7 +126,7 @@ const updateProfile = async (req, res) => {
 
     try {
         const user = await UserModel.findOne({ nip });
-        if (!user) {
+        if (!user || user.archived !== 0) {
             return res.status(404).json({
                 message: 'User not found'
             });
@@ -179,7 +181,7 @@ const updateProfile = async (req, res) => {
 
 module.exports = { 
     resetPassword,
-    getUserData,
+    getSelfData,
     getUserProfileData,
     updateProfile
 };

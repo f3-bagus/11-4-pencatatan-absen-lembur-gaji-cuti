@@ -1,5 +1,7 @@
+//* Import Controller *//
 const OvertimeModel = require('../models/Overtime');
 
+//* All Method *//
 // Method untuk mengambil data overtime
 const getOvertimes = async (req, res) => {
   try {

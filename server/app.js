@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cron = require('node-cron');
 
 var app = express();
 
@@ -23,6 +24,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Import Routes
 const routes = require('./routes');
 app.use('/api/', routes);
+
+// Schedule the updateAttendance function to run during working days at 23:59
+const AttendanceController = require('./controllers/AttendanceController');
+cron.schedule('59 23 * * 1-5', () => {
+  console.log('Running the scheduled task: updateAttendance');
+  AttendanceController.updateAttendance();
+}, {
+  timezone: "Asia/Jakarta"
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -15,10 +15,10 @@ router.post('/create-employee', adminController.createEmployee);
 /* Admin: create hr account */
 router.post('/create-hr', adminController.createHR);
 
-/* Admin: Reset User Password */
+/* Admin: Reset User Password by NIP */
 router.post('/reset-password/:nip', adminController.resetUserPassword);
 
-/* Admin: Delete user */
+/* Admin: Delete User by NIP*/
 router.delete('/delete-user/:nip', adminController.deleteUser);
 
 module.exports = router;

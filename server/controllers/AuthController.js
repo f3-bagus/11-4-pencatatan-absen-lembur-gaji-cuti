@@ -1,11 +1,13 @@
 const jwt = require('jsonwebtoken');
 const secretKey = '639AqKEkrQjms2grEgcFTRP60m67jGSjrCeOZteT8R';
 const bcrypt = require('bcrypt');
-const UserModel = require('../models/User');
-
 const blacklist = new Set();
 
-// Authentication Token JWT
+//* Import Controller *//
+const UserModel = require('../models/User');
+
+//* All Method *//
+/* Sistem: Authentication Token JWT */
 const authenticateToken = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
@@ -47,7 +49,7 @@ const authenticateToken = async (req, res, next) => {
     }
 };
 
-// Authorization Role
+/* Sistem: Authorization Role */
 const authorizeRole = (requiredRoles) => async (req, res, next) => {
     try {
         const { nip } = req.user;
@@ -68,7 +70,7 @@ const authorizeRole = (requiredRoles) => async (req, res, next) => {
     }
 };
 
-// Verify Login
+/* Sistem: Verify Login */
 const isLogin = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
@@ -96,15 +98,12 @@ const isLogin = async (req, res, next) => {
 /* All User: login */
 const login = async (req, res) => {
     const { nip, password } = req.body;
-    console.log(nip);
     try {
         const user = await UserModel.findOne({ nip });
     
-        if (!user) {
+        if (!user || user.archived !== 0) {
             return res.status(404).json({ 
                 message: 'User Not Found',
-                nip,
-                password
             });
         }
     
@@ -137,14 +136,13 @@ const login = async (req, res) => {
                 message: 'Wrong Password' 
             });
         }
-  
     } catch (error) {
         res.status(500).json({ 
-            message: "gabisa baca"
+            message: error
         });
     }
 };
-  
+
 /* All User : logout */
 const logout = async (req, res) => {
     try {

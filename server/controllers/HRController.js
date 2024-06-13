@@ -1,7 +1,9 @@
+//* Import Controller *//
 const HRModel = require('../models/HR');
 const OvertimeModel = require('../models/Overtime');
 const mongoose = require('mongoose');
 
+//* All Method *//
 // Method untuk mengambil data employee
 const getAllHR = async (req, res) => {
   try {

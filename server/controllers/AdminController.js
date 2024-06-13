@@ -1,8 +1,12 @@
 const bcrypt = require('bcrypt');
+
+//* Import Controller *//
 const UserModel = require('../models/User');
 const EmployeeModel = require('../models/Employee');
 const HRModel = require('../models/HR');
+const AdminModel = require('../models/Admin');
 
+//* All Method *//
 /* Admin: Create Employee Account */
 const createEmployee = async (req, res) => {
     const { nip, name, gender, email, phone, type, division } = req.body;
@@ -132,7 +136,7 @@ const deleteUser = async (req, res) => {
             { new: true }
         );
         
-        if (!user) {
+        if (!user || user.archived !== 0) {
             return res.status(404).json({ 
                 message: 'User not found' 
             });
@@ -149,8 +153,39 @@ const deleteUser = async (req, res) => {
 };
 
 /* Admin : Get all user data */
-const getAllUser = async (req, res) => {
+const getAllUserData = async (req, res) => {
     try {
+        const adminData = await AdminModel.aggregate([
+            {
+                $lookup: {
+                    from: 'tbl_users',
+                    localField: 'nip',
+                    foreignField: 'nip',
+                    as: 'user'
+                }
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $match: {
+                    'user.archived': { $ne: 1 },
+                    'user.nip': { $ne: req.user.nip }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    nip: '$nip',
+                    name: '$name',
+                    role: '$user.role',
+                    gender: '$user.gender',
+                    email: '$user.email',
+                    phone: '$user.phone'
+                }
+            }
+        ]);
+
         const hrData = await HRModel.aggregate([
             {
                 $lookup: {
@@ -173,7 +208,10 @@ const getAllUser = async (req, res) => {
                     _id: 0,
                     nip: '$nip',
                     name: '$name',
-                    role: '$user.role'
+                    role: '$user.role',
+                    gender: '$user.gender',
+                    email: '$user.email',
+                    phone: '$user.phone'
                 }
             }
         ]);
@@ -200,12 +238,17 @@ const getAllUser = async (req, res) => {
                     _id: 0,
                     nip: '$nip',
                     name: '$name',
-                    role: '$user.role'
+                    role: '$user.role',
+                    gender: '$user.gender',
+                    email: '$user.email',
+                    phone: '$user.phone',
+                    type: '$user.type',
+                    division: '$user.division'
                 }
             }
         ]);
 
-        const allUser = hrData.concat(employeeData);
+        const allUser = adminData.concat(hrData, employeeData);
 
         if (allUser.length === 0) {
             return res.status(404).json({ 
@@ -228,6 +271,37 @@ const getUser = async (req, res) => {
     const { nip } = req.params;
 
     try {
+        const adminData = await AdminModel.aggregate([
+            {
+                $lookup: {
+                    from: 'tbl_users',
+                    localField: 'nip',
+                    foreignField: 'nip',
+                    as: 'user'
+                }
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $match: {
+                    'user.nip': nip,
+                    'user.archived': { $ne: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    nip: '$nip',
+                    name: '$name',
+                    role: '$user.role',
+                    gender: '$user.gender',
+                    email: '$user.email',
+                    phone: '$user.phone'
+                }
+            }
+        ]);
+
         const hrData = await HRModel.aggregate([
             {
                 $lookup: {
@@ -251,7 +325,10 @@ const getUser = async (req, res) => {
                     _id: 0,
                     nip: '$nip',
                     name: '$name',
-                    role: '$user.role'
+                    role: '$user.role',
+                    gender: '$user.gender',
+                    email: '$user.email',
+                    phone: '$user.phone'
                 }
             }
         ]);
@@ -279,7 +356,12 @@ const getUser = async (req, res) => {
                     _id: 0,
                     nip: '$nip',
                     name: '$name',
-                    role: '$user.role'
+                    role: '$user.role',
+                    gender: '$user.gender',
+                    email: '$user.email',
+                    phone: '$user.phone',
+                    type: '$user.type',
+                    division: '$user.division'
                 }
             }
         ]);
@@ -308,6 +390,6 @@ module.exports = {
     createHR,
     resetUserPassword,
     deleteUser,
-    getAllUser,
+    getAllUserData,
     getUser
 };

@@ -5,17 +5,10 @@ const router = express.Router();
 const auth = require('../controllers/AuthController');
 const employeeController = require('../controllers/EmployeeController');
 const { getEmployees, acceptOvertime, getLeaveHistory, getOvertimeHistory } = require('../controllers/EmployeeController');
-const authenticate = require('../controllers/AuthController');
 
 //* Routes *//
 /* Admin & HR : All Employee Data */
-router.get('/employees', authenticate.authenticateToken, auth.authorizeRole(['hr', 'admin']), employeeController.getEmployees);
-
-/* Employee: Clock-In */
-router.post('/clock-in/:nip', auth.authorizeRole('employee'), employeeController.clockIn);
-
-/* Employee: Clock-Out */
-
+router.get('/employees', auth.authorizeRole(['hr', 'admin']), employeeController.getEmployees);
 
 //employee accept overtime
 router.get('/employe', getEmployees);

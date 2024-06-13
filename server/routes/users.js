@@ -9,7 +9,7 @@ const adminController = require('../controllers/AdminController');
 
 //* Routes *//
 /* All User: get info user login */
-router.get('/', userController.getUserData);
+router.get('/', userController.getSelfData);
 
 /* All User: get info own user profile */
 router.get('/profile', userController.getUserProfileData);
@@ -21,7 +21,7 @@ router.put('/update-profile', upload.single('profile_photo'), userController.upd
 router.put('/reset-password', userController.resetPassword);
 
 /* Admin: get all user (hr and employee) */
-router.get('/data', auth.authorizeRole('admin'), adminController.getAllUser);
+router.get('/data', auth.authorizeRole('admin'), adminController.getAllUserData);
 
 /* Admin: get user by nip (hr and employee) */
 router.get('/data/:nip', auth.authorizeRole('admin'), adminController.getUser);

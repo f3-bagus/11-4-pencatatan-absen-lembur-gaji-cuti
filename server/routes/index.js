@@ -14,7 +14,7 @@ router.use('/hr', require('./hr'));
 router.use('/employee', require('./employee'));
 router.use('/attendance', require('./attendance'));
 router.use('/overtime', require('./overtime'));
-router.use('/salary', require('./salary'));
+router.use('/payroll', require('./payroll'));
 router.use('/leave', require('./leave'));
 router.use('/reports', require('./reports'));
 

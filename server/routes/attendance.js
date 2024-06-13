@@ -8,7 +8,6 @@ const attendanceController = require('../controllers/AttendanceController');
 const { addLeaveAttendance } = require('../controllers/AttendanceController');
 
 //* Routes *//
-
 /* Employee: Clock-In */
 router.post('/clock-in', auth.authorizeRole('employee'), employeeController.clockIn);
 
@@ -18,7 +17,7 @@ router.post('/clock-out', auth.authorizeRole('employee'), employeeController.clo
 /* Admin & HR : Get all employee attendance data  */
 router.get('/data', auth.authorizeRole(['admin', 'hr']), attendanceController.getAllEmployeeAttendance);
 
-/* Admin & HR: Get employee attendance data */
+/* Admin & HR: Get employee attendance data by nip */
 router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), attendanceController.getEmployeeAttendance);
 
 module.exports = router;

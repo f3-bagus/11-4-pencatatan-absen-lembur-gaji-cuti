@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const SalarySchema = new mongoose.Schema({    
+const PayrollSchema = new mongoose.Schema({    
     employee: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Employee'
@@ -9,8 +9,8 @@ const SalarySchema = new mongoose.Schema({
         type: String, 
         required: true 
     },
-    month: {
-        type: String,
+    date: {
+        type: Date,
         default: null
     },
     basic_salary: {
@@ -51,13 +51,13 @@ const SalarySchema = new mongoose.Schema({
         default: Date.now 
     }
 }, { 
-    collection: 'tbl_salaries' 
+    collection: 'tbl_payrolls' 
 });
 
-SalarySchema.pre('save', function(next) {
+PayrollSchema.pre('save', function(next) {
     this.updated_at = Date.now();
     next();
 });
 
-const SalaryModel = mongoose.model("Salary", SalarySchema);
-module.exports = SalaryModel;
+const PayrollModel = mongoose.model("Payroll", PayrollSchema);
+module.exports = PayrollModel;

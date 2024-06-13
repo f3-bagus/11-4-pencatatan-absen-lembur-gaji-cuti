@@ -1,6 +1,8 @@
+//* Import Controller *//
 const LeaveModel = require('../models/Leave');
 const AttendanceModel = require('../models/Attendance');
 
+//* All Method *//
 // Method untuk mengambil data cuti
 const getLeave = async (req, res) => {
   try {

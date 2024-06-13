@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { useColorMode } from '@chakra-ui/react';
 
 ChartJS.register(
   CategoryScale,
@@ -22,6 +23,8 @@ ChartJS.register(
 );
 
 const LemburChart = () => {
+  const { colorMode } = useColorMode();
+
   const data = {
     labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
     datasets: [
@@ -49,8 +52,29 @@ const LemburChart = () => {
     plugins: {
       legend: {
         position: 'top',
+        labels: {
+          color: colorMode === 'light' ? 'gray' : 'white'
+        }
       },
     },
+    scales: {
+      x: {
+        ticks: {
+          color: colorMode === 'light' ? 'gray' : 'white'
+        },
+        grid: {
+          color: colorMode === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)'
+        }
+      },
+      y: {
+        ticks: {
+          color: colorMode === 'light' ? 'gray' : 'white'
+        },
+        grid: {
+          color: colorMode === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)'
+        }
+      }
+    }
   };
 
   return <Line data={data} options={options} />;

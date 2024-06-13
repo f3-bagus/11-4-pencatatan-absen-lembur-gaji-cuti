@@ -8,7 +8,7 @@ const ProtectedRoute = ({ role }) => {
 
   if (loading) {
     return (
-      <Center>
+      <Center height="100vh">
         <Spinner
           thickness="4px"
           speed="0.65s"

@@ -1,5 +1,4 @@
 import React from "react";
-import HrLayout from "../HrLayout";
 import {
   useTable,
   useSortBy,
@@ -7,9 +6,7 @@ import {
   useGlobalFilter,
 } from "react-table";
 import {
-  useColorModeValue,
   Flex,
-  Heading,
   Box,
   Stack,
   Table,
@@ -137,7 +134,7 @@ const DataTable = ({ columns, data, filename }) => {
         </Flex>
       </Flex>
 
-      <TableContainer py="3" w="940px">
+      <TableContainer py="3" w="900px">
         <Table {...getTableProps()}>
           <Thead>
             {headerGroups.map((headerGroup) => {
@@ -249,113 +246,6 @@ const DataTable = ({ columns, data, filename }) => {
   );
 };
 
-const Leave = () => {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "nip",
-        accessor: "nip",
-      },
-      {
-        Header: "name",
-        accessor: "name",
-      },
-      {
-        Header: "start_date",
-        accessor: "start_date",
-      },
-      {
-        Header: "end_date",
-        accessor: "end_date",
-      },
-      {
-        Header: "type",
-        accessor: "type",
-      },
-      {
-        Header: "reasons",
-        accessor: "reasons",
-      },
-      {
-        Header: "photo",
-        accessor: "photo",
-      },
-      {
-        Header: "status_leave",
-        accessor: "status_leave",
-      },
-      {
-        Header: "Action",
-        accessor: "action",
-        Cell: ({ row }) => (
-          <>
-            <Button
-              colorScheme="blue"
-              size="sm"
-              onClick={() => handleAccept(row.original)}
-            >
-              Accept
-            </Button>
-            <Button
-              colorScheme="red"
-              size="sm"
-              ml={2}
-              onClick={() => handleReject(row.original)}
-            >
-              Reject
-            </Button>
-          </>
-        ),
-      },
-    ],
-    []
-  );
 
-  const handleReject = (rowData) => {
-    // Lakukan operasi untuk menolak permintaan cuti
-    console.log("Rejecting leave for:", rowData);
-    // Misalnya, Anda dapat membuat permintaan ke backend untuk mengubah status cuti menjadi ditolak
-  };
 
-  const handleAccept = (rowData) => {
-    // Lakukan operasi untuk menerima permintaan cuti
-    console.log("Accepting leave for:", rowData);
-    // Misalnya, Anda dapat membuat permintaan ke backend untuk mengubah status cuti
-  };
-
-  const data = React.useMemo(
-    () => [
-      {
-        nip: 33421312,
-        name: "John Doe",
-        start_date: "10-12-2024",
-        end_date: "12-12-2024",
-        type: "3",
-        reasons: "sick",
-        photo: "jpg",
-        status_leave: "pending",
-      },
-    ],
-    []
-  );
-
-  return (
-    <HrLayout>
-      <Flex w="full" p="5" direction="column" gap={5}>
-        <Heading as="h1" size="xl">
-          Leave
-        </Heading>
-        <Box
-          bg={useColorModeValue("white", "green.800")}
-          p="3"
-          borderRadius="2xl"
-          shadow="lg"
-        >
-          <DataTable columns={columns} data={data} filename={"table_leave"}/>
-        </Box>
-      </Flex>
-    </HrLayout>
-  );
-};
-
-export default Leave;
+export default DataTable;

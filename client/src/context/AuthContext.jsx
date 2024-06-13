@@ -34,7 +34,6 @@ const AuthProvider = ({ children }) => {
       setIsLogin(true);
 
       if (rememberMe) {
-        //localStorage.setItem("rememberMe", JSON.stringify(rememberMe));
         localStorage.setItem("nip", nip);
         localStorage.setItem("password", password);
       }

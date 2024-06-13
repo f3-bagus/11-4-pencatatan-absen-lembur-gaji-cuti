@@ -302,7 +302,7 @@ const Salary = () => {
     <HrLayout>
       <Flex w="full" p="5" direction="column" gap={5}>
         <Heading as="h1" size="xl">
-          Salary
+          Payroll
         </Heading>
         <Box
           bg={useColorModeValue("white", "green.800")}

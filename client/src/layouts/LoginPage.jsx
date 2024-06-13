@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   Button,
   Flex,
@@ -11,29 +11,38 @@ import {
   InputRightElement,
   FormErrorMessage,
   Stack,
+  Checkbox,
   Image,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
 import { BiShow, BiHide } from "react-icons/bi";
 import { validationSchema } from "../utils/validationSchema";
+import { AuthContext } from "../context/AuthContext";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const { login } = useContext(AuthContext);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const initialValues = {
-    nip: "",
-    password: "",
+    nip: localStorage.getItem("nip")??"",
+    password: localStorage.getItem("password")?? "",
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    console.log(values);
-    setSuccess(true);
+    login(values.nip, values.password, rememberMe);
     setSubmitting(false);
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("nip") && localStorage.getItem("password")) {
+      setRememberMe(true);
+    }
+  }, []);
 
   return (
     <Stack
@@ -55,95 +64,102 @@ const LoginPage = () => {
             </Heading>
             <Text color={"gray.500"}>Sign in to your account</Text>
           </Flex>
-          {success ? (
-            <h1>You are logged in</h1>
-          ) : (
-            <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleSubmit}
-            >
-              {({ isSubmitting, isValid }) => (
-                <Form>
-                  <Field name="nip">
-                    {({ field, form }) => (
-                      <FormControl
-                        isInvalid={form.errors.nip && form.touched.nip}
-                      >
-                        <FormLabel htmlFor="nip">
-                          NIP
-                          <Text as="span" color="red.500">
-                            *
-                          </Text>
-                        </FormLabel>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ isSubmitting, isValid, setValues }) => (
+              <Form>
+                <Field name="nip">
+                  {({ field, form }) => (
+                    <FormControl
+                      isInvalid={form.errors.nip && form.touched.nip}
+                    >
+                      <FormLabel htmlFor="nip">
+                        NIP
+                        <Text as="span" color="red.500">
+                          *
+                        </Text>
+                      </FormLabel>
+                      <Input
+                        {...field}
+                        id="nip"
+                        type="text"
+                        focusBorderColor="green.500"
+                        _autofill={{
+                          boxShadow: "0 0 0 30px #9AE6B4 inset !important",
+                          textFillColor: "black !important",
+                        }}
+                      />
+                      <FormErrorMessage>{form.errors.nip}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+                <Field name="password">
+                  {({ field, form }) => (
+                    <FormControl
+                      isInvalid={form.errors.password && form.touched.password}
+                    >
+                      <FormLabel htmlFor="password">
+                        Password
+                        <Text as="span" color="red.500">
+                          *
+                        </Text>
+                      </FormLabel>
+                      <InputGroup>
                         <Input
                           {...field}
-                          id="nip"
-                          type="text"
+                          id="password"
+                          type={showPassword ? "text" : "password"}
                           focusBorderColor="green.500"
                           _autofill={{
                             boxShadow: "0 0 0 30px #9AE6B4 inset !important",
                             textFillColor: "black !important",
                           }}
                         />
-                        <FormErrorMessage>{form.errors.nip}</FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Field name="password">
-                    {({ field, form }) => (
-                      <FormControl
-                        isInvalid={
-                          form.errors.password && form.touched.password
-                        }
+                        <InputRightElement width="4.5rem">
+                          <Button
+                            h="1.75rem"
+                            size="md"
+                            onClick={handleClickShowPassword}
+                          >
+                            {showPassword ? <BiShow /> : <BiHide />}
+                          </Button>
+                        </InputRightElement>
+                      </InputGroup>
+                      <FormErrorMessage>
+                        {form.errors.password}
+                      </FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+                <Field name="rememberMe">
+                  {() => (
+                    <FormControl py="5">
+                      <Checkbox
+                        isChecked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                        colorScheme="green"
                       >
-                        <FormLabel htmlFor="password">
-                          Password
-                          <Text as="span" color="red.500">
-                            *
-                          </Text>
-                        </FormLabel>
-                        <InputGroup>
-                          <Input
-                            {...field}
-                            id="password"
-                            type={showPassword ? "text" : "password"}
-                            focusBorderColor="green.500"
-                            _autofill={{
-                              boxShadow: "0 0 0 30px #9AE6B4 inset !important",
-                              textFillColor: "black !important",
-                            }}
-                          />
-                          <InputRightElement width="4.5rem">
-                            <Button
-                              h="1.75rem"
-                              size="md"
-                              onClick={handleClickShowPassword}
-                            >
-                              {showPassword ? <BiShow /> : <BiHide />}
-                            </Button>
-                          </InputRightElement>
-                        </InputGroup>
-                        <FormErrorMessage>
-                          {form.errors.password}
-                        </FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Stack spacing={6} mt={16}>
-                    <Button
-                      type="submit"
-                      colorScheme="green"
-                      isLoading={isSubmitting}
-                      isDisabled={!isValid || isSubmitting}
-                    >
-                      Sign in
-                    </Button>
-                  </Stack>
-                </Form>
-              )}
-            </Formik>
-          )}
+                        Remember Me
+                      </Checkbox>
+                    </FormControl>
+                  )}
+                </Field>
+                <Stack spacing={6}>
+                  <Button
+                    type="submit"
+                    colorScheme="green"
+                    isLoading={isSubmitting}
+                    isDisabled={!isValid || isSubmitting}
+                  >
+                    Sign in
+                  </Button>
+                </Stack>
+              </Form>
+            )}
+          </Formik>
         </Stack>
       </Flex>
       <Flex flex={1}>

@@ -92,9 +92,13 @@ const getEmployeeAttendance = async (req, res) => {
             {
                 $project: {
                     _id: 0,
-                    employee_id: "$_id",
-                    employee_name: "$name",
-                    employee_nip: "$nip",
+                    name: "$name",
+                    nip: "$nip",
+                    email: "$email",
+                    phone: "$phone",
+                    division: "$division",
+                    gender: "$gender",
+                    type: "$type",
                     clock_in: "$attendances.clock_in",
                     clock_out: "$attendances.clock_out",
                     status_attendance: "$attendances.status_attendance"
@@ -115,7 +119,7 @@ const getEmployeeAttendance = async (req, res) => {
 };
 
 /* Sistem : Auto Update Attendance */
-const updateAttendance = async (req, res) => {
+const updateAttendance = async () => {
     const now = new Date();
     const todayDate = formatDate(now);
 
@@ -124,10 +128,14 @@ const updateAttendance = async (req, res) => {
             { 
                 date: todayDate, 
                 clock_out: null, 
-                status_attendance: { $in: ['clock-in ok', 'clock-in late'] } 
+                status_attendance: { 
+                    $in: ['clock-in ok', 'clock-in late'] 
+                } 
             },
             { 
-                $set: { status_attendance: { $concat: ['$status_attendance', ' without clock out'] } } 
+                $set: { 
+                    status_attendance: { $concat: ['$status_attendance', ' without clock out'] } 
+                } 
             }
         );
         updatedCount = updateAttendance.nModified;
@@ -142,7 +150,6 @@ const updateAttendance = async (req, res) => {
         });
 
         const attendanceRecords = employeesAbsent.map(employee => ({
-            employee: employee._id,
             nip: employee.nip,
             date: todayDate,
             status_attendance: 'absent',

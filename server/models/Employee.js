@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const EmployeeSchema = new mongoose.Schema({    
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
     nip: { 
         type: String, 
         unique: true, 
@@ -31,7 +27,7 @@ const EmployeeSchema = new mongoose.Schema({
     },
     type: { 
         type: String, 
-        enum: ["permanent", "contract", "intern", "part_time"],
+        enum: ["permanent", "contract", "intern"],
         default: "permanent" 
     },
     division: { 
@@ -55,11 +51,7 @@ const EmployeeSchema = new mongoose.Schema({
     updated_at: { 
         type: Date, 
         default: Date.now 
-    },
-    attendances: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Attendance'
-    }]
+    }
 }, { 
     collection: 'tbl_employees' 
 });

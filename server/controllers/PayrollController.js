@@ -2,6 +2,11 @@
 const PayrollModel = require('../models/Payroll');
 
 //* All Method *//
+/* Only Get Date without Time */
+function formatDate(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
 /* Admin & HR : Get all employee payroll data */
 const getAllEmployeePayroll = async (req, res) => {
   try {
@@ -176,9 +181,108 @@ const getSelfPayroll = async (req, res) => {
   }
 };
 
+/* Sistem: Auto Calculate And Update All Employee Payroll  */
+const calculateAndUpdatePayroll = async () => {
+    const now = new Date();
+    const todayDate = formatDate(now);
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    try {
+        const employees = await EmployeeModel.find({ archived: { $ne: 1 } });
+
+        for (const employee of employees) {
+            const nip = employee.nip;
+            let basicSalary = 0;
+            if (employee.type === "intern") {
+                basicSalary = 4000000;
+            } else {
+                switch (employee.division) {
+                    case "IT":
+                        basicSalary = 7000000;
+                        break;
+                    case "Sales":
+                    case "Marketing":
+                        basicSalary = 5000000;
+                        break;
+                    case "Accounting":
+                        basicSalary = 6500000;
+                        break;
+                    default:
+                        basicSalary = 4500000;
+                }
+            }
+            
+            const payroll = await PayrollModel.findOne({ 
+                nip, 
+                date: { 
+                    $gte: new Date(currentYear, currentMonth, 1), 
+                    $lt: new Date(currentYear, currentMonth + 1, 1) 
+                } 
+            });
+
+            const attendanceData = await AttendanceModel.find({ 
+                nip, 
+                date: { 
+                    $gte: new Date(currentYear, currentMonth, 1), 
+                    $lt: new Date(currentYear, currentMonth + 1, 1) 
+                } 
+            });
+
+            let deductionPermission = 0;
+            let deductionAbsent = 0;
+            attendanceData.forEach(att => {
+                if (att.status_attendance === "permit") {
+                    deductionPermission += 0.5 * (1 / 24) * basicSalary;
+                } else if (att.status_attendance === "absent") {
+                    deductionAbsent += (1 / 24) * basicSalary;
+                }
+            });
+
+            const overtimeData = await OvertimeModel.find({ 
+                nip, 
+                date: { 
+                    $gte: new Date(currentYear, currentMonth, 1), 
+                    $lt: new Date(currentYear, currentMonth + 1, 1) 
+                } 
+            });
+
+            let overtimeSalary = 0;
+            overtimeData.forEach(ot => {
+                if (ot.status_overtime === "taken") {
+                    overtimeSalary += ot.overtime_rate;
+                }
+            });
+
+            const totalSalary = basicSalary + overtimeSalary - deductionPermission - deductionAbsent;
+            
+            const payrollData = {
+                nip: employee.nip,
+                date: todayDate,
+                basic_salary: basicSalary,
+                overtime_salary: overtimeSalary,
+                deduction_permission: deductionPermission,
+                deduction_absent: deductionAbsent,
+                total_salary: totalSalary
+            };
+
+            if (payroll) {
+                await PayrollModel.updateOne({ _id: payroll._id }, payrollData);
+            } else {
+                await PayrollModel.create(payrollData);
+            }
+        }
+
+        console.log('Payroll records updated successfully.');
+    } catch (error) {
+        console.error('Error updating payroll records:', error);
+    }
+};
+
 
 module.exports = {
   getAllEmployeePayroll,
   getEmployeePayroll,
-  getSelfPayroll
+  getSelfPayroll,
+  calculateAndUpdatePayroll
 };

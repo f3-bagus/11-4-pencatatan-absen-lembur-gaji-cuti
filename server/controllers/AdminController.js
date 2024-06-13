@@ -366,7 +366,7 @@ const getUser = async (req, res) => {
             }
         ]);
 
-        const userData = hrData.concat(employeeData);
+        const allUser = adminData.concat(hrData, employeeData);
 
         if (userData.length === 0) {
             return res.status(404).json({ 

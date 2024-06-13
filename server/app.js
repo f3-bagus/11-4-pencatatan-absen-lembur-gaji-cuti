@@ -26,10 +26,19 @@ const routes = require('./routes');
 app.use('/api/', routes);
 
 // Schedule the updateAttendance function to run during working days at 23:59
-const AttendanceController = require('./controllers/AttendanceController');
+const attendanceController = require('./controllers/AttendanceController');
 cron.schedule('59 23 * * 1-5', () => {
   console.log('Running the scheduled task: updateAttendance');
-  AttendanceController.updateAttendance();
+  attendanceController.updateAttendance();
+}, {
+  timezone: "Asia/Jakarta"
+});
+
+// Schedule the calculateAndUpdatePayroll function to run on the 1st of every month at 00:00
+const payrollController = require('./controllers/PayrollController');
+cron.schedule('0 0 1 * *', () => {
+  console.log('Running the scheduled task: calculateAndUpdatePayroll');
+  payrollController.calculateAndUpdatePayroll();
 }, {
   timezone: "Asia/Jakarta"
 });

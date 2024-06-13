@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const PayrollSchema = new mongoose.Schema({    
-    employee: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Employee'
-    },
     nip: { 
         type: String, 
         required: true 
@@ -22,10 +18,6 @@ const PayrollSchema = new mongoose.Schema({
         default: null
     },
     deduction_permission: {
-        type: Number,
-        default: null
-    },
-    deduction_sick: {
         type: Number,
         default: null
     },

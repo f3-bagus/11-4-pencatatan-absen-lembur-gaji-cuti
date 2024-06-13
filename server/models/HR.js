@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const HRSchema = new mongoose.Schema({    
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
     nip: { 
         type: String, 
         unique: true, 

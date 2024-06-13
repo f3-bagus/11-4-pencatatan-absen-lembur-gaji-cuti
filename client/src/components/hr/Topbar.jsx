@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Swal from "sweetalert2";
 import {
   Box,
@@ -28,12 +28,37 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import { MdMenu } from "react-icons/md";
 import { SidebarNav } from "./SidebarNav";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Topbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
+  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    Swal.fire({
+      title: "Logout",
+      text: "Are you sure you want to logout?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, logout!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await logout(); 
+          Swal.fire("Logged Out!", "You have been logged out.", "success");
+          navigate("/"); 
+        } catch (error) {
+          console.error("Logout failed", error);
+          Swal.fire("Error!", "There was a problem logging out.", "error");
+        }
+      }
+    });
+  };
 
   return (
     <>
@@ -112,27 +137,7 @@ export default function Topbar() {
                     _hover={{
                       bg: useColorModeValue("gray.100", "green.600"),
                     }}
-                    onClick={() => {
-                      Swal.fire({
-                        title: "Logout",
-                        text: "Are you sure you want to logout?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes, logout!",
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                          // Tambahkan aksi logout di sini
-                          // Misalnya, melakukan redirect atau menjalankan fungsi logout
-                          Swal.fire(
-                            "Logged Out!",
-                            "You have been logged out.",
-                            "success"
-                          );
-                        }
-                      });
-                    }}
+                    onClick={handleLogout}
                   >
                     Logout
                   </MenuItem>

@@ -22,7 +22,7 @@ const items = [
     type: "link",
     label: "Dashboard",
     icon: MdOutlineSpaceDashboard,
-    path: "/hr/dashboard",
+    path: "/hr",
   },
   {
     type: "header",
@@ -36,9 +36,9 @@ const items = [
   },
   {
     type: "link",
-    label: "Salary",
+    label: "Payroll",
     icon: AiOutlineDollarCircle,
-    path: "/hr/salary",
+    path: "/hr/payroll",
   },
   {
     type: "header",

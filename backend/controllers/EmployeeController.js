@@ -268,6 +268,28 @@ const getAvailableOvertime = async (req, res) => {
   }
 };
 
+/* Employee: Get History of Accepted Overtime */
+const getAcceptedOvertimeHistory = async (req, res) => {
+  const { nip } = req.user;
+
+  try {
+    const acceptedOvertime = await OvertimeModel.find({
+      nip,
+      status_overtime: 'taken'
+    });
+
+    res.status(200).json({
+      message: "Accepted overtime history retrieved successfully",
+      data: acceptedOvertime
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};
+
+
 /* Employee: Accept Overtime */
 const acceptOvertime = async (req, res) => {
   const { overtimeId } = req.params; 
@@ -339,6 +361,8 @@ module.exports = {
   clockOut,
   getAllEmployeeData,
   getEmployee,
+  getAvailableOvertime,
+  getAcceptedOvertimeHistory,
   acceptOvertime,
   getLeaveHistory,
   getOvertimeHistory

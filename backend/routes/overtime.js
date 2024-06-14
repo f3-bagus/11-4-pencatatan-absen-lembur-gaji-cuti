@@ -4,12 +4,14 @@ const router = express.Router();
 //* Import Controller *//
 const auth = require('../controllers/AuthController');
 const overtimeController = require('../controllers/OvertimeController');
-const { getOvertimes } = require('../controllers/OvertimeController');
-const authenticate = require('../controllers/AuthController');
+const employeeController = require('../controllers/EmployeeController');
 
 
 //* Routes *//
-router.get('/overtime', authenticate.authenticateToken, overtimeController.getOvertimes);
-router.get('/overtime', getOvertimes);
+/* Employee: Get Available Overtime */
+router.get('/data', auth.authorizeRole('employee'), employeeController.getAvailableOvertime);
+
+/* Employee: Get History of Accepted Overtime */
+router.get('/data/history', auth.authorizeRole('employee'), employeeController.getAcceptedOvertimeHistory);
 
 module.exports = router;

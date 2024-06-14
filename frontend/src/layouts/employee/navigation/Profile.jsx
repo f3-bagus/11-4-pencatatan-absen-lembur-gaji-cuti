@@ -24,7 +24,7 @@ const Profile = () => {
             w="full"
             borderRadius="2xl"
             boxShadow="lg"
-            bg={useColorModeValue("white", "green.900")}
+            bg={useColorModeValue("white", "green.800")}
           >
             <Box
               borderTopRadius="2xl"

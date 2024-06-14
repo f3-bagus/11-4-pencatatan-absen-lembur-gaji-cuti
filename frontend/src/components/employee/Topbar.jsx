@@ -102,8 +102,9 @@ export default function Topbar() {
                   <Avatar
                     size={"sm"}
                     src={
-                      "https://i0.wp.com/global.ac.id/wp-content/uploads/2015/04/speaker-3-v2.jpg?fit=768%2C768&ssl=1"
+                      ""
                     }
+                    bgColor="gray.500"
                   />
                 </MenuButton>
                 <MenuList
@@ -115,14 +116,15 @@ export default function Topbar() {
                     <Avatar
                       size={"xl"}
                       src={
-                        "https://i0.wp.com/global.ac.id/wp-content/uploads/2015/04/speaker-3-v2.jpg?fit=768%2C768&ssl=1"
+                        ""
                       }
+                      bgColor="gray.500"
                     />
                   </Center>
                   <br />
                   <Center flexDirection="column">
                     <Text fontWeight="bold" fontSize="sm">
-                      NIP:{" "}{nip}
+                      NIP :{" "}{nip}
                     </Text>
                     <Text color="gray.400" fontSize="md" fontWeight="bold">
                       Employee

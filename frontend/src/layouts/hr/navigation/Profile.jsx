@@ -59,8 +59,9 @@ const Profile = () => {
             <VStack mt="-12" spacing="3" mb={5}>
               <Avatar
                 size="2xl"
-                src="https://i0.wp.com/global.ac.id/wp-content/uploads/2015/04/speaker-3-v2.jpg?fit=768%2C768&ssl=1"
+                src=""
                 borderColor="white"
+                bgColor="gray.500"
               />
               <Text fontSize="lg" fontWeight="bold">
                 {name}

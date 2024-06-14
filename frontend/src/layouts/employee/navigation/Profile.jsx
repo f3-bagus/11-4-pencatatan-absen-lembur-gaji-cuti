@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import HrLayout from "../HrLayout";
+import React from "react";
+import EmployeeLayout from "../EmployeeLayout";
 import {
   Box,
   Avatar,
@@ -14,35 +14,10 @@ import {
   Input,
   Button,
 } from "@chakra-ui/react";
-import axios from "axios";
 
 const Profile = () => {
-  const [name, setName] = useState("");
-  const [nip, setNip] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-
-  const getProfile = () => {
-    axios
-      .get("http://localhost:5000/api/user/profile")
-      .then((res) => {
-        //console.log(res.data.data);
-        setName(res.data.data.name);
-        setNip(res.data.data.nip);
-        setEmail(res.data.data.email);
-        setPhone(res.data.data.phone);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    getProfile();
-  }, []);
-
   return (
-    <HrLayout>
+    <EmployeeLayout>
       <Flex w="full" p="5" direction={{ base: "column", md: "row" }} gap={5}>
         <Flex w="full" direction="column" gap={5}>
           <Box
@@ -63,10 +38,13 @@ const Profile = () => {
                 borderColor="white"
               />
               <Text fontSize="lg" fontWeight="bold">
-                {name}
+                dummy
               </Text>
               <Text fontSize="md" color="gray.500">
-                Account type: <b>Hr</b>
+                Division: <b>IT</b>
+              </Text>
+              <Text fontSize="md" color="gray.500">
+                Account type: <b>Employee</b>
               </Text>
             </VStack>
           </Box>
@@ -140,7 +118,7 @@ const Profile = () => {
               <Input
                 type="text"
                 focusBorderColor="green.500"
-                placeholder={nip}
+                placeholder="dummy"
                 disabled
               />
             </FormControl>
@@ -149,7 +127,7 @@ const Profile = () => {
               <Input
                 type="text"
                 focusBorderColor="green.500"
-                placeholder={name}
+                placeholder="dummy"
               />
             </FormControl>
           </Stack>
@@ -159,7 +137,7 @@ const Profile = () => {
               <Input
                 type="email"
                 focusBorderColor="green.500"
-                placeholder={email}
+                placeholder="dummy"
               />
             </FormControl>
             <FormControl>
@@ -167,7 +145,7 @@ const Profile = () => {
               <Input
                 type="number"
                 focusBorderColor="green.500"
-                placeholder={phone}
+                placeholder="dummy"
               />
             </FormControl>
           </Stack>
@@ -187,7 +165,7 @@ const Profile = () => {
           </Button>
         </Box>
       </Flex>
-    </HrLayout>
+    </EmployeeLayout>
   );
 };
 

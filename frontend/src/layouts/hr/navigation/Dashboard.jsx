@@ -1,24 +1,50 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import HrLayout from "../HrLayout";
-import {
-  Flex,
-  Stack,
-  Box,
-  Heading,
-  useColorModeValue,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  IconButton,
-} from "@chakra-ui/react";
+import { Flex, Stack, Box, Heading, useColorModeValue } from "@chakra-ui/react";
 import { FaUserTie, FaUser } from "react-icons/fa";
 import { RiTeamFill } from "react-icons/ri";
-import { MdMenu } from "react-icons/md";
 import LemburChart from "../../../components/hr/chart/LemburChart";
 import CutiChart from "../../../components/hr/chart/CutiChart";
+import axios from "axios";
 
 const Dashboard = () => {
+  const [roleCounts, setRoleCounts] = useState({});
+  const [totalDivisions, setTotalDivisions] = useState(0);
+
+  const getData = () => {
+    axios
+      .get("http://localhost:5000/api/employee/data")
+      .then((res) => {
+        const employees = res.data.data;
+        countRoles(employees);
+        countDivisions(employees);
+        console.log(employees);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const countRoles = (employees) => {
+    const counts = employees.reduce((acc, employee) => {
+      acc[employee.role] = (acc[employee.role] || 0) + 1;
+      return acc;
+    }, {});
+    setRoleCounts(counts);
+  };
+
+  const countDivisions = (employees) => {
+    const divisions = employees.reduce((acc, employee) => {
+      acc.add(employee.division);
+      return acc;
+    }, new Set());
+    setTotalDivisions(divisions.size);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <HrLayout>
       <Flex direction="column" w="full" py="4">
@@ -27,7 +53,6 @@ const Dashboard = () => {
           direction={{ base: "column", md: "row" }}
           spacing="24px"
           w="full"
-          //p="4"
           mb="4"
           px="2"
         >
@@ -49,7 +74,7 @@ const Dashboard = () => {
                   Total Employees
                 </Heading>
                 <Heading as="h1" size="lg">
-                  100
+                  {roleCounts.employee || 0}
                 </Heading>
               </Stack>
               <Box bg="green.500" p="3" borderRadius="full">
@@ -75,7 +100,7 @@ const Dashboard = () => {
                   Total Managers
                 </Heading>
                 <Heading as="h1" size="lg">
-                  50
+                  {roleCounts.manager || 0}
                 </Heading>
               </Stack>
               <Box bg="green.500" p="3" borderRadius="full">
@@ -101,7 +126,7 @@ const Dashboard = () => {
                   Total Divisions
                 </Heading>
                 <Heading as="h1" size="lg">
-                  5
+                  {totalDivisions}
                 </Heading>
               </Stack>
               <Box bg="green.500" p="3" borderRadius="full">
@@ -116,7 +141,6 @@ const Dashboard = () => {
           direction={{ base: "column", md: "row" }}
           spacing="24px"
           w="full"
-          // px="4"
           px="2"
         >
           <Box
@@ -131,22 +155,6 @@ const Dashboard = () => {
               <Heading as="h1" size="sm" mb={6}>
                 Overtime Overview
               </Heading>
-              {/* <Menu>
-                <MenuButton
-                  as={IconButton}
-                  aria-label="Options"
-                  icon={<MdMenu />}
-                  variant="outline"
-                />
-                <MenuList>
-                  <MenuItem>
-                    Day
-                  </MenuItem>
-                  <MenuItem>
-                    Month
-                  </MenuItem>
-                </MenuList>
-              </Menu> */}
             </Stack>
             <LemburChart />
           </Box>
@@ -162,22 +170,6 @@ const Dashboard = () => {
               <Heading as="h1" size="sm" mb={6}>
                 Leave Overview
               </Heading>
-              {/* <Menu>
-                <MenuButton
-                  as={IconButton}
-                  aria-label="Options"
-                  icon={<MdMenu />}
-                  variant="outline"
-                />
-                <MenuList>
-                  <MenuItem>
-                    Day
-                  </MenuItem>
-                  <MenuItem>
-                    Month
-                  </MenuItem>
-                </MenuList>
-              </Menu> */}
             </Stack>
             <CutiChart />
           </Box>

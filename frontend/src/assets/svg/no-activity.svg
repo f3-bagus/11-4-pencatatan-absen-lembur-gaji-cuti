@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120px" height="120px" viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 56.3 (101010) - https://sketch.com -->
+    <title>A0738A72-9539-41FD-B792-66804B7C75C8svg/</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <filter x="-5.0%" y="-75.0%" width="110.0%" height="250.0%" filterUnits="objectBoundingBox" id="filter-1">
+            <feGaussianBlur stdDeviation="2" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+        <linearGradient x1="64.8048896%" y1="17.044279%" x2="64.8048896%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#B4B4B4" offset="0%"></stop>
+            <stop stop-color="#F2F4F7" offset="100%"></stop>
+        </linearGradient>
+        <path d="M19.7288136,21.3728814 L9.86440678,21.3728814 L0,21.3728814 C0,19.180791 0,16.9887006 0,14.7966102 C0,6.57627119 2.81840194,0 9.86440678,0 C16.9104116,0 19.7288136,6.57627119 19.7288136,14.7966102 C19.7288136,16.9887006 19.7288136,19.180791 19.7288136,21.3728814 Z" id="path-3"></path>
+        <linearGradient x1="64.8048896%" y1="8.79481076%" x2="64.8048896%" y2="76.7661145%" id="linearGradient-5">
+            <stop stop-color="#212121" offset="0%"></stop>
+            <stop stop-color="#777777" stop-opacity="0.5" offset="100%"></stop>
+        </linearGradient>
+        <filter x="-15.6%" y="-8.4%" width="131.3%" height="116.8%" filterUnits="objectBoundingBox" id="filter-6">
+            <feGaussianBlur stdDeviation="0.6" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+        <linearGradient x1="-9.69940455%" y1="88.8622246%" x2="60.5295342%" y2="30.6075157%" id="linearGradient-7">
+            <stop stop-color="#B4B4B4" offset="0%"></stop>
+            <stop stop-color="#F2F4F7" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="-223.25685%" y1="381.355259%" x2="488.470772%" y2="204.988236%" id="linearGradient-8">
+            <stop stop-color="#F96D01" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="99.9208193%"></stop>
+        </linearGradient>
+        <linearGradient x1="-112.737593%" y1="54.9946133%" x2="152.678796%" y2="51.481087%" id="linearGradient-9">
+            <stop stop-color="#FF6F00" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="99.9208193%"></stop>
+        </linearGradient>
+        <linearGradient x1="64.8048896%" y1="78.5899457%" x2="64.8048896%" y2="32.0559396%" id="linearGradient-10">
+            <stop stop-color="#212121" offset="0%"></stop>
+            <stop stop-color="#777777" offset="100%"></stop>
+        </linearGradient>
+        <filter x="-13.0%" y="-16.7%" width="126.1%" height="133.3%" filterUnits="objectBoundingBox" id="filter-11">
+            <feGaussianBlur stdDeviation="1" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+        <linearGradient x1="64.8048896%" y1="100%" x2="64.8048896%" y2="32.0559396%" id="linearGradient-12">
+            <stop stop-color="#B4B4B4" offset="0%"></stop>
+            <stop stop-color="#F2F4F7" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="admin" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="admin---cash-advance---blank-1.0" transform="translate(-660.000000, -384.000000)">
+            <rect fill="#F2F4F7" x="0" y="0" width="1440" height="1024"></rect>
+            <g id="Talenta/-Template/-Basic" fill="#FFFFFF" stroke="#E2E2E2">
+                <g id="Stage" transform="translate(24.000000, 84.000000)">
+                    <rect id="base" x="-0.5" y="-0.5" width="1393" height="877" rx="4"></rect>
+                </g>
+            </g>
+            <g id="blank" transform="translate(532.000000, 384.000000)">
+                <g id="Icons/-Blankslate/-No-activity" transform="translate(128.000000, 0.000000)">
+                    <g id="Icon">
+                        <ellipse id="Oval" fill-opacity="0.5" fill="#B4B4B4" filter="url(#filter-1)" cx="60" cy="116" rx="60" ry="4"></ellipse>
+                        <g id="Path-2" transform="translate(4.000000, 0.000000)">
+                            <mask id="mask-4" fill="white">
+                                <use xlink:href="#path-3"></use>
+                            </mask>
+                            <use id="Mask" fill="url(#linearGradient-2)" xlink:href="#path-3"></use>
+                            <path d="M19.7288136,21.3728814 L14.7966102,21.3728814 C14.7966102,19.180791 14.7966102,16.9887006 14.7966102,14.7966102 C14.7966102,7.69064671 11.5084746,4.93220339 9.86440678,3.28813559 C8.22033898,1.6440678 8.22033898,1.6440678 8.22033898,0 C18.0847458,0 19.7288136,8.22033898 19.7288136,14.7966102 C19.7288136,19.180791 19.7288136,21.3728814 19.7288136,21.3728814 Z" fill-opacity="0.6" fill="url(#linearGradient-5)" filter="url(#filter-6)" mask="url(#mask-4)"></path>
+                        </g>
+                        <path d="M12,0 C17.3616285,0 56.3806387,0 79.7755102,0 C88.0408163,0 93,6.54545455 93,14.7272727 C93,26.3231486 93,54.0807243 93,98 C56.6326531,98 38.4489796,98 38.4489796,98 C30.1836735,98 23.5714286,91.4545455 23.5714286,83.2727273 C23.5714286,75.0909091 23.5714286,19.9877166 23.5714286,14.7272727 C23.5714286,6.54545455 20.2653061,0 12,0 Z" id="Rectangle" fill="url(#linearGradient-7)"></path>
+                        <rect id="Rectangle" fill="#FFFFFF" x="36" y="18" width="8" height="8" rx="1.6440678"></rect>
+                        <rect id="Rectangle" fill="url(#linearGradient-8)" x="36" y="38" width="8" height="8" rx="1.6440678"></rect>
+                        <rect id="Rectangle" fill="#FFFFFF" x="36" y="58" width="8" height="8" rx="1.6440678"></rect>
+                        <rect id="Rectangle" fill="#FFFFFF" x="48" y="20" width="35" height="4" rx="1.6440678"></rect>
+                        <rect id="Rectangle" fill="url(#linearGradient-9)" x="48" y="40" width="35" height="4" rx="1.6440678"></rect>
+                        <rect id="Rectangle" fill="#FFFFFF" x="48" y="60" width="35" height="4" rx="1.6440678"></rect>
+                        <path d="M44.5714286,80 C44.5714286,80 44.5714286,81.6363636 44.5714286,84.9090909 C44.5714286,88.1818182 46.2142857,98 38,98 C49.5,98 34.1358502,98 47.8571429,98 C56.0639214,98 61,91.4545455 61,83.2727273 C61,81.0909091 61,80 61,80 C53.3333333,80 47.8571429,80 44.5714286,80 Z" id="Path-3" fill-opacity="0.6" fill="url(#linearGradient-10)" filter="url(#filter-11)"></path>
+                        <path d="M51.0731707,75 C51.0731707,75 51.0731707,77.7380952 51.0731707,83.2142857 C51.0731707,91.4285714 46.1707317,98 38,98 C49.4390244,98 53.439975,98 91.9268293,98 C100.097561,98 105,93.0714286 105,84.8571429 C105,82.6666667 105,79.3809524 105,75 L51.0731707,75 Z" id="Path-3" fill="url(#linearGradient-12)"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

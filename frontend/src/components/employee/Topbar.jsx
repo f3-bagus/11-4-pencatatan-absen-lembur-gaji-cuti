@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import Swal from 'sweetalert2';
+import React, { useContext, useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import {
   Box,
   Flex,
@@ -31,11 +31,19 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function Topbar() {
+  const [nip, setNip] = useState("");
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedNip = localStorage.getItem("nip");
+    if (storedNip) {
+      setNip(storedNip);
+    }
+  }, []);
 
   const handleLogout = async () => {
     Swal.fire({
@@ -49,9 +57,9 @@ export default function Topbar() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await logout(); 
+          await logout();
           Swal.fire("Logged Out!", "You have been logged out.", "success");
-          navigate("/"); 
+          navigate("/");
         } catch (error) {
           console.error("Logout failed", error);
           Swal.fire("Error!", "There was a problem logging out.", "error");
@@ -113,14 +121,21 @@ export default function Topbar() {
                   </Center>
                   <br />
                   <Center flexDirection="column">
-                    <Text>username</Text>
-                    <Text color="gray.400" fontSize="sm">Employee</Text>
+                    <Text fontWeight="bold" fontSize="sm">
+                      NIP:{" "}{nip}
+                    </Text>
+                    <Text color="gray.400" fontSize="md" fontWeight="bold">
+                      Employee
+                    </Text>
                   </Center>
                   <MenuDivider />
                   <MenuItem
                     bg={useColorModeValue("white", "green.900")}
                     _hover={{
                       bg: useColorModeValue("gray.100", "green.600"),
+                    }}
+                    onClick={() => {
+                      navigate("/employee/profile");
                     }}
                   >
                     Profile
@@ -156,11 +171,14 @@ export default function Topbar() {
               fontSize="2xl"
               color={colorMode === "light" ? "green.500" : "green.200"}
             >
-              <Text as="span" fontStyle="italic">A</Text>bsentee
+              <Text as="span" fontStyle="italic">
+                A
+              </Text>
+              bsentee
             </Heading>
           </DrawerHeader>
           <DrawerBody>
-            <SidebarNav collapse={false}/>
+            <SidebarNav collapse={false} />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

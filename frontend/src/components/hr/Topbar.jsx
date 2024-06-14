@@ -41,7 +41,7 @@ export default function Topbar() {
   useEffect(() => {
     const storedNip = localStorage.getItem("nip");
     if (storedNip) {
-      setNip(JSON.parse(storedNip));
+      setNip(storedNip);
     }
   }, []);
 
@@ -121,7 +121,9 @@ export default function Topbar() {
                   </Center>
                   <br />
                   <Center flexDirection="column">
-                    <Text fontWeight="bold" fontSize="sm">{nip}</Text>
+                    <Text fontWeight="bold" fontSize="sm">
+                      NIP:{" "}{nip}
+                    </Text>
                     <Text color="gray.400" fontSize="md" fontWeight="bold">
                       Hr
                     </Text>

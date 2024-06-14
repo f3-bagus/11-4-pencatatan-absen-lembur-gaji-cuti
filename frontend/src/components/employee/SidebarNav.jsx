@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import {
   ListIcon,
   Heading,
@@ -6,62 +7,52 @@ import {
   Text,
   List,
   ListItem,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import {
-  MdOutlineSpaceDashboard,
-} from "react-icons/md";
+import { LuMonitorCheck } from "react-icons/lu";
+import { AiOutlineDollarCircle } from "react-icons/ai";
+import { PiAirplaneTilt } from "react-icons/pi";
+import { FaRegClock } from "react-icons/fa";
 
 const items = [
   {
-    type: "link",
-    label: "Employee",
-    icon: MdOutlineSpaceDashboard,
-    path: "/",
+    type: "header",
+    label: "Time Management",
   },
-
+  {
+    type: "link",
+    label: "Attendance",
+    icon: LuMonitorCheck,
+    path: "/employee",
+  },
+  {
+    type: "link",
+    label: "Overtime",
+    icon: FaRegClock,
+    path: "/employee/overtime",
+  },
+  {
+    type: "link",
+    label: "Leave",
+    icon: PiAirplaneTilt,
+    path: "/employee/leave",
+  },
   {
     type: "header",
-    label: "Employee",
+    label: "Payroll",
   },
   {
     type: "link",
-    label: "Employee",
-    icon: MdOutlineSpaceDashboard,
-    path: "/",
-  },
-  {
-    type: "link",
-    label: "Employee",
-    icon: MdOutlineSpaceDashboard,
-    path: "/",
-  },
-  
-  {
-    type: "header",
-    label: "Employee",
-  },
-  {
-    type: "link",
-    label: "Employee",
-    icon: MdOutlineSpaceDashboard,
-    path: "/",
-  },
-  {
-    type: "link",
-    label: "Employee",
-    icon: MdOutlineSpaceDashboard,
-    path: "/",
-  },
-  {
-    type: "link",
-    label: "Employee",
-    icon: MdOutlineSpaceDashboard,
-    path: "/",
+    label: "Payroll",
+    icon: AiOutlineDollarCircle,
+    path: "/employee/payroll",
   },
 ];
 
 const NavItem = ({ item, collapse }) => {
+  const location = useLocation();
   const { label, icon, path, type } = item;
+  const isActive = location.pathname === path;
 
   if (type === "link") {
     return (
@@ -81,7 +72,10 @@ const NavItem = ({ item, collapse }) => {
           fontWeight="medium"
           justifyContent={collapse ? "center" : ""}
           borderRadius={5}
-          _hover={{ textDecoration: "none", color: "green.500" }}
+          p="1"
+          _hover={{ textDecoration: "none", color: "green.300" }}
+          bg={isActive ? useColorModeValue("green.500", "green.900") : ""}
+          color={isActive ? "white" : ""}
         >
           <ListIcon as={icon} fontSize={22} m="0" />
           {!collapse && <Text>{label}</Text>}
@@ -108,7 +102,7 @@ const NavItem = ({ item, collapse }) => {
 
 export const SidebarNav = ({ collapse }) => {
   return (
-    <List w="full" mt={{ base: 0, md: 8}}>
+    <List w="full" mt={{ base: 0, md: 8 }}>
       {items.map((item, index) => (
         <ListItem key={index}>
           <NavItem item={item} collapse={collapse} />

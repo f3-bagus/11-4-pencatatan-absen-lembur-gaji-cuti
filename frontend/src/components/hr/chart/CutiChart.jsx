@@ -24,18 +24,21 @@ const CutiChart = () => {
   const { colorMode } = useColorMode();
 
   const data = {
-    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    labels: [
+      'January', 'February', 'March', 'April', 'May', 'June', 
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ],
     datasets: [
       {
         label: 'IT',
-        data: [2, 4, 3, 5, 7, 3, 1],
+        data: [10, 12, 8, 15, 18, 14, 12, 16, 20, 25, 22, 18],
         backgroundColor: '#C6F6D5',
         borderColor: '#38A169',
         borderWidth: 3,
       },
       {
         label: 'Accounting',
-        data: [4, 2, 1, 5, 6, 3, 5],
+        data: [12, 15, 10, 18, 20, 16, 14, 19, 22, 28, 25, 21],
         backgroundColor: '#BEE3F8',
         borderColor: '#3182CE',
         borderWidth: 3,

@@ -46,6 +46,10 @@ const Attedance = () => {
         accessor: "clock_out",
       },
       {
+        Header: "date",
+        accessor: "date",
+      },
+      {
         Header: "status_attendance",
         accessor: "status_attendance",
       },

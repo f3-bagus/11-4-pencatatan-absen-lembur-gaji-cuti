@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Button,
   Flex,
@@ -23,17 +23,25 @@ import { AuthContext } from "../context/AuthContext";
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const { login } = useContext(AuthContext);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const initialValues = {
-    nip: localStorage.getItem("nip")??"",
-    password: localStorage.getItem("password")?? "",
+    nip: localStorage.getItem("nip") ?? "",
+    password: localStorage.getItem("password") ?? "",
   };
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    login(values.nip, values.password, rememberMe);
+  const handleSubmit = async (values, { setSubmitting }) => {
+    setIsLoading(true); 
+    try {
+      await login(values.nip, values.password, rememberMe);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
+    setIsLoading(false);
     setSubmitting(false);
   };
 
@@ -150,7 +158,7 @@ const LoginPage = () => {
                   <Button
                     type="submit"
                     colorScheme="green"
-                    isLoading={isSubmitting}
+                    isLoading={isLoading} 
                     isDisabled={!isValid || isSubmitting}
                   >
                     Sign in

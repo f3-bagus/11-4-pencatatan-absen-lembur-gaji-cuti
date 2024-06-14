@@ -8,7 +8,14 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 import AdmDashboard from "./layouts/admin/navigation/Dashboard";
-import EmpDashboard from "./layouts/employee/navigation/Dashboard";
+
+import {
+  EmpAttedance,
+  EmpLeave,
+  EmpOvertime,
+  EmpPayroll,
+  EmpProfile
+} from './layouts/employee/navigation';
 
 import {
   HrDashboard,
@@ -39,7 +46,11 @@ function App() {
             <Route path="/hr/profile" element={<HrProfile />} />
           </Route>
           <Route element={<ProtectedRoute role="employee" />}>
-            <Route path="/employee" element={<EmpDashboard />} />
+            <Route path="/employee" element={<EmpAttedance />} />
+            <Route path="/employee/payroll" element={<EmpPayroll />} />
+            <Route path="/employee/overtime" element={<EmpOvertime />} />
+            <Route path="/employee/leave" element={<EmpLeave />} />
+            <Route path="/employee/profile" element={<EmpProfile />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

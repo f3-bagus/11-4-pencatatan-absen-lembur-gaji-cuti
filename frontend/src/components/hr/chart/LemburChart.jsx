@@ -26,11 +26,14 @@ const LemburChart = () => {
   const { colorMode } = useColorMode();
 
   const data = {
-    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    labels: [
+      'January', 'February', 'March', 'April', 'May', 'June', 
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ],
     datasets: [
       {
         label: 'IT',
-        data: [2, 4, 3, 5, 7, 3, 1],
+        data: [20, 15, 25, 30, 10, 45, 35, 20, 25, 40, 30, 20],
         fill: false,
         backgroundColor: '#C6F6D5',
         borderColor: '#38A169',
@@ -38,7 +41,7 @@ const LemburChart = () => {
       },
       {
         label: 'Accounting',
-        data: [4, 2, 1, 5, 6, 3, 5],
+        data: [15, 25, 20, 35, 40, 20, 25, 30, 35, 25, 15, 10],
         fill: false,
         backgroundColor: '#BEE3F8',
         borderColor: '#3182CE',

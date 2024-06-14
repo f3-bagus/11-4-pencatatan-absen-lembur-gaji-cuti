@@ -10,6 +10,9 @@ const { getEmployees, acceptOvertime, getLeaveHistory, getOvertimeHistory } = re
 /* Admin & HR: Get All Employee Data*/
 router.get('/data', auth.authorizeRole(['admin', 'hr']), employeeController.getAllEmployeeData);
 
+/* Admin & HR: Get Employee Data by NIP*/
+router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), employeeController.getEmployee);
+
 //employee accept overtime
 router.post('/accept-overtime', acceptOvertime);
 

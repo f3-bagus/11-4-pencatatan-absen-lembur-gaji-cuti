@@ -132,7 +132,7 @@ const clockOut = async (req, res) => {
   }
 };
 
-/* Admin : Get All Employee Data */
+/* Admin & HR : Get All Employee Data */
 const getAllEmployeeData = async (req, res) => {
   try {
       const employeeData = await EmployeeModel.aggregate([
@@ -184,11 +184,11 @@ const getAllEmployeeData = async (req, res) => {
   }
 };
 
-const getUser = async (req, res) => {
+/* Admin & HR : Get Employee Data by NIP */
+const getEmployee = async (req, res) => {
   const { nip } = req.params;
 
   try {
-
       const employeeData = await EmployeeModel.aggregate([
           {
               $lookup: {
@@ -338,6 +338,7 @@ module.exports = {
   clockIn,
   clockOut,
   getAllEmployeeData,
+  getEmployee,
   acceptOvertime,
   getLeaveHistory,
   getOvertimeHistory

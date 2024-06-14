@@ -31,14 +31,14 @@ const CutiChart = () => {
         data: [2, 4, 3, 5, 7, 3, 1],
         backgroundColor: '#C6F6D5',
         borderColor: '#38A169',
-        borderWidth: 1,
+        borderWidth: 3,
       },
       {
         label: 'Accounting',
         data: [4, 2, 1, 5, 6, 3, 5],
         backgroundColor: '#BEE3F8',
         borderColor: '#3182CE',
-        borderWidth: 1,
+        borderWidth: 3,
       },
     ],
   };

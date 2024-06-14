@@ -132,45 +132,201 @@ const clockOut = async (req, res) => {
   }
 };
 
-
-// Method untuk mengambil data employee
-const getEmployees = async (req, res) => {
+/* Admin & HR : Get All Employee Data */
+const getAllEmployeeData = async (req, res) => {
   try {
-    const employees = await EmployeeModel.find();
-    res.json(employees);
+      const employeeData = await EmployeeModel.aggregate([
+          {
+              $lookup: {
+                  from: 'tbl_users',
+                  localField: 'nip',
+                  foreignField: 'nip',
+                  as: 'user'
+              }
+          },
+          {
+              $unwind: '$user'
+          },
+          {
+              $match: {
+                  'user.archived': { $ne: 1 }
+              }
+          },
+          {
+              $project: {
+                  _id: 0,
+                  nip: '$nip',
+                  name: '$name',
+                  role: '$user.role',
+                  gender: '$user.gender',
+                  email: '$user.email',
+                  phone: '$user.phone',
+                  type: '$user.type',
+                  division: '$user.division'
+              }
+          }
+      ]);
+
+      if (!employeeData) {
+          return res.status(404).json({ 
+              message: 'User not found' 
+          });
+      }
+
+      res.status(200).json({
+          message: 'Success',
+          data: employeeData
+      });
   } catch (error) {
-    res.status(500).json({ 
-        message: error.message 
+      res.status(500).json({ 
+          message: error.message 
+      });
+  }
+};
+
+/* Admin & HR : Get Employee Data by NIP */
+const getEmployee = async (req, res) => {
+  const { nip } = req.params;
+
+  try {
+      const employeeData = await EmployeeModel.aggregate([
+          {
+              $lookup: {
+                  from: 'tbl_users',
+                  localField: 'nip',
+                  foreignField: 'nip',
+                  as: 'user'
+              }
+          },
+          {
+              $unwind: '$user'
+          },
+          {
+              $match: {
+                  'user.nip': nip,
+                  'user.archived': { $ne: 1 }
+              }
+          },
+          {
+              $project: {
+                  _id: 0,
+                  nip: '$nip',
+                  name: '$name',
+                  role: '$user.role',
+                  gender: '$user.gender',
+                  email: '$user.email',
+                  phone: '$user.phone',
+                  type: '$user.type',
+                  division: '$user.division'
+              }
+          }
+      ]);
+
+      if (!employeeData) {
+          return res.status(404).json({ 
+              message: 'User not found' 
+          });
+      }
+
+      res.status(200).json({
+          message: 'Success',
+          data: userData[0]
+      });
+  } catch (error) {
+      res.status(500).json({ 
+          message: error.message 
+      });
+  }
+};
+
+/* Employee: Get Available Overtime */
+const getAvailableOvertime = async (req, res) => {
+  const { nip } = req.user; 
+
+  try {
+    const employee = await EmployeeModel.findOne({ nip });
+
+    if (!employee) {
+      return res.status(404).json({
+        message: "Data User not found"
+      });
+    }
+
+    const availableOvertime = await OvertimeModel.find({
+      division: employee.division,
+      status_overtime: 'available'
+    });
+
+    res.status(200).json({
+      message: "Available overtime retrieved successfully",
+      data: availableOvertime
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
     });
   }
 };
 
-// Method untuk menerima tawaran lembur
-const acceptOvertime = async (req, res) => {
-  const { employeeNip, overtimeId } = req.body;
+/* Employee: Get History of Accepted Overtime */
+const getAcceptedOvertimeHistory = async (req, res) => {
+  const { nip } = req.user;
+
   try {
-    // Cari lembur berdasarkan ID
-    const overtime = await OvertimeModel.findById(overtimeId);
-    if (!overtime) {
-      return res.status(404).json({ message: "Overtime not found" });
-    }
+    const acceptedOvertime = await OvertimeModel.find({
+      nip,
+      status_overtime: 'taken'
+    });
 
-    // Periksa apakah status lembur masih available
-    if (overtime.status_overtime !== 'available') {
-      return res.status(400).json({ message: "Overtime not available" });
-    }
-
-    // Update status lembur menjadi taken dan set nip karyawan yang menerima
-    overtime.status_overtime = 'taken';
-    overtime.nip = employeeNip;
-    overtime.updated_at = new Date();
-    await overtime.save();
-
-    res.status(200).json({ message: "Overtime accepted", overtime });
+    res.status(200).json({
+      message: "Accepted overtime history retrieved successfully",
+      data: acceptedOvertime
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message
+    });
   }
 };
+
+
+/* Employee: Accept Overtime */
+const acceptOvertime = async (req, res) => {
+  const { overtimeId } = req.params; 
+  const { nip } = req.user;
+
+  try {
+    const overtime = await OvertimeModel.findById(overtimeId);
+
+    if (!overtime) {
+      return res.status(404).json({
+        message: "Overtime not found"
+      });
+    }
+
+    if (overtime.status_overtime !== 'available') {
+      return res.status(400).json({
+        message: "Overtime is no longer available"
+      });
+    }
+
+    if (!overtime.nip) {
+      overtime.nip = nip;
+    }
+    overtime.status_overtime = 'taken';
+    await overtime.save();
+
+    res.status(200).json({
+      message: "Overtime accepted successfully",
+      data: overtime
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};
+
 
 //history leave employee
 const getLeaveHistory = async (req, res) => {
@@ -203,7 +359,10 @@ const getOvertimeHistory = async (req, res) => {
 module.exports = {
   clockIn,
   clockOut,
-  getEmployees,
+  getAllEmployeeData,
+  getEmployee,
+  getAvailableOvertime,
+  getAcceptedOvertimeHistory,
   acceptOvertime,
   getLeaveHistory,
   getOvertimeHistory

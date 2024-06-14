@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import {
   Box,
@@ -31,11 +31,19 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function Topbar() {
+  const [nip, setNip] = useState("");
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedNip = localStorage.getItem("nip");
+    if (storedNip) {
+      setNip(JSON.parse(storedNip));
+    }
+  }, []);
 
   const handleLogout = async () => {
     Swal.fire({
@@ -49,9 +57,9 @@ export default function Topbar() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await logout(); 
+          await logout();
           Swal.fire("Logged Out!", "You have been logged out.", "success");
-          navigate("/"); 
+          navigate("/");
         } catch (error) {
           console.error("Logout failed", error);
           Swal.fire("Error!", "There was a problem logging out.", "error");
@@ -113,9 +121,9 @@ export default function Topbar() {
                   </Center>
                   <br />
                   <Center flexDirection="column">
-                    <Text>username</Text>
-                    <Text color="gray.400" fontSize="sm">
-                      Employee
+                    <Text fontWeight="bold" fontSize="sm">{nip}</Text>
+                    <Text color="gray.400" fontSize="md" fontWeight="bold">
+                      Hr
                     </Text>
                   </Center>
                   <MenuDivider />

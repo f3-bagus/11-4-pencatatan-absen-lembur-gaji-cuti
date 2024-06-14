@@ -7,6 +7,6 @@ const hrController = require('../controllers/HRController');
 
 //* Routes *//
 /* HR : Create Overtime */
-router.post('/overtime', auth.authorizeRole('hr'), hrController.submitOvertime);
+router.post('/overtime', auth.authorizeRole('hr'), hrController.createOvertime);
 
 module.exports = router;

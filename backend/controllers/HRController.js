@@ -4,8 +4,8 @@ const OvertimeModel = require('../models/Overtime');
 const mongoose = require('mongoose');
 
 //* All Method *//
-// Method untuk mengajukan overtime
-const submitOvertime = async (req, res) => {
+/* HR: Create Overtime for Division*/ 
+const createOvertime = async (req, res) => {
   const { division, date, reason, overtime_rate } = req.body;
 
   try {
@@ -29,5 +29,5 @@ const submitOvertime = async (req, res) => {
 };
 
 module.exports = {
-  submitOvertime
+  createOvertime
 };

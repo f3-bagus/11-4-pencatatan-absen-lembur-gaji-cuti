@@ -1,20 +1,24 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import LoginPage from "./layouts/LoginPage";
+import NotFound from "./layouts/NotFound";
 
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 import AdmDashboard from "./layouts/admin/navigation/Dashboard";
 import EmpDashboard from "./layouts/employee/navigation/Dashboard";
-import HrDashboard from "./layouts/hr/navigation/Dashboard";
-import HrAttedance from "./layouts/hr/navigation/Attedance";
-import HrSalary from "./layouts/hr/navigation/Salary";
-import HrOvertime from "./layouts/hr/navigation/Overtime";
-import HrLeave from "./layouts/hr/navigation/Leave";
-import HrReport from "./layouts/hr/navigation/Report";
-import HrProfile from "./layouts/hr/navigation/Profile";
-import NotFound from "./layouts/NotFound";
+
+import {
+  HrDashboard,
+  HrAttedance,
+  HrSalary,
+  HrOvertime,
+  HrLeave,
+  HrReport,
+  HrProfile,
+} from "./layouts/hr/navigation";
 
 function App() {
   return (
@@ -37,7 +41,7 @@ function App() {
           <Route element={<ProtectedRoute role="employee" />}>
             <Route path="/employee" element={<EmpDashboard />} />
           </Route>
-          <Route path="*" element={<NotFound />}/>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>
     </Router>

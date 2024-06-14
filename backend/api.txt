@@ -20,6 +20,8 @@ reset self password : /api/user/reset-password/
 -> GET 
 get all user data (all info (employee, hr, admin)): /api/user/data
 get user data by nip (all info (employee, hr, admin)): /api/user/data/:nip
+get all employee data (all info): /api/employee/data
+get employee data by nip (all info): /api/employee/data/:nip
 get all employee attendance data : /api/attendance/data
 get employee attendance data by nip : /api/attendance/data/:nip
 get all employee payroll : /api/payroll/data/employee
@@ -40,6 +42,8 @@ delete user by nip : /api/admin/delete-user/:nip
 
 3. HR:
 -> GET
+get all employee data (all info): /api/employee/data
+get employee data by nip (all info): /api/employee/data/:nip
 get all employee attendance data : /api/attendance/data
 get employee attendance data by nip : /api/attendance/data/:nip
 get all employee payroll : /api/payroll/data/employee
@@ -59,7 +63,8 @@ reject-leave : /api/leave/reject/:id
 4. Employee:
 -> GET
 get history leave : /api/employee/:nip/leaves
-get history overtime : /api/employee/:nip/overtimes
+get available overtime data : /api/employee/data
+get history overtime data : /api/employee/data/history
 
 -> POST
 clock-in : /api/attendance/clock-in

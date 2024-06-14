@@ -23,6 +23,14 @@ const Attedance = () => {
     getAttendance();
   }, []);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -48,6 +56,7 @@ const Attedance = () => {
       {
         Header: "date",
         accessor: "date",
+        Cell: ({ value }) => formatDate(value),
       },
       {
         Header: "status_attendance",

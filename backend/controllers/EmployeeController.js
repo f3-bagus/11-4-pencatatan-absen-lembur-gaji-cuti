@@ -167,7 +167,7 @@ const getAllEmployeeData = async (req, res) => {
           }
       ]);
 
-      if (!employeeData) {
+      if (!employeeData || employeeData.length === 0) {
           return res.status(404).json({ 
               message: 'User not found' 
           });
@@ -222,7 +222,7 @@ const getEmployee = async (req, res) => {
           }
       ]);
 
-      if (!employeeData) {
+      if (!employeeData || employeeData.length === 0) {
           return res.status(404).json({ 
               message: 'User not found' 
           });

@@ -24,6 +24,7 @@ get all employee data (all info): /api/employee/data
 get employee data by nip (all info): /api/employee/data/:nip
 get all employee attendance data : /api/attendance/data
 get employee attendance data by nip : /api/attendance/data/:nip
+get all overtime data : /api/employee/data/all
 get all employee payroll : /api/payroll/data/employee
 get employee payroll by nip : /api/payroll/data/employee/:nip
 get all employee :/api/employee/employees
@@ -46,6 +47,7 @@ get all employee data (all info): /api/employee/data
 get employee data by nip (all info): /api/employee/data/:nip
 get all employee attendance data : /api/attendance/data
 get employee attendance data by nip : /api/attendance/data/:nip
+get all overtime data : /api/employee/data/all
 get all employee payroll : /api/payroll/data/employee
 get employee payroll by nip : /api/payroll/data/employee/:nip
 

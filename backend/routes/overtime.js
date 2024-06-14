@@ -14,4 +14,7 @@ router.get('/data', auth.authorizeRole('employee'), employeeController.getAvaila
 /* Employee: Get History of Accepted Overtime */
 router.get('/data/history', auth.authorizeRole('employee'), employeeController.getAcceptedOvertimeHistory);
 
+/* Admin & HR : Get All Overtime Data */
+router.get('/data/all', auth.authorizeRole(['admin', 'hr']), overtimeController.getAllOvertime);
+
 module.exports = router;

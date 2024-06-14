@@ -7,9 +7,10 @@ get self data profile (all info) : /api/user/profile
 -> POST
 login : /api/auth/login
 logout : /api/auth/logout
-reset self password : /api/user/reset-password/
 
 -> PUT
+update self profile : /api/user/update-profile/
+reset self password : /api/user/reset-password/
 
 -> DELETE
 
@@ -17,8 +18,8 @@ reset self password : /api/user/reset-password/
 
 2. Admin:
 -> GET 
-get all user data (all info): /api/user/data
-get user data by nip (all info): /api/user/data/:nip
+get all user data (all info (employee, hr, admin)): /api/user/data
+get user data by nip (all info (employee, hr, admin)): /api/user/data/:nip
 get all employee attendance data : /api/attendance/data
 get employee attendance data by nip : /api/attendance/data/:nip
 get all employee payroll : /api/payroll/data/employee

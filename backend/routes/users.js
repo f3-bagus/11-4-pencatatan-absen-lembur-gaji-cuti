@@ -17,7 +17,7 @@ router.get('/profile', userController.getUserProfileData);
 /* All User: update user profile */
 router.put('/update-profile', upload.single('profile_photo'), userController.updateProfile);
 
-/* All User: reset own user password */
+/* All User: reset self user password */
 router.put('/reset-password', userController.resetPassword);
 
 /* Admin: get all user (hr and employee) */

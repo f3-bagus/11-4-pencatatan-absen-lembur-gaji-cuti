@@ -12,8 +12,8 @@ const EmployeeSchema = new mongoose.Schema({
     },
     gender: { 
         type: String, 
-        enum: ["Male", "Female"],
-        default: "Male"
+        enum: ["male", "female"],
+        default: "male"
     },
     email: { 
         type: String, 
@@ -32,8 +32,8 @@ const EmployeeSchema = new mongoose.Schema({
     },
     division: { 
         type: String, 
-        enum: ["IT", "Sales", "Marketing", "Accounting"],
-        default: "Sales"
+        enum: ["it", "sales", "marketing", "accounting"],
+        default: "sales"
     },
     profile_photo: {
         type: String,

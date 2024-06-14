@@ -4,13 +4,9 @@ const router = express.Router();
 //* Import Controller *//
 const auth = require('../controllers/AuthController');
 const hrController = require('../controllers/HRController');
-const { getAllHR, submitOvertime } = require('../controllers/HRController');
 
 //* Routes *//
-/* : All HR Data */
-router.get('/all', hrController.getAllHR);
+/* HR : Create Overtime */
+router.post('/overtime', auth.authorizeRole('hr'), hrController.submitOvertime);
 
-/* */
-router.post('/overtime', submitOvertime);
-router.get('/', getAllHR);
 module.exports = router;

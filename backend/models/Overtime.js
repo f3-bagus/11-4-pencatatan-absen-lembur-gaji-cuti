@@ -3,19 +3,15 @@ const mongoose = require('mongoose');
 const OvertimeSchema = new mongoose.Schema({    
     nip: { 
         type: String, 
-        required: true 
+        default: null
     },
     division: { 
         type: String, 
-        enum: ["IT", "Sales", "Marketing", "Accounting"]
+        enum: ["it", "sales", "marketing", "accounting"]
     },
     date: {
         type: Date,
         default: Date.now
-    },
-    hours: {
-        type: Number,
-        default: 0
     },
     reason: {
         type: String, 
@@ -43,7 +39,7 @@ const OvertimeSchema = new mongoose.Schema({
         type: Date, 
         default: Date.now 
     }
-}, { 
+}, {
     collection: 'tbl_overtimes' 
 });
 

@@ -12,8 +12,8 @@ const HRSchema = new mongoose.Schema({
     },
     gender: { 
         type: String, 
-        enum: ["Male", "Female"],
-        default: "Male"
+        enum: ["male", "female"],
+        default: "male"
     },
     email: { 
         type: String, 

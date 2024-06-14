@@ -198,14 +198,14 @@ const calculateAndUpdatePayroll = async () => {
                 basicSalary = 4000000;
             } else {
                 switch (employee.division) {
-                    case "IT":
+                    case "it":
                         basicSalary = 7000000;
                         break;
-                    case "Sales":
-                    case "Marketing":
+                    case "sales":
+                    case "marketing":
                         basicSalary = 5000000;
                         break;
-                    case "Accounting":
+                    case "accounting":
                         basicSalary = 6500000;
                         break;
                     default:

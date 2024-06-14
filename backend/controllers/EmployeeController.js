@@ -33,7 +33,7 @@ const clockIn = async (req, res) => {
 
       if (now.getHours() < 6) {
           return res.status(400).json({
-              message: `It is not yet time to clock in today (${todayDate})`
+              message: `It is not yet time to clock in today (${clockInTime})`
           });
       }
 
@@ -93,7 +93,7 @@ const clockOut = async (req, res) => {
 
       if (now.getHours() <= 16 && now.getMinutes() < 30) {
           return res.status(400).json({
-              message: `It is not yet time to clock out today (${now})`
+              message: `It is not yet time to clock out today (${clockOutTime})`
           });
       }
 

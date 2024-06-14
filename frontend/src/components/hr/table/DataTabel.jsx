@@ -133,8 +133,8 @@ const DataTable = ({ columns, data, filename }) => {
           </CSVLink>
         </Flex>
       </Flex>
-
-      <TableContainer py="3" w="900px">
+      
+      <TableContainer py="3" maxW="910px">
         <Table {...getTableProps()}>
           <Thead>
             {headerGroups.map((headerGroup) => {

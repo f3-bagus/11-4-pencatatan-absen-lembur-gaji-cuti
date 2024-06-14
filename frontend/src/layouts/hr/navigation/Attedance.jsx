@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import HrLayout from "../HrLayout";
 import DataTable from "../../../components/hr/table/DataTabel";
-import {
-  Flex,
-  Heading,
-  Box,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Flex, Heading, Box, useColorModeValue } from "@chakra-ui/react";
+import axios from "axios";
 
 const Attedance = () => {
+  const [data, setData] = useState([]);
+
+  const getAttendance = () => {
+    axios
+      .get("http://localhost:5000/api/attendance/data")
+      .then((res) => {
+        //console.log(res.data.data);
+        setData(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getAttendance();
+  }, []);
+
   const columns = React.useMemo(
     () => [
       {
@@ -20,42 +34,20 @@ const Attedance = () => {
         accessor: "name",
       },
       {
-        Header: "check_in",
-        accessor: "check_in",
+        Header: "division",
+        accessor: "division",
       },
       {
-        Header: "check_out",
-        accessor: "check_out",
+        Header: "clock_in",
+        accessor: "clock_in",
       },
       {
-        Header: "date",
-        accessor: "date",
+        Header: "clock_out",
+        accessor: "clock_out",
       },
       {
-        Header: "status",
-        accessor: "status",
-      },
-    ],
-    []
-  );
-
-  const data = React.useMemo(
-    () => [
-      {
-        nip: 33421312,
-        name: "John Doe",
-        check_in: "09.00",
-        check_out: "17.00",
-        date: "12-12-2024",
-        status: "attend",
-      },
-      {
-        nip: 33421312,
-        name: "Emily Johnson",
-        check_in: "09.00",
-        check_out: "17.00",
-        date: "12-12-2024",
-        status: "attend",
+        Header: "status_attendance",
+        accessor: "status_attendance",
       },
     ],
     []
@@ -73,7 +65,11 @@ const Attedance = () => {
           borderRadius="2xl"
           shadow="lg"
         >
-          <DataTable columns={columns} data={data} filename={"table_attendance"}/>
+          <DataTable
+            columns={columns}
+            data={data}
+            filename={"table_attendance"}
+          />
         </Box>
       </Flex>
     </HrLayout>

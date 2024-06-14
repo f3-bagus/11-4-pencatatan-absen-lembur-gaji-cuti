@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import HrLayout from "../HrLayout";
 import {
   useColorModeValue,
@@ -7,9 +7,24 @@ import {
   Box,
 } from "@chakra-ui/react";
 import DataTable from "../../../components/hr/table/DataTabel";
-
+import axios from 'axios';
 
 const Salary = () => {
+  const [data, setData] = useState([]);
+
+  const getPayroll = () => {
+    axios.get('http://localhost:5000/api/payroll/data/employee').then((res) =>{
+      //console.log(res.data.data);
+      setData(res.data.data)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+  useEffect(() => {
+    getPayroll();
+  }, []);
+
   const columns = React.useMemo(
     () => [
       {
@@ -51,24 +66,6 @@ const Salary = () => {
       {
         Header: "total_salary",
         accessor: "total_salary",
-      },
-    ],
-    []
-  );
-
-  const data = React.useMemo(
-    () => [
-      {
-        nip: 33421312,
-        name: "John Doe",
-        division: "IT",
-        month: "June",
-        basic_salary: "Rp. 5.000.000",
-        overtime_pay: "Rp. 500.000",
-        deduction_permission: "Rp. 100.000",
-        deduction_sick: "Rp. 100.000",
-        deduction_absent: "Rp. 100.000",
-        total_salary: "Rp. 5.200.000",
       },
     ],
     []

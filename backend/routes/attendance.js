@@ -5,7 +5,6 @@ const router = express.Router();
 const auth = require('../controllers/AuthController');
 const employeeController = require('../controllers/EmployeeController');
 const attendanceController = require('../controllers/AttendanceController');
-const { addLeaveAttendance } = require('../controllers/AttendanceController');
 
 //* Routes *//
 /* Employee: Clock-In */

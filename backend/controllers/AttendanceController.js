@@ -38,6 +38,7 @@ const getAllEmployeeAttendance = async (req, res) => {
                     division: "$division",
                     gender: "$gender",
                     type: "$type",
+                    date: "$attendances.date",
                     clock_in: "$attendances.clock_in",
                     clock_out: "$attendances.clock_out",
                     status_attendance: "$attendances.status_attendance"
@@ -99,6 +100,7 @@ const getEmployeeAttendance = async (req, res) => {
                     division: "$division",
                     gender: "$gender",
                     type: "$type",
+                    date: "$attendances.date",
                     clock_in: "$attendances.clock_in",
                     clock_out: "$attendances.clock_out",
                     status_attendance: "$attendances.status_attendance"

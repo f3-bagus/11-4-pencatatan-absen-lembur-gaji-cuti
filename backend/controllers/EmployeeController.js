@@ -184,6 +184,61 @@ const getAllEmployeeData = async (req, res) => {
   }
 };
 
+const getUser = async (req, res) => {
+  const { nip } = req.params;
+
+  try {
+
+      const employeeData = await EmployeeModel.aggregate([
+          {
+              $lookup: {
+                  from: 'tbl_users',
+                  localField: 'nip',
+                  foreignField: 'nip',
+                  as: 'user'
+              }
+          },
+          {
+              $unwind: '$user'
+          },
+          {
+              $match: {
+                  'user.nip': nip,
+                  'user.archived': { $ne: 1 }
+              }
+          },
+          {
+              $project: {
+                  _id: 0,
+                  nip: '$nip',
+                  name: '$name',
+                  role: '$user.role',
+                  gender: '$user.gender',
+                  email: '$user.email',
+                  phone: '$user.phone',
+                  type: '$user.type',
+                  division: '$user.division'
+              }
+          }
+      ]);
+
+      if (!employeeData) {
+          return res.status(404).json({ 
+              message: 'User not found' 
+          });
+      }
+
+      res.status(200).json({
+          message: 'Success',
+          data: userData[0]
+      });
+  } catch (error) {
+      res.status(500).json({ 
+          message: error.message 
+      });
+  }
+};
+
 /* Employee: Get Available Overtime */
 const getAvailableOvertime = async (req, res) => {
   const { nip } = req.user; 

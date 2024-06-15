@@ -1,4 +1,5 @@
 //* Import Controller *//
+const UserModel = require('../models/User');
 const LeaveModel = require('../models/Leave');
 const AttendanceModel = require('../models/Attendance');
 
@@ -118,7 +119,7 @@ const getEmployeeLeaves = async (req, res) => {
 const applyLeave = async (req, res) => {
   const { nip } = req.user;
   const { start_date, end_date, type, reason } = req.body;
-  const leaveLetter = req.file ? req.file.path : null;
+  const leave_letter = req.file ? req.file.path : null;
 
   try {
       const user = await UserModel.findOne({ nip });
@@ -149,7 +150,7 @@ const applyLeave = async (req, res) => {
           end_date: end_date,
           type: type,
           reason: reason,
-          leave_letter: leaveLetter 
+          leave_letter: leave_letter 
       });
 
       const savedLeave = await leaveData.save();

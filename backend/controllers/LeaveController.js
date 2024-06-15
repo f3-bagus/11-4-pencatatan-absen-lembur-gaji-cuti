@@ -114,26 +114,40 @@ const getEmployeeLeaves = async (req, res) => {
   }
 };
 
-// Method untuk mengajukan cuti
+/* Employee: Apply Leave */
 const applyLeave = async (req, res) => {
-  const { employeeId, nip, start_date, end_date, type, reason } = req.body;
-
-  const newLeave = new LeaveModel({
-    employee: employeeId,
-    nip: nip,
-    start_date: start_date,
-    end_date: end_date,
-    type: type,
-    reason: reason
-  });
+  const { nip } = req.user;
+  const { start_date, end_date, type, reason } = req.body;
+  const leaveLetter = req.file ? req.file.path : null;
 
   try {
-    const savedLeave = await newLeave.save();
-    res.status(201).json(savedLeave);
+      const user = await UserModel.findOne({ nip });
+      if (!user || user.archived !== 0) {
+          return res.status(404).json({
+              message: 'User not found'
+          });
+      }
+
+      const leaveData = new LeaveModel({
+          nip: nip,
+          start_date: start_date,
+          end_date: end_date,
+          type: type,
+          reason: reason,
+          leave_letter: leaveLetter 
+      });
+
+      const savedLeave = await leaveData.save();
+
+      res.status(201).json({
+          message: 'Leave application submitted successfully',
+          data: savedLeave
+      });
   } catch (error) {
-    res.status(400).json({ 
-        message: error.message 
-    });
+      res.status(500).json({
+          message: 'Failed to submit leave application',
+          error: error.message
+      });
   }
 };
 

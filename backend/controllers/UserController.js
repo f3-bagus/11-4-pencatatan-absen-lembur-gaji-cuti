@@ -122,7 +122,7 @@ const getUserProfileData = async (req, res) => {
 const updateProfile = async (req, res) => {
     const { nip } = req.user;
     const { name, gender, email, phone } = req.body;
-    const profilePhoto = req.file;
+    const profilePhoto = req.file ? req.file.path : null;
 
     try {
         const user = await UserModel.findOne({ nip });
@@ -155,14 +155,11 @@ const updateProfile = async (req, res) => {
             });
         }
 
-        userData.name = name ? name : userData.name;
-        userData.gender = gender ? gender : userData.gender;
-        userData.email = email ? email : userData.email;
-        userData.phone = phone ? phone : userData.phone;
-
-        if (profilePhoto) {
-            userData.profile_photo = `/uploads/profile_photo/${profilePhoto.filename}`;
-        }
+        if (name) userData.name = name;
+        if (gender) userData.gender = gender;
+        if (email) userData.email = email;
+        if (phone) userData.phone = phone;
+        if (profilePhoto) userData.profile_photo = profilePhoto;
         
         await userData.save();
 

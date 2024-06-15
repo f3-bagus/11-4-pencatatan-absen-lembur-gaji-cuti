@@ -14,7 +14,8 @@ router.get('/data', auth.authorizeRole(['admin', 'hr']), leaveController.getAllE
 /* Admin & HR: Get Employee Leave Data by NIP */
 router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), leaveController.getEmployeeLeaves);
 
-router.post('/apply', leaveController.applyLeave);
+/* Employee: Apply Leave */
+router.post('/apply', auth.authorizeRole('employee'), leaveController.applyLeave);
 
 // Rute untuk menyetujui cuti
 router.put('/approve/:id', leaveController.approveLeave);

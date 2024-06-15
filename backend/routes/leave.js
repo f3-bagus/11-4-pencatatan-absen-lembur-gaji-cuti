@@ -17,10 +17,17 @@ router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), leaveController.ge
 /* Employee: Apply Leave */
 router.post('/apply', auth.authorizeRole('employee'), leaveController.applyLeave);
 
-// Rute untuk menyetujui cuti
+/* Admin & HR: Approve Employee Leave */
 router.put('/approve/:id', auth.authorizeRole(['hr', 'admin']), leaveController.approveLeave);
 
-// Rute untuk menolak cuti
+/* Admin & HR: Rejected Employee Leave */
 router.put('/reject/:id', leaveController.rejectLeave);
+
+/* Employee: Get History of Leave Data  */
+router.get('/data/history', auth.authorizeRole('employee'), leaveController.getLeaveHistory);
+
+/* Employee: Get Remaining Leave Data  */
+router.get('/data/remaining', auth.authorizeRole('employee'), leaveController.getRemainingLeave);
+
 
 module.exports = router;

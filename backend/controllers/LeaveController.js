@@ -129,6 +129,21 @@ const applyLeave = async (req, res) => {
           });
       }
 
+      if (type === 'leave') {
+        const startOfYear = new Date(new Date().getFullYear(), 0, 1); 
+        const yearlyLeaveCount = await LeaveModel.countDocuments({ 
+          nip, 
+          type: 'leave', 
+          start_date: { $gte: startOfYear } 
+        });
+        
+        if (yearlyLeaveCount >= 12) {
+          return res.status(400).json({
+            message: 'Your annual leave quota has been exhausted. Max: 12 leave!'
+          });
+        }
+      }
+
       const leaveData = new LeaveModel({
           nip: nip, 
           start_date: start_date,
@@ -151,6 +166,51 @@ const applyLeave = async (req, res) => {
       });
   }
 };
+
+/* Employee: Get History of Leave */
+const getLeaveHistory = async (req, res) => {
+  const { nip } = req.user;
+
+  try {
+    const acceptedLeave = await LeaveModel.find({nip});
+
+    res.status(200).json({
+      message: "Leave history retrieved successfully",
+      data: acceptedLeave
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};
+
+/* Employee: Get Remaining Leave */
+const getRemainingLeave = async (req, res) => {
+  const { nip } = req.user;
+
+  try {
+    const startOfYear = new Date(new Date().getFullYear(), 0, 1);
+    const takenLeaveCount = await LeaveModel.countDocuments({ 
+      nip, 
+      type: 'leave', 
+      start_date: { $gte: startOfYear } 
+    });
+
+    const maxYearlyLeave = 12; 
+    const remainingLeave = maxYearlyLeave - takenLeaveCount;
+
+    res.status(200).json({
+      message: "Remaining annual leave retrieved successfully",
+      remaining_leave: remainingLeave
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};
+
 
 /* Admin & HR: Approve Employee Leave */
 const approveLeave = async (req, res) => {
@@ -178,7 +238,7 @@ const approveLeave = async (req, res) => {
     await attendanceData.save();
 
     res.status(200).json({
-      message: 'Leave approved and attendance updated',
+      message: 'Leave approved and attendance updated succesfully!',
       leave: leave,
       attendance: attendanceData
     });
@@ -189,16 +249,24 @@ const approveLeave = async (req, res) => {
   }
 };
 
-// Method untuk menolak cuti
+/* Admin & HR: Approve Employee Leave */
 const rejectLeave = async (req, res) => {
+  const {leaveId} = req.params;
+  
   try {
-    const leaveId = req.params.id;
-    const updatedLeave = await LeaveModel.findByIdAndUpdate(
-      leaveId, 
-      { status_leave: 'rejected' },
-      { new: true }
-    );
-    res.status(200).json(updatedLeave);
+    const leave = await LeaveModel.findById(leaveId);
+    if (!leave) {
+        return res.status(404).json({
+            message: 'Leave request not found'
+        });
+    }
+    leave.status_leave = 'rejected';
+    await leave.save();
+    
+    res.status(200).json({
+      message: 'Leave rejected succesfully!',
+      leave: leave
+    });
   } catch (error) {
     res.status(500).json({ 
         message: error.message 
@@ -209,6 +277,8 @@ const rejectLeave = async (req, res) => {
 module.exports = {
   getAllEmployeeLeaves,
   getEmployeeLeaves,
+  getLeaveHistory,
+  getRemainingLeave,
   applyLeave,
   approveLeave,
   rejectLeave

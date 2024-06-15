@@ -341,20 +341,6 @@ const getLeaveHistory = async (req, res) => {
   }
 };
 
-//overtime history employee
-const getOvertimeHistory = async (req, res) => {
-  const { nip } = req.params;
-  
-  try {
-    const overtimes = await OvertimeModel.find({ nip }).sort({ date: -1 });
-    res.status(200).json(overtimes);
-  } catch (error) {
-    res.status(500).json({ 
-        message: error.message 
-    });
-  }
-};
-
 module.exports = {
   clockIn,
   clockOut,
@@ -363,6 +349,5 @@ module.exports = {
   getAvailableOvertime,
   getAcceptedOvertimeHistory,
   acceptOvertime,
-  getLeaveHistory,
-  getOvertimeHistory
+  getLeaveHistory
 };

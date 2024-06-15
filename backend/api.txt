@@ -56,8 +56,8 @@ get employee payroll by nip : /api/payroll/data/employee/:nip
 create-overtime : /api/hr/overtime
 
 -> PUT
-approve employee leave : /api/leave/approve/:_id 
-reject-leave : /api/leave/reject/:id (x)
+approve employee leave : /api/leave/approve/:id 
+reject employee leave : /api/leave/reject/:id
 
 ->DELETE
 
@@ -66,15 +66,16 @@ reject-leave : /api/leave/reject/:id (x)
 4. Employee:
 -> GET
 get self attendance data : /api/employee/attendance
-get history leave : /api/employee/:nip/leaves (x)
+get self history leave data : /api/leave/data/history
+get self remaining leave data : /api/leave/data/remaining
 get available overtime data : /api/overtime/data
-get history overtime data : /api/overtime/data/history
+get self history overtime data : /api/overtime/data/history
 
 -> POST
 clock-in : /api/attendance/clock-in
 clock-out : /api/attendance/clock-out
-accept-overtime : /api/employee/accept-overtime/:_id
-apply-leave : /api/leave/apply (?)
+accept overtime : /api/employee/accept-overtime/:id
+apply leave : /api/leave/apply (?)
 
 -> PUT
 

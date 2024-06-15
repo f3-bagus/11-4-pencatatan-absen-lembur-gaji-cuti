@@ -76,7 +76,7 @@ const LoginPage = () => {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting, isValid, setValues }) => (
+            {({ isSubmitting, isValid }) => (
               <Form>
                 <Field name="nip">
                   {({ field, form }) => (

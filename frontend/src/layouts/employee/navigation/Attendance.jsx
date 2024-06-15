@@ -7,7 +7,6 @@ import {
   VStack,
   Flex,
   useColorModeValue,
-  Image,
   Heading,
   HStack,
   Divider,
@@ -188,7 +187,7 @@ const Attendance = () => {
             <DataTable
             columns={columns}
             data={attendance}
-            filename={"table_attendance"}
+            filename={"attendance_history"}
           />
           </Box>
         </Flex>

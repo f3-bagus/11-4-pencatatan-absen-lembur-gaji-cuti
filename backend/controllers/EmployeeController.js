@@ -75,57 +75,61 @@ const clockOut = async (req, res) => {
   const { nip } = req.user;
 
   try {
-      const employee = await EmployeeModel.findOne({ nip });
-      if (!employee || employee.archived !== 0) {
-          return res.status(404).json({
-              message: 'Data not found'
-          });
-      }
-
-      const now = new Date();
-      const clockOutTime = formatTime(now);
-      const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-
-      if (now.getHours() < 16 || (now.getHours() === 16 && now.getMinutes() < 30)) {
-          return res.status(400).json({
-              message: `It is not yet time to clock out today (${clockOutTime})`
-          });
-      }
-
-      const attendanceToday = await AttendanceModel.findOne({
-          nip,
-          date: todayDate
+    const employee = await EmployeeModel.findOne({ nip });
+    if (!employee || employee.archived !== 0) {
+      return res.status(404).json({
+        message: 'Data not found'
       });
+    }
 
-      if (!attendanceToday) {
-          return res.status(400).json({
-              message: "You haven't clocked in yet. Please clock in first before clocking out!"
-          });
-      } else if (attendanceToday.clock_out) {
-          return res.status(400).json({
-              message: 'You have already clocked out'
-          });
-      } else {
-          attendanceToday.clock_out = clockOutTime;
-          if (attendanceToday.status_attendance === "clock in late") {
-              attendanceToday.status_attendance = 'late';
-          } else {
-              attendanceToday.status_attendance = 'present';
-          }
-          await attendanceToday.save();
+    const now = new Date();
+    const clockOutTime = formatTime(now);
+    const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
 
-          res.status(200).json({
-              message: 'clock out successful',
-              clockOut: attendanceToday.clock_out,
-              statusAttendance: attendanceToday.status_attendance
-          });
-      }
+    // Check if the employee has clocked in today
+    const attendanceToday = await AttendanceModel.findOne({
+      nip,
+      date: todayDate
+    });
+
+    if (!attendanceToday) {
+      return res.status(400).json({
+        message: "You haven't clocked in yet. Please clock in first before clocking out!"
+      });
+    }
+
+    if (attendanceToday.clock_out) {
+      return res.status(400).json({
+        message: 'You have already clocked out'
+      });
+    }
+
+    if (now.getHours() < 16 || (now.getHours() === 16 && now.getMinutes() < 30)) {
+      return res.status(400).json({
+        message: `It is not yet time to clock out today (${clockOutTime})`
+      });
+    }
+
+    attendanceToday.clock_out = clockOutTime;
+    if (attendanceToday.status_attendance === "clock in late") {
+      attendanceToday.status_attendance = 'late';
+    } else {
+      attendanceToday.status_attendance = 'present';
+    }
+    await attendanceToday.save();
+
+    res.status(200).json({
+      message: 'clock out successful',
+      clockOut: attendanceToday.clock_out,
+      statusAttendance: attendanceToday.status_attendance
+    });
   } catch (error) {
-      res.status(500).json({
-          message: error.message
-      });
+    res.status(500).json({
+      message: error.message
+    });
   }
 };
+
 
 /* Admin & HR : Get All Employee Data */
 const getAllEmployeeData = async (req, res) => {

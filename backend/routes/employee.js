@@ -4,6 +4,7 @@ const router = express.Router();
 //* Import Controller *//
 const auth = require('../controllers/AuthController');
 const employeeController = require('../controllers/EmployeeController');
+const attendanceController = require('../controllers/AttendanceController');
 const { getEmployees, acceptOvertime, getLeaveHistory, getOvertimeHistory } = require('../controllers/EmployeeController');
 
 //* Routes *//
@@ -12,6 +13,9 @@ router.get('/data', auth.authorizeRole(['admin', 'hr']), employeeController.getA
 
 /* Admin & HR: Get Employee Data by NIP*/
 router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), employeeController.getEmployee);
+
+/* Employee : Get self attendance data */
+router.get('/attendance', auth.authorizeRole('employee'), attendanceController.getSelfAttendance);
 
 //employee accept overtime
 router.post('/accept-overtime', acceptOvertime);

@@ -120,6 +120,68 @@ const getEmployeeAttendance = async (req, res) => {
     }
 };
 
+/* Employee : Get self attendance data */
+const getSelfAttendance = async (req, res) => {
+    const { nip } = req.user;
+
+    try {
+        const employee = await EmployeeModel.findOne({ nip });
+        if (!employee || employee.archived !== 0) {
+            return res.status(404).json({
+                message: 'Data not found'
+            });
+        }
+
+        const employeeAttendanceData = await EmployeeModel.aggregate([
+            {
+                $match: { nip: nip }
+            },
+            {
+                $lookup: {
+                    from: "tbl_attendances",
+                    localField: "nip",
+                    foreignField: "nip",
+                    as: "attendances"
+                }
+            },
+            {
+                $unwind: "$attendances"
+            },
+            {
+                $match: {
+                    'attendances.archived': { $ne: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    name: "$name",
+                    nip: "$nip",
+                    email: "$email",
+                    phone: "$phone",
+                    division: "$division",
+                    gender: "$gender",
+                    type: "$type",
+                    date: "$attendances.date",
+                    clock_in: "$attendances.clock_in",
+                    clock_out: "$attendances.clock_out",
+                    status_attendance: "$attendances.status_attendance"
+                }
+            }
+        ]);
+
+        res.status(200).json({
+            message: 'Success',
+            data: employeeAttendanceData
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: `Failed to get employee attendance data for '${nip}'`,
+            error: error.message
+        });
+    }
+};
+
 /* Sistem : Auto Update Attendance */
 const updateAttendance = async () => {
     const now = new Date();
@@ -175,5 +237,6 @@ const updateAttendance = async () => {
 module.exports = {
     getAllEmployeeAttendance,
     getEmployeeAttendance,
+    getSelfAttendance,
     updateAttendance
 };

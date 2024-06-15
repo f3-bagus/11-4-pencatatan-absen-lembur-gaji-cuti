@@ -4,7 +4,7 @@ const router = express.Router();
 //* Import Controller *//
 const auth = require('../controllers/AuthController');
 const leaveController = require('../controllers/LeaveController');
-const { approveLeave, rejectLeave } = require('../controllers/LeaveController');
+const { uploadLeaveLetter } = require('../controllers/StorageController');
 
 
 //* Routes *//
@@ -15,7 +15,7 @@ router.get('/data', auth.authorizeRole(['admin', 'hr']), leaveController.getAllE
 router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), leaveController.getEmployeeLeaves);
 
 /* Employee: Apply Leave */
-router.post('/apply', auth.authorizeRole('employee'), leaveController.applyLeave);
+router.post('/apply', uploadLeaveLetter.single('leave_letter'), auth.authorizeRole('employee'), leaveController.applyLeave);
 
 /* Admin & HR: Approve Employee Leave */
 router.put('/approve/:id', auth.authorizeRole(['hr', 'admin']), leaveController.approveLeave);

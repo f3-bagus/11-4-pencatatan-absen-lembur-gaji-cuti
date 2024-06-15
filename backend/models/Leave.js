@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const LeaveSchema = new mongoose.Schema({
     nip: { 
         type: String, 
-        required: true 
+        default: nully
     },
     start_date: {
         type: Date,
@@ -26,7 +26,10 @@ const LeaveSchema = new mongoose.Schema({
         enum: ["permit", "sick", "leave"],
         default: "leave" 
     },
-    reason: String,
+    reason: {
+        type: String,
+        default: "Ada keperluan/kepentingan"
+    },
     status_leave: { 
         type: String, 
         enum: ["approved", "rejected", "pending"],

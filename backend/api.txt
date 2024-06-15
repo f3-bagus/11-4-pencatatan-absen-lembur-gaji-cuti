@@ -9,8 +9,8 @@ login : /api/auth/login
 logout : /api/auth/logout
 
 -> PUT
-update self profile : /api/user/update-profile/ (?)
-reset self password : /api/user/reset-password/
+update self profile : /api/user/update-profile (?)
+reset self password : /api/user/reset-password
 
 -> DELETE
 

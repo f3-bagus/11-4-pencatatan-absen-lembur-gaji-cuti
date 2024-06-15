@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import EmployeeLayout from "../EmployeeLayout";
 import {
   Flex,
@@ -14,9 +14,41 @@ import {
   Button,
 } from "@chakra-ui/react";
 import DataTable from "../../../components/employee/table/DataTabel";
+import axios from "axios";
 
 const Overtime = () => {
   const { colorMode } = useColorMode();
+  const [overtime, setOvertime] = useState([]);
+  const [history, setHistory] = useState([]);
+
+  const getOvertime = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/overtime/data"
+      );
+      console.log(response.data);
+      setOvertime(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getHistory = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/overtime/data/history"
+      );
+      console.log(response.data);
+      setHistory(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getOvertime();
+    getHistory();
+  }, []);
 
   const attendanceColumns = React.useMemo(
     () => [

@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import DataTable from "../../../components/employee/table/DataTabel";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import axios from "axios";
 
 const Leave = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

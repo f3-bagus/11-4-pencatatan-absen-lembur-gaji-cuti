@@ -32,7 +32,7 @@ const items = [
   },
   {
     type: "link",
-    label: "Payroll",
+    label: "Salary",
     icon: AiOutlineDollarCircle,
     path: "/admin/payroll",
   },

@@ -14,6 +14,7 @@ import {
   AdmOvertime,
   AdmPayroll,
   AdmProfile,
+  AdmCreatehr,
 } from './layouts/admin/navigation';
 
 import {
@@ -46,6 +47,7 @@ function App() {
             <Route path="/admin/payroll" element={<AdmPayroll />} />
             <Route path="/admin/overtime" element={<AdmOvertime />} />
             <Route path="/admin/profile" element={<AdmProfile />} />
+            <Route path="/admin/createhr" element={<AdmCreatehr />} />
           </Route>
           <Route element={<ProtectedRoute role="hr" />}>
             <Route path="/hr" element={<HrDashboard />} />

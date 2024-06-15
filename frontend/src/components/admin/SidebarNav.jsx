@@ -25,10 +25,40 @@ const items = [
     path: "/admin",
   },
   {
-    type: "link",
+    type: "header",
     label: "Attendance",
+  },
+  {
+    type: "link",
+    label: "Daily Attendance",
     icon: LuMonitorCheck,
     path: "/admin/attendance",
+  },
+  {
+    type: "link",
+    label: "Monthly Attendance",
+    icon: LuMonitorCheck,
+    path: "/",
+  },
+  {
+    type: "header",
+    label: "Account",
+  },
+  {
+    type: "link",
+    label: "Create Employee Acount",
+    icon: LuMonitorCheck,
+    path: "/",
+  },
+  {
+    type: "link",
+    label: "Create HR Acount",
+    icon: LuMonitorCheck,
+    path: "/admin/createhr",
+  },
+  {
+    type: "header",
+    label: "Employee",
   },
   {
     type: "link",

@@ -22,8 +22,6 @@ const Dashboard = () => {
     getAttendance();
   }, []);
 
-  
-
   const columns = React.useMemo(
     () => [
       {

@@ -18,6 +18,6 @@ router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), employeeController
 router.get('/attendance', auth.authorizeRole('employee'), attendanceController.getSelfAttendance);
 
 /* Employee : Accept Overtime */
-router.post('/accept-overtime/:id', auth.authorizeRole('employee'), employeeController.acceptOvertime);
+router.post('/accept-overtime/:overtimeId', auth.authorizeRole('employee'), employeeController.acceptOvertime);
 
 module.exports = router;

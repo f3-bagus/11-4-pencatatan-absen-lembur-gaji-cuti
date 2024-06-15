@@ -6,15 +6,15 @@ var logger = require('morgan');
 var cors = require('cors');
 const cron = require('node-cron');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 var app = express();
+const port = process.env.PORT || 5000;
 
 // Connect to MongoDB
 const connectToDatabase = require('./library/dbconfig');
 connectToDatabase();
-
-// // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());

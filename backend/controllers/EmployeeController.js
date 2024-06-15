@@ -91,7 +91,7 @@ const clockOut = async (req, res) => {
       const clockOutTime = formatTime(now);
       const todayDate = formatDate(now); 
 
-      if (now.getHours() <= 16 && now.getMinutes() < 30) {
+      if (now.getHours() < 16 || (now.getHours() === 16 && now.getMinutes() < 30)) {
           return res.status(400).json({
               message: `It is not yet time to clock out today (${clockOutTime})`
           });

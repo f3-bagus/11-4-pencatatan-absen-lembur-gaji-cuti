@@ -65,8 +65,8 @@ reject-leave : /api/leave/reject/:id
 4. Employee:
 -> GET
 get history leave : /api/employee/:nip/leaves
-get available overtime data : /api/employee/data
-get history overtime data : /api/employee/data/history
+get available overtime data : /api/overtime/data
+get history overtime data : /api/overtime/data/history
 
 -> POST
 clock-in : /api/attendance/clock-in

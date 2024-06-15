@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 const cron = require('node-cron');
-
 const dotenv = require('dotenv');
 dotenv.config();
 

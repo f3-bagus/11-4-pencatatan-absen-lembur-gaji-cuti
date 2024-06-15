@@ -15,19 +15,18 @@ router.get('/data', auth.authorizeRole(['admin', 'hr']), leaveController.getAllE
 router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), leaveController.getEmployeeLeaves);
 
 /* Employee: Apply Leave */
-router.post('/apply', uploadLeaveLetter.single('leave_letter'), auth.authorizeRole('employee'), leaveController.applyLeave);
+router.post('/apply', auth.authorizeRole('employee'), uploadLeaveLetter.single('leave_letter'), leaveController.applyLeave);
 
 /* Admin & HR: Approve Employee Leave */
-router.put('/approve/:id', auth.authorizeRole(['hr', 'admin']), leaveController.approveLeave);
+router.put('/approve/:leaveId', auth.authorizeRole(['hr', 'admin']), leaveController.approveLeave);
 
 /* Admin & HR: Rejected Employee Leave */
-router.put('/reject/:id', leaveController.rejectLeave);
+router.put('/reject/:leaveId', leaveController.rejectLeave);
 
 /* Employee: Get History of Leave Data  */
 router.get('/data/history', auth.authorizeRole('employee'), leaveController.getLeaveHistory);
 
 /* Employee: Get Remaining Leave Data  */
 router.get('/data/remaining', auth.authorizeRole('employee'), leaveController.getRemainingLeave);
-
 
 module.exports = router;

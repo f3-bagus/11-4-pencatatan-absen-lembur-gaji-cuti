@@ -5,7 +5,6 @@ const router = express.Router();
 const auth = require('../controllers/AuthController');
 const employeeController = require('../controllers/EmployeeController');
 const attendanceController = require('../controllers/AttendanceController');
-const { getLeaveHistory, getOvertimeHistory } = require('../controllers/EmployeeController');
 
 //* Routes *//
 /* Admin & HR: Get All Employee Data*/

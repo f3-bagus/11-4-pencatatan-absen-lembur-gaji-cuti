@@ -1,7 +1,6 @@
 //* Import Controller *//
 const LeaveModel = require('../models/Leave');
 const AttendanceModel = require('../models/Attendance');
-const { updateAttendance } = require('./AttendanceController');
 
 //* All Method *//
 /* Admin & HR: Get All Employee Leave Data */
@@ -160,6 +159,7 @@ const applyLeave = async (req, res) => {
           data: savedLeave
       });
   } catch (error) {
+      console.error(error);
       res.status(500).json({
           message: 'Failed to submit leave application',
           error: error.message
@@ -231,7 +231,7 @@ const approveLeave = async (req, res) => {
       date:leave.start_date,
       clock_in: null,
       clock_out: null,
-      status_attendance: updatedLeave.type
+      status_attendance: leave.type
     });
 
     await attendanceData.validate();

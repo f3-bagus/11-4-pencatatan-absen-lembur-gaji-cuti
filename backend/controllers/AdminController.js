@@ -56,7 +56,7 @@ const createEmployee = async (req, res) => {
 
 /* Admin: Create HR Account */
 const createHR = async (req, res) => {
-    const { nip, name, gender, email, phone } = req.body;
+    const { nip } = req.body;
 
     try {
         const hashedPassword = await bcrypt.hash('user12345', 10);
@@ -69,16 +69,16 @@ const createHR = async (req, res) => {
 
         await newUser.save();
 
-        const newHR = new HRModel({
-            nip,
-            name,
-            gender,
-            email,
-            phone
-        });
+        // const newHR = new HRModel({
+        //     nip,
+        //     name,
+        //     gender,
+        //     email,
+        //     phone
+        // });
 
-        await newHR.validate();
-        await newHR.save();
+        // await newHR.validate();
+        // await newHR.save();
 
         res.status(201).json({ 
             message: 'HR created successfully', 
@@ -86,7 +86,7 @@ const createHR = async (req, res) => {
                 nip: newUser.nip,
                 role: newUser.role
             }, 
-            hr: newHR 
+            // hr: newHR 
         });
 
     } catch (error) {

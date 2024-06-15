@@ -9,8 +9,9 @@ const { approveLeave, rejectLeave } = require('../controllers/LeaveController');
 
 
 //* Routes *//
-router.get('/leaves', auth.authenticateToken, leaveController.getLeave);
-router.post('/apply-leave', applyLeave);
+router.get('/leave', auth.authenticateToken, leaveController.getLeave);
+
+router.post('/apply', applyLeave);
 
 // Rute untuk menyetujui cuti
 router.put('/approve/:id', approveLeave);

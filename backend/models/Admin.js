@@ -25,7 +25,10 @@ const AdminSchema = new mongoose.Schema({
         unique: true,
         default: null 
     },
-    profile_photo: String,
+    profile_photo: {
+        type: String,
+        default: null
+    },
     archived: { 
         type: Number,
         enum: [0, 1],

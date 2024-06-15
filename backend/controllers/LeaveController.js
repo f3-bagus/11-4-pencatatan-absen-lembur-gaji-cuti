@@ -1,6 +1,7 @@
 //* Import Controller *//
 const LeaveModel = require('../models/Leave');
 const AttendanceModel = require('../models/Attendance');
+const { updateAttendance } = require('./AttendanceController');
 
 //* All Method *//
 /* Admin & HR: Get All Employee Leave Data */
@@ -129,7 +130,7 @@ const applyLeave = async (req, res) => {
       }
 
       const leaveData = new LeaveModel({
-          nip: nip,
+          nip: nip, 
           start_date: start_date,
           end_date: end_date,
           type: type,
@@ -151,34 +152,34 @@ const applyLeave = async (req, res) => {
   }
 };
 
-// Method untuk menyetujui cuti dan memperbarui tabel Attendance
+/* Admin & HR: Approve Employee Leave */
 const approveLeave = async (req, res) => {
+  const {leaveId} = req.params;
+  
   try {
-    const leaveId = req.params.id;
-    const updatedLeave = await LeaveModel.findByIdAndUpdate(
-      leaveId, 
-      { status_leave: 'approved' },
-      { new: true }
-    );
-
-    if (!updatedLeave) {
-      return res.status(404).json({ message: 'Leave not found' });
+    const leave = await LeaveModel.findById(leaveId);
+    if (!leave) {
+        return res.status(404).json({
+            message: 'Leave request not found'
+        });
     }
+    leave.status_leave = 'approved';
+    await leave.save();
 
-    // Perbarui data Attendance
-    const attendanceData = {
-      employee: updatedLeave.employee,
-      nip: updatedLeave.nip,
-      clock_in: updatedLeave.start_date,
-      clock_out: updatedLeave.end_date,
+    const attendanceData = await AttendanceModel({
+      nip: nip,
+      date:leave.start_date,
+      clock_in: null,
+      clock_out: null,
       status_attendance: updatedLeave.type
-    };
+    });
 
-    await AttendanceModel.create(attendanceData);
+    await attendanceData.validate();
+    await attendanceData.save();
 
     res.status(200).json({
       message: 'Leave approved and attendance updated',
-      leave: updatedLeave,
+      leave: leave,
       attendance: attendanceData
     });
   } catch (error) {

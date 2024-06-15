@@ -56,7 +56,7 @@ get employee payroll by nip : /api/payroll/data/employee/:nip
 create-overtime : /api/hr/overtime
 
 -> PUT
-acc-leave : /api/leave/approve/:id (x)
+approve employee leave : /api/leave/approve/:_id 
 reject-leave : /api/leave/reject/:id (x)
 
 ->DELETE

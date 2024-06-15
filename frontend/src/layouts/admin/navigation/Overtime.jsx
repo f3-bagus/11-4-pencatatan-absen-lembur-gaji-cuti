@@ -7,30 +7,15 @@ import {
   Flex,
   Heading,
   Box,
-  Button,
   Modal,
-  ModalBody,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalFooter,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  FormErrorMessage,
 } from "@chakra-ui/react";
 import DataTable from "../../../components/admin/table/DataTabel";
-import { IoIosAddCircleOutline } from "react-icons/io";
-import { Formik, Form, Field } from "formik";
-import { validationSchemaOvertime } from "../../../utils/validationSchema";
 import axios from "axios";
 
 const Overtime = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onClose } = useDisclosure();
   const [overtime, setOvertime] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [setIsLoading] = useState(false);
   const toast = useToast();
 
   const getDataOvertime = async () => {

@@ -32,6 +32,10 @@ const LeaveSchema = new mongoose.Schema({
         enum: ["approved", "rejected", "pending"],
         default: "pending" 
     },
+    leave_letter: {
+        type: String,
+        required: true,
+    },
     archived: { 
         type: Number,
         enum: [0, 1], 

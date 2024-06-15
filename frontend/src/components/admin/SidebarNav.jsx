@@ -1,3 +1,5 @@
+import React from "react";
+import { useLocation } from "react-router-dom";
 import {
   ListIcon,
   Heading,
@@ -6,62 +8,46 @@ import {
   Text,
   List,
   ListItem,
+  useColorModeValue
 } from "@chakra-ui/react";
-import {
-  MdOutlineSpaceDashboard,
-} from "react-icons/md";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { AiOutlineDollarCircle } from "react-icons/ai";
+import { LuMonitorCheck } from "react-icons/lu";
+import { FaRegClock } from "react-icons/fa";
+import { PiAirplaneTilt } from "react-icons/pi";
+import { TbReportAnalytics } from "react-icons/tb";
 
 const items = [
   {
     type: "link",
-    label: "Admin",
+    label: "Dashboard",
     icon: MdOutlineSpaceDashboard,
-    path: "/",
-  },
-
-  {
-    type: "header",
-    label: "Admin",
+    path: "/admin",
   },
   {
     type: "link",
-    label: "Admin",
-    icon: MdOutlineSpaceDashboard,
-    path: "/",
+    label: "Attendance",
+    icon: LuMonitorCheck,
+    path: "/admin/attendance",
   },
   {
     type: "link",
-    label: "Admin",
-    icon: MdOutlineSpaceDashboard,
-    path: "/",
-  },
-  
-  {
-    type: "header",
-    label: "Admin",
+    label: "Payroll",
+    icon: AiOutlineDollarCircle,
+    path: "/admin/payroll",
   },
   {
     type: "link",
-    label: "Admin",
-    icon: MdOutlineSpaceDashboard,
-    path: "/",
-  },
-  {
-    type: "link",
-    label: "Admin",
-    icon: MdOutlineSpaceDashboard,
-    path: "/",
-  },
-  {
-    type: "link",
-    label: "Admin",
-    icon: MdOutlineSpaceDashboard,
-    path: "/",
+    label: "Overtime",
+    icon: FaRegClock,
+    path: "/admin/overtime",
   },
 ];
 
 const NavItem = ({ item, collapse }) => {
+  const location = useLocation();
   const { label, icon, path, type } = item;
+  const isActive = location.pathname === path;
 
   if (type === "link") {
     return (
@@ -81,7 +67,10 @@ const NavItem = ({ item, collapse }) => {
           fontWeight="medium"
           justifyContent={collapse ? "center" : ""}
           borderRadius={5}
-          _hover={{ textDecoration: "none", color: "green.500" }}
+          p="1"
+          _hover={{ textDecoration: "none", color: "green.300" }}
+          bg={isActive ? useColorModeValue("green.500", "green.900") : ""}
+          color={isActive ? "white" : ""}
         >
           <ListIcon as={icon} fontSize={22} m="0" />
           {!collapse && <Text>{label}</Text>}
@@ -108,7 +97,7 @@ const NavItem = ({ item, collapse }) => {
 
 export const SidebarNav = ({ collapse }) => {
   return (
-    <List w="full" mt={{ base: 0, md: 8}}>
+    <List w="full" mt={{ base: 0, md: 8 }}>
       {items.map((item, index) => (
         <ListItem key={index}>
           <NavItem item={item} collapse={collapse} />

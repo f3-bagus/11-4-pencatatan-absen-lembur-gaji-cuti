@@ -10,6 +10,13 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import AdmDashboard from "./layouts/admin/navigation/Dashboard";
 
 import {
+  AdmAttedance,
+  AdmOvertime,
+  AdmPayroll,
+  AdmProfile
+} from './layouts/admin/navigation';
+
+import {
   EmpAttedance,
   EmpLeave,
   EmpOvertime,
@@ -35,6 +42,10 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route element={<ProtectedRoute role="admin" />}>
             <Route path="/admin" element={<AdmDashboard />} />
+            <Route path="/admin/attendance" element={<AdmDashboard />} />
+            <Route path="/admin/payroll" element={<AdmDashboard />} />
+            <Route path="/admin/overtime" element={<AdmDashboard />} />
+            <Route path="/admin/profile" element={<AdmDashboard />} />
           </Route>
           <Route element={<ProtectedRoute role="hr" />}>
             <Route path="/hr" element={<HrDashboard />} />

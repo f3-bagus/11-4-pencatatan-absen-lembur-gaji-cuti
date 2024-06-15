@@ -127,7 +127,7 @@ export default function Topbar() {
                       NIP :{" "}{nip}
                     </Text>
                     <Text color="gray.400" fontSize="md" fontWeight="bold">
-                      Hr
+                      Admin
                     </Text>
                   </Center>
                   <MenuDivider />
@@ -138,7 +138,7 @@ export default function Topbar() {
                       bg: useColorModeValue("gray.100", "green.600"),
                     }}
                     onClick={() => {
-                      navigate("/hr/profile");
+                      navigate("/admin/profile");
                     }}
                   >
                     Profile

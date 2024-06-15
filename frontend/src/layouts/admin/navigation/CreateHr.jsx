@@ -29,6 +29,7 @@ const CreateHr = () => {
   });
 
   const [isInvalidNIPAlertOpen, setIsInvalidNIPAlertOpen] = useState(false);
+  const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -51,24 +52,28 @@ const CreateHr = () => {
 
     console.log(formData); // Replace with your API call or further logic
     // Here you would typically handle form submission, e.g., send data to backend
+    
+    // Show success alert
+    setIsSuccessAlertOpen(true);
   };
 
   const closeInvalidNIPAlert = () => {
     setIsInvalidNIPAlertOpen(false);
   };
 
+  const closeSuccessAlert = () => {
+    setIsSuccessAlertOpen(false);
+  };
+
   return (
     <AdminLayout>
       <Flex
-        w="full"
-        p="5"
-        direction="column"
-        gap={5}
-      >
+        w="full" p="5" direction="column" gap={5}>
+        
         <Box
           bg={useColorModeValue("white", "green.800")}
           p="2"
-          borderRadius="xl"
+          borderRadius="2xl"
           shadow="lg"
         >
           <form onSubmit={handleSubmit}>
@@ -97,8 +102,8 @@ const CreateHr = () => {
                 onChange={handleChange}
               >
                 <option value="">Select Gender</option>
-                <option value="female">Perempuan</option>
-                <option value="male">Laki-laki</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
               </Select>
             </FormControl>
             <FormControl id="email" isRequired mt={4}>
@@ -160,6 +165,31 @@ const CreateHr = () => {
 
             <AlertDialogFooter>
               <Button onClick={closeInvalidNIPAlert} colorScheme="blue">
+                Close
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      {/* Alert dialog for success */}
+      <AlertDialog
+        isOpen={isSuccessAlertOpen}
+        onClose={closeSuccessAlert}
+        leastDestructiveRef={undefined}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Success
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Successfully created account.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button onClick={closeSuccessAlert} colorScheme="blue">
                 Close
               </Button>
             </AlertDialogFooter>

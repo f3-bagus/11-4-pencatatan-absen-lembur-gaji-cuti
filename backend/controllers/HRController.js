@@ -6,12 +6,13 @@ const mongoose = require('mongoose');
 //* All Method *//
 /* HR: Create Overtime for Division*/ 
 const createOvertime = async (req, res) => {
-  const { division, date, reason, overtime_rate } = req.body;
+  const { division, date, hours, reason, overtime_rate } = req.body;
 
   try {
     const overtime = new OvertimeModel({
       division,
       date,
+      hours,
       reason,
       overtime_rate,
       status_overtime: 'available',

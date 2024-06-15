@@ -24,10 +24,11 @@ get all employee data (all info): /api/employee/data
 get employee data by nip (all info): /api/employee/data/:nip
 get all employee attendance data : /api/attendance/data
 get employee attendance data by nip : /api/attendance/data/:nip
-get all overtime data : /api/employee/data/all
-get all employee payroll : /api/payroll/data/employee
+get all employee overtime data : /api/employee/data/all
+get all employee leave data : /api/leave/data
+get all employee leave data by nip: /api/leave/data/:nip
+get all employee payroll data : /api/payroll/data/employee
 get employee payroll by nip : /api/payroll/data/employee/:nip
-get all employee :/api/employee/employees
 
 -> POST
 create employee account : /api/admin/create-employee
@@ -72,7 +73,7 @@ get history overtime data : /api/overtime/data/history
 -> POST
 clock-in : /api/attendance/clock-in
 clock-out : /api/attendance/clock-out
-accept-overtime : /api/employee/accept-overtime
+accept-overtime : /api/employee/accept-overtime/:_id
 apply-leave : /api/leave/apply-leave (x)
 
 -> PUT

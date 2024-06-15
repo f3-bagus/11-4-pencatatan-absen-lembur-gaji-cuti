@@ -13,6 +13,10 @@ const OvertimeSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    hours: {
+        type: Number, 
+        default: null
+    },
     reason: {
         type: String, 
         default: null

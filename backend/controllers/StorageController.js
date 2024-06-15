@@ -1,17 +1,29 @@
 const multer = require('multer');
 const path = require('path');
 
-/* All User: Handle Upload File */
-const storage = multer.diskStorage({
+/* All User: Handle Upload File Photo Profile */
+const profilePhotoStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/profile_photo/');
+        cb(null, 'uploads/profile_photo');
     },
     filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-        cb(null, file.fieldname + '-' + uniqueSuffix)
+        cb(null, Date.now() + '-' + file.originalname);
     }
 });
+const uploadProfilePhoto = multer({ storage: profilePhotoStorage });
 
-const upload = multer({ storage: storage });
+/* Employee: Handle Upload File Leave Letter */
+const leaveLetterStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/leave_letter');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+const uploadLeaveLetter = multer({ storage: leaveLetterStorage });
 
-module.exports = { upload };
+module.exports = { 
+    uploadProfilePhoto,
+    uploadLeaveLetter
+};

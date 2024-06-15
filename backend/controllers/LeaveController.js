@@ -3,15 +3,114 @@ const LeaveModel = require('../models/Leave');
 const AttendanceModel = require('../models/Attendance');
 
 //* All Method *//
-// Method untuk mengambil data cuti
-const getLeave = async (req, res) => {
+/* Admin & HR: Get All Employee Leave Data */
+const getAllEmployeeLeaves = async (req, res) => {
   try {
-    const leave = await LeaveModel.find();
-    res.json(leave);
+      const employeeLeaveData = await LeaveModel.aggregate([
+          {
+              $match: {
+                  archived: { $ne: 1 }
+              }
+          },
+          {
+              $lookup: {
+                  from: "tbl_employees", 
+                  localField: "nip",
+                  foreignField: "nip",
+                  as: "employee"
+              }
+          },
+          {
+              $unwind: "$employee"
+          },
+          {
+              $project: {
+                  _id: 0,
+                  name: "$employee.name",
+                  nip: "$nip",
+                  email: "$employee.email",
+                  phone: "$employee.phone",
+                  division: "$employee.division",
+                  gender: "$employee.gender",
+                  type: "$type",
+                  start_date: 1,
+                  end_date: 1,
+                  reason: 1,
+                  status_leave: 1,
+                  leave_letter: 1
+              }
+          }
+      ]);
+
+      res.status(200).json({
+          message: 'Success',
+          data: employeeLeaveData
+      });
   } catch (error) {
-    res.status(500).json({ 
-        message: error.message 
-    });
+      res.status(500).json({
+          message: 'Failed to get all employee leave data',
+          error: error.message
+      });
+  }
+};
+
+/* Admin & HR: Get Employee Leave Data by NIP */
+const getEmployeeLeaves = async (req, res) => {
+  const { nip } = req.params;
+  
+  try {
+      const employeeLeaveData = await LeaveModel.aggregate([
+          {
+              $match: {
+                  nip: nip,
+                  archived: { $ne: 1 }
+              }
+          },
+          {
+              $lookup: {
+                  from: "tbl_employees",
+                  localField: "nip",
+                  foreignField: "nip",
+                  as: "employee"
+              }
+          },
+          {
+              $unwind: "$employee"
+          },
+          {
+              $project: {
+                  _id: 0,
+                  name: "$employee.name",
+                  nip: "$nip",
+                  email: "$employee.email",
+                  phone: "$employee.phone",
+                  division: "$employee.division",
+                  gender: "$employee.gender",
+                  type: "$type",
+                  start_date: 1,
+                  end_date: 1,
+                  reason: 1,
+                  status_leave: 1,
+                  leave_letter: 1
+              }
+          }
+      ]);
+
+      if (employeeLeaveData.length === 0) {
+          return res.status(404).json({
+              message: `No leave data found for NIP: ${nip}`
+          });
+      }
+
+      res.status(200).json({
+          message: 'Success',
+          data: employeeLeaveData
+      });
+  } catch (error) {
+      res.status(500).json({
+          message: 'Failed to get employee leave data',
+          error: error.message
+      });
   }
 };
 
@@ -93,8 +192,9 @@ const rejectLeave = async (req, res) => {
 };
 
 module.exports = {
-    getLeave,
-    applyLeave,
-    approveLeave,
-    rejectLeave
+  getAllEmployeeLeaves,
+  getEmployeeLeaves,
+  applyLeave,
+  approveLeave,
+  rejectLeave
 };

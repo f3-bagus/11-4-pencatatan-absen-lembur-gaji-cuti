@@ -37,7 +37,6 @@ const LeaveSchema = new mongoose.Schema({
     },
     leave_letter: {
         type: String,
-        required: true,
     },
     archived: { 
         type: Number,

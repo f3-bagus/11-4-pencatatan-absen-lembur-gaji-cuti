@@ -12,6 +12,7 @@ import {
   TabPanel,
   TabPanels,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import DataTable from "../../../components/employee/table/DataTabel";
 import axios from "axios";
@@ -20,13 +21,13 @@ const Overtime = () => {
   const { colorMode } = useColorMode();
   const [overtime, setOvertime] = useState([]);
   const [history, setHistory] = useState([]);
+  const toast = useToast();
 
   const getOvertime = async () => {
     try {
       const response = await axios.get(
         "http://localhost:5000/api/overtime/data"
       );
-      console.log(response.data);
       setOvertime(response.data.data);
     } catch (error) {
       console.log(error);
@@ -50,35 +51,28 @@ const Overtime = () => {
     getHistory();
   }, []);
 
-  const attendanceColumns = React.useMemo(
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const acceptColumns = React.useMemo(
     () => [
       {
-        Header: "nip",
-        accessor: "nip",
+        Header: "date",
+        accessor: "date",
+        Cell: ({ value }) => formatDate(value),
       },
       {
-        Header: "name",
-        accessor: "name",
+        Header: "reason",
+        accessor: "reason",
       },
       {
-        Header: "total_attendance",
-        accessor: "total_attendance",
-      },
-      {
-        Header: "total_present",
-        accessor: "total_present",
-      },
-      {
-        Header: "absent",
-        accessor: "absent",
-      },
-      {
-        Header: "sick",
-        accessor: "sick",
-      },
-      {
-        Header: "leave",
-        accessor: "leave",
+        Header: "overtime_rate",
+        accessor: "overtime_rate",
       },
       {
         Header: "Action",
@@ -92,14 +86,6 @@ const Overtime = () => {
             >
               Accept
             </Button>
-            <Button
-              colorScheme="red"
-              size="sm"
-              ml={2}
-              onClick={() => handleReject(row.original)}
-            >
-              Reject
-            </Button>
           </>
         ),
       },
@@ -107,86 +93,61 @@ const Overtime = () => {
     []
   );
 
-  const payrollColumns = React.useMemo(
+  const historyColumns = React.useMemo(
     () => [
       {
-        Header: "nip",
-        accessor: "nip",
+        Header: "date",
+        accessor: "date",
+        Cell: ({ value }) => formatDate(value),
       },
       {
-        Header: "name",
-        accessor: "name",
+        Header: "hours",
+        accessor: "hours",
       },
       {
-        Header: "division",
-        accessor: "division",
+        Header: "reason",
+        accessor: "reason",
       },
       {
-        Header: "month",
-        accessor: "month",
-      },
-      {
-        Header: "basic_salary",
-        accessor: "basic_salary",
-      },
-      {
-        Header: "total_overtime",
-        accessor: "total_overtime",
-      },
-      {
-        Header: "total_deduction",
-        accessor: "total_deduction",
-      },
-      {
-        Header: "total_salary",
-        accessor: "total_salary",
+        Header: "overtime_rate",
+        accessor: "overtime_rate",
       },
     ],
     []
   );
 
-  const handleReject = (rowData) => {
-    // Lakukan operasi untuk menolak permintaan cuti
-    console.log("Rejecting leave for:", rowData);
-    // Misalnya, Anda dapat membuat permintaan ke backend untuk mengubah status cuti menjadi ditolak
+  const handleAccept = async (rowData) => {
+    console.log("Accepting overtime for:", rowData);
+
+    const { _id: overtimeId } = rowData;
+
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/employee/accept-overtime/${overtimeId}`
+      );
+      console.log(response.data);
+      toast({
+        position: "top-left",
+        title: "Overtime Accepted",
+        description: "Overtime has been accepted successfully.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+
+      getOvertime();
+    } catch (error) {
+      console.error("Error accepting overtime:", error);
+      toast({
+        position: "top-left",
+        title: "Error",
+        description: "There was an error accepting overtime.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
-
-  const handleAccept = (rowData) => {
-    // Lakukan operasi untuk menerima permintaan cuti
-    console.log("Accepting leave for:", rowData);
-    // Misalnya, Anda dapat membuat permintaan ke backend untuk mengubah status cuti
-  };
-
-  const attendanceData = React.useMemo(
-    () => [
-      {
-        nip: 33421312,
-        name: "John Doe",
-        total_attendance: "full",
-        total_present: "full",
-        absent: "-",
-        sick: "-",
-        leave: "-",
-      },
-    ],
-    []
-  );
-
-  const payrollData = React.useMemo(
-    () => [
-      {
-        nip: 33421312,
-        name: "John Doe",
-        division: "IT",
-        month: "June",
-        basic_salary: "Rp. 5.000.000",
-        total_overtime: "Rp. 500.000",
-        total_deduction: "Rp. 100.000",
-        total_salary: "Rp. 5.400.000",
-      },
-    ],
-    []
-  );
 
   return (
     <EmployeeLayout>
@@ -208,16 +169,16 @@ const Overtime = () => {
             <TabPanels>
               <TabPanel>
                 <DataTable
-                  columns={attendanceColumns}
-                  data={attendanceData}
-                  filename={"attendance_report"}
+                  columns={acceptColumns}
+                  data={overtime}
+                  filename={"overtime_acc_report"}
                 />
               </TabPanel>
               <TabPanel>
                 <DataTable
-                  columns={payrollColumns}
-                  data={payrollData}
-                  filename={"payroll_report"}
+                  columns={historyColumns}
+                  data={history}
+                  filename={"overtime_history_report"}
                 />
               </TabPanel>
             </TabPanels>

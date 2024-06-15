@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import EmployeeLayout from "../EmployeeLayout";
 import {
   useColorModeValue,
   useDisclosure,
+  useToast,
   Flex,
   Heading,
   Box,
@@ -17,16 +18,73 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
+  Textarea,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import DataTable from "../../../components/employee/table/DataTabel";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { Formik, Form, Field } from "formik";
+import { validationSchemaLeave } from "../../../utils/validationSchema";
 import axios from "axios";
 
 const Leave = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [history, setHistory] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
-  const initialRef = React.useRef(null);
+  const getHistory = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/employee/:nip/leaves"
+      );
+      console.log(response.data);
+      setHistory(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getHistory();
+  }, []);
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    setIsLoading(true);
+    console.log(values);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/leave/apply",
+        values
+      );
+      toast({
+        position: "top-left",
+        title: "Leave Applied",
+        description: "Leave form has been submitted successfully.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error(
+        "Error submitting leave:",
+        error.response || error.message
+      );
+      toast({
+        position: "top-left",
+        title: "Error",
+        description:
+          error.response?.data?.message ||
+          "There was an error submitting your leave application.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+    setIsLoading(false);
+    setSubmitting(false);
+  };
 
   const columns = React.useMemo(
     () => [
@@ -104,7 +162,6 @@ const Leave = () => {
           </Button>
 
           <Modal
-            initialFocusRef={initialRef}
             isOpen={isOpen}
             onClose={onClose}
             size={{ base: "xs", md: "md", lg: "lg" }}
@@ -113,63 +170,149 @@ const Leave = () => {
             <ModalContent bg={useColorModeValue("white", "green.900")}>
               <ModalHeader>Apply for Overtime</ModalHeader>
               <ModalCloseButton />
-              <ModalBody pb={6}>
-                <FormControl>
-                  <FormLabel>Division</FormLabel>
-                  <Select
-                    ref={initialRef}
-                    placeholder="Select division"
-                    focusBorderColor="green.500"
-                  >
-                    <option value="IT">IT</option>
-                    <option value="Sales">Sales</option>
-                    <option value="Marketing">Marketing</option>
-                    <option value="Accounting">Accounting</option>
-                  </Select>
-                </FormControl>
 
-                <FormControl mt={4}>
-                  <FormLabel>Date</FormLabel>
-                  <Input
-                    type="date"
-                    placeholder="Enter date"
-                    focusBorderColor="green.500"
-                  />
-                </FormControl>
+              <Formik
+                initialValues={{
+                  start_date: "",
+                  end_date: "",
+                  type: "",
+                  reason: "",
+                  leave_letter: "",
+                }}
+                validationSchema={validationSchemaLeave}
+                onSubmit={handleSubmit}
+              >
+                {({ isSubmitting, isValid }) => (
+                  <Form>
+                    <ModalBody pb={6}>
+                      <Field name="start_date">
+                        {({ field, form }) => (
+                          <FormControl
+                            isInvalid={
+                              form.errors.start_date && form.touched.start_date
+                            }
+                            mt={3}
+                          >
+                            <FormLabel>Start Date</FormLabel>
+                            <Input
+                              {...field}
+                              type="date"
+                              placeholder="Enter date"
+                              focusBorderColor="green.500"
+                            />
+                            <FormErrorMessage>
+                              {form.errors.start_date}
+                            </FormErrorMessage>
+                          </FormControl>
+                        )}
+                      </Field>
 
-                <FormControl mt={4}>
-                  <FormLabel>Hours</FormLabel>
-                  <Input
-                    type="number"
-                    placeholder="Enter hours"
-                    focusBorderColor="green.500"
-                  />
-                </FormControl>
+                      <Field name="end_date">
+                        {({ field, form }) => (
+                          <FormControl
+                            isInvalid={
+                              form.errors.end_date && form.touched.end_date
+                            }
+                            mt={3}
+                          >
+                            <FormLabel>End Date</FormLabel>
+                            <Input
+                              {...field}
+                              type="date"
+                              placeholder="Enter date"
+                              focusBorderColor="green.500"
+                            />
+                            <FormErrorMessage>
+                              {form.errors.end_date}
+                            </FormErrorMessage>
+                          </FormControl>
+                        )}
+                      </Field>
 
-                <FormControl mt={4}>
-                  <FormLabel>Overtime Rate</FormLabel>
-                  <Input
-                    type="number"
-                    placeholder="Enter overtime rate"
-                    focusBorderColor="green.500"
-                  />
-                </FormControl>
-              </ModalBody>
+                      <Field name="type">
+                        {({ field, form }) => (
+                          <FormControl
+                            isInvalid={form.errors.type && form.touched.type}
+                            mt={3}
+                          >
+                            <FormLabel>Type</FormLabel>
+                            <Input
+                              {...field}
+                              type="text"
+                              placeholder="Enter type"
+                              focusBorderColor="green.500"
+                            />
+                            <FormErrorMessage>
+                              {form.errors.type}
+                            </FormErrorMessage>
+                          </FormControl>
+                        )}
+                      </Field>
 
-              <ModalFooter>
-                <Button colorScheme="green" mr={3}>
-                  Submit
-                </Button>
-                <Button onClick={onClose}>Cancel</Button>
-              </ModalFooter>
+                      <Field name="reason">
+                        {({ field, form }) => (
+                          <FormControl
+                            isInvalid={
+                              form.errors.reason && form.touched.reason
+                            }
+                            mt={3}
+                          >
+                            <FormLabel>Reason</FormLabel>
+                            <Textarea
+                              {...field}
+                              placeholder="Enter reason"
+                              focusBorderColor="green.500"
+                            />
+                            <FormErrorMessage>
+                              {form.errors.reason}
+                            </FormErrorMessage>
+                          </FormControl>
+                        )}
+                      </Field>
+
+                      <Field name="leave_letter">
+                        {({ field, form }) => (
+                          <FormControl
+                            isInvalid={
+                              form.errors.leave_letter &&
+                              form.touched.leave_letter
+                            }
+                            mt={3}
+                          >
+                            <FormLabel>Leave Letter</FormLabel>
+                            <Input
+                              {...field}
+                              type="file"
+                              focusBorderColor="green.500"
+                              alignContent="center"
+                            />
+                            <FormErrorMessage>
+                              {form.errors.leave_letter}
+                            </FormErrorMessage>
+                          </FormControl>
+                        )}
+                      </Field>
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <Button
+                        colorScheme="green"
+                        mr={3}
+                        type="submit"
+                        isLoading={isLoading}
+                        isDisabled={!isValid || isSubmitting}
+                      >
+                        Submit
+                      </Button>
+                      <Button onClick={onClose}>Cancel</Button>
+                    </ModalFooter>
+                  </Form>
+                )}
+              </Formik>
             </ModalContent>
           </Modal>
 
-          <DataTable
-            columns={columns}
-            data={data}
-            filename={"table_overtime"}
-          />
+          <DataTable columns={columns} data={data} filename={"leave_history"} />
         </Box>
       </Flex>
     </EmployeeLayout>

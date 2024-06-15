@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const LeaveSchema = new mongoose.Schema({
     nip: { 
         type: String, 
-        default: nully
+        default: null
     },
     start_date: {
         type: Date,

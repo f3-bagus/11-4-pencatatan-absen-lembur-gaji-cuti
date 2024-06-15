@@ -10,11 +10,6 @@ function formatTime(date) {
   return date.toTimeString().split(' ')[0];
 }
 
-/* Sistem: Only Get Date without Time */
-function formatDate(date) {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-}
-
 /* Employee : clock In */
 const clockIn = async (req, res) => {
   const { nip } = req.user;
@@ -29,7 +24,7 @@ const clockIn = async (req, res) => {
 
       const now = new Date();
       const clockInTime = formatTime(now);
-      const todayDate = formatDate(now)
+      const todayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
 
       if (now.getHours() < 6) {
           return res.status(400).json({
@@ -89,7 +84,7 @@ const clockOut = async (req, res) => {
 
       const now = new Date();
       const clockOutTime = formatTime(now);
-      const todayDate = formatDate(now); 
+      const todayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
 
       if (now.getHours() < 16 || (now.getHours() === 16 && now.getMinutes() < 30)) {
           return res.status(400).json({

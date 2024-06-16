@@ -30,6 +30,7 @@ const EmployeeLayout = ({ children }) => {
         borderRadius="2xl"
         transition="width 0.4s ease"
         display={{ base: "none", md: "block" }}
+        overflow="scroll"
       >
         <Sidebar collapse={collapse} />
       </Flex>

@@ -151,11 +151,9 @@ const Dashboard = () => {
             shadow="lg"
             p="3"
           >
-            <Stack direction="row" justifyContent="space-between">
-              <Heading as="h1" size="sm" mb={6}>
-                Overtime Overview
-              </Heading>
-            </Stack>
+            <Heading as="h1" size="sm" mb={6}>
+              Overtime Overview
+            </Heading>
             <LemburChart />
           </Box>
           <Box
@@ -166,11 +164,9 @@ const Dashboard = () => {
             shadow="lg"
             p="3"
           >
-            <Stack direction="row" justifyContent="space-between">
-              <Heading as="h1" size="sm" mb={6}>
-                Leave Overview
-              </Heading>
-            </Stack>
+            <Heading as="h1" size="sm" mb={6}>
+              Leave Overview
+            </Heading>
             <CutiChart />
           </Box>
         </Stack>

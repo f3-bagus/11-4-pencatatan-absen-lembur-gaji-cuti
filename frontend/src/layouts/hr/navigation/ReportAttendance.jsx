@@ -15,7 +15,7 @@ import {
 import DataTable from "../../../components/hr/table/DataTabel";
 import axios from "axios";
 
-const Report = () => {
+const ReportAttendace = () => {
   const [monthly, setMonthly] = useState([]);
   const [yearly, setYearly] = useState([]);
   const { colorMode } = useColorMode();
@@ -23,10 +23,9 @@ const Report = () => {
   const getReport = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/attendance/report"
+        "http://localhost:5000/api/report/attendance/monthly"
       );
-      console.log(response.data.data.reportMonthly);
-      console.log(response.data.data.reportYearly);
+      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -36,7 +35,7 @@ const Report = () => {
     getReport();
   }, []);
 
-  const attendanceColumns = React.useMemo(
+  const monthlyColumns = React.useMemo(
     () => [
       {
         Header: "nip",
@@ -45,95 +44,76 @@ const Report = () => {
       {
         Header: "name",
         accessor: "name",
-      },
-      {
-        Header: "total_attendance",
-        accessor: "total_attendance",
-      },
-      {
-        Header: "total_present",
-        accessor: "total_present",
-      },
-      {
-        Header: "absent",
-        accessor: "absent",
-      },
-      {
-        Header: "sick",
-        accessor: "sick",
-      },
-      {
-        Header: "leave",
-        accessor: "leave",
-      },
-    ],
-    []
-  );
-
-  const payrollColumns = React.useMemo(
-    () => [
-      {
-        Header: "nip",
-        accessor: "nip",
-      },
-      {
-        Header: "name",
-        accessor: "name",
-      },
-      {
-        Header: "division",
-        accessor: "division",
       },
       {
         Header: "month",
         accessor: "month",
       },
       {
-        Header: "basic_salary",
-        accessor: "basic_salary",
+        Header: "present",
+        accessor: "present",
       },
       {
-        Header: "total_overtime",
-        accessor: "total_overtime",
+        Header: "late",
+        accessor: "late",
       },
       {
-        Header: "total_deduction",
-        accessor: "total_deduction",
+        Header: "absent",
+        accessor: "absent",
       },
       {
-        Header: "total_salary",
-        accessor: "total_salary",
+        Header: "leave",
+        accessor: "leave",
       },
-    ],
-    []
-  );
-
-  const attendanceData = React.useMemo(
-    () => [
       {
-        nip: 33421312,
-        name: "John Doe",
-        total_attendance: "full",
-        total_present: "full",
-        absent: "-",
-        sick: "-",
-        leave: "-",
+        Header: "permit",
+        accessor: "permit",
+      },
+      {
+        Header: "sick",
+        accessor: "sick",
+      },
+      {
+        Header: "total attendance",
+        accessor: "total_attendance",
       },
     ],
     []
   );
 
-  const payrollData = React.useMemo(
+  const yearlyColumns = React.useMemo(
     () => [
       {
-        nip: 33421312,
-        name: "John Doe",
-        division: "IT",
-        month: "June",
-        basic_salary: "Rp. 5.000.000",
-        total_overtime: "Rp. 500.000",
-        total_deduction: "Rp. 100.000",
-        total_salary: "Rp. 5.400.000",
+        Header: "nip",
+        accessor: "nip",
+      },
+      {
+        Header: "present",
+        accessor: "present",
+      },
+      {
+        Header: "late",
+        accessor: "late",
+      },
+      {
+        Header: "absent",
+        accessor: "absent",
+      },
+      {
+        Header: "leave",
+        accessor: "leave",
+      },
+      {
+        Header: "permit",
+        accessor: "permit",
+      },
+      {
+        Header: "sick",
+        accessor: "sick",
+      },
+      {
+        Header: "total attendance",
+        accessor: "total_attendance",
       },
     ],
     []
@@ -159,15 +139,15 @@ const Report = () => {
             <TabPanels>
               <TabPanel>
                 <DataTable
-                  columns={attendanceColumns}
-                  data={attendanceData}
+                  columns={monthlyColumns}
+                  data={monthly}
                   filename={"monthly_report"}
                 />
               </TabPanel>
               <TabPanel>
                 <DataTable
-                  columns={payrollColumns}
-                  data={payrollData}
+                  columns={yearlyColumns}
+                  data={yearly}
                   filename={"yearly_report"}
                 />
               </TabPanel>
@@ -179,4 +159,4 @@ const Report = () => {
   );
 };
 
-export default Report;
+export default ReportAttendace;

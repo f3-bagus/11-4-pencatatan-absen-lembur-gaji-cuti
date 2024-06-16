@@ -57,10 +57,26 @@ const items = [
     path: "/hr/leave",
   },
   {
-    type: "link",
+    type: "header",
     label: "Report",
+  },
+  {
+    type: "link",
+    label: "Attendance",
     icon: TbReportAnalytics,
-    path: "/hr/report",
+    path: "/hr/report/attendance",
+  },
+  {
+    type: "link",
+    label: "Overtime",
+    icon: TbReportAnalytics,
+    path: "/hr/report/overtime",
+  },
+  {
+    type: "link",
+    label: "All",
+    icon: TbReportAnalytics,
+    path: "/hr/report/all",
   },
 ];
 

@@ -9,12 +9,19 @@ import {
   ListItem,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { LuMonitorCheck } from "react-icons/lu";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { PiAirplaneTilt } from "react-icons/pi";
 import { FaRegClock } from "react-icons/fa";
 
 const items = [
+  {
+    type: "link",
+    label: "Dashboard",
+    icon: MdOutlineSpaceDashboard,
+    path: "/employee",
+  },
   {
     type: "header",
     label: "Time Management",
@@ -23,7 +30,7 @@ const items = [
     type: "link",
     label: "Attendance",
     icon: LuMonitorCheck,
-    path: "/employee",
+    path: "/employee/attendance",
   },
   {
     type: "link",

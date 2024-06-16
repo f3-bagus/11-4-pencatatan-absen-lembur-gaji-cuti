@@ -37,7 +37,7 @@ const items = [
     type: "link",
     label: "Monthly Attendance",
     icon: LuMonitorCheck,
-    path: "/",
+    path: "/admin/monthly",
   },
   {
     type: "header",
@@ -47,7 +47,7 @@ const items = [
     type: "link",
     label: "Create Employee Acount",
     icon: IoIosCreate,
-    path: "/",
+    path: "/admin/createemp",
   },
   {
     type: "link",

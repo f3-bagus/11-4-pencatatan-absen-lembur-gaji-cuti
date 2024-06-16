@@ -15,9 +15,12 @@ import {
   AdmPayroll,
   AdmProfile,
   AdmCreatehr,
+  AdmMonthly,
+  AdmCreateemp,
 } from './layouts/admin/navigation';
 
 import {
+  EmpDashboard,
   EmpAttedance,
   EmpLeave,
   EmpOvertime,
@@ -31,7 +34,7 @@ import {
   HrSalary,
   HrOvertime,
   HrLeave,
-  HrReport,
+  HrReportAttendance,
   HrProfile,
 } from "./layouts/hr/navigation";
 
@@ -48,6 +51,8 @@ function App() {
             <Route path="/admin/overtime" element={<AdmOvertime />} />
             <Route path="/admin/profile" element={<AdmProfile />} />
             <Route path="/admin/createhr" element={<AdmCreatehr />} />
+            <Route path="/admin/createemp" element={<AdmCreateemp />} />
+            <Route path="/admin/monthly" element={<AdmMonthly />} />
           </Route>
           <Route element={<ProtectedRoute role="hr" />}>
             <Route path="/hr" element={<HrDashboard />} />
@@ -55,11 +60,12 @@ function App() {
             <Route path="/hr/payroll" element={<HrSalary />} />
             <Route path="/hr/overtime" element={<HrOvertime />} />
             <Route path="/hr/leave" element={<HrLeave />} />
-            <Route path="/hr/report" element={<HrReport />} />
+            <Route path="/hr/report/attendance" element={<HrReportAttendance />} />
             <Route path="/hr/profile" element={<HrProfile />} />
           </Route>
           <Route element={<ProtectedRoute role="employee" />}>
-            <Route path="/employee" element={<EmpAttedance />} />
+            <Route path="/employee" element={<EmpDashboard />} />
+            <Route path="/employee/attendance" element={<EmpAttedance />} />
             <Route path="/employee/payroll" element={<EmpPayroll />} />
             <Route path="/employee/overtime" element={<EmpOvertime />} />
             <Route path="/employee/leave" element={<EmpLeave />} />

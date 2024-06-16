@@ -1,3 +1,4 @@
+export { default as EmpDashboard } from "./Dashboard";
 export { default as EmpAttedance } from "./Attendance";
 export { default as EmpPayroll } from "./Payroll";
 export { default as EmpOvertime } from "./Overtime";

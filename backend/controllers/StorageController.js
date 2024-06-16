@@ -35,16 +35,20 @@ const downloadLeaveLetter = async (req, res) => {
         const leave = await LeaveModel.findById(leaveId);
 
         if (!leave) {
-            return res.status(404).json({ message: "Leave not found" });
+            return res.status(404).json({ 
+                message: "Leave not found" 
+            });
         }
 
         const filename = leave.leave_letter;
 
         if (!filename) {
-            return res.status(404).json({ message: "Leave letter not found" });
+            return res.status(404).json({ 
+                message: "Leave letter not found" 
+            });
         }
 
-        const filePath = path.join(__dirname, 'uploads', 'leave_letter', filename);
+        const filePath = path.join(__dirname, '../public/uploads/leave_letter', filename);
 
         res.download(filePath, (err) => {
             if (err) {

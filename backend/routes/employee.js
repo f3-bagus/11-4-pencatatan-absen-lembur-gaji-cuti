@@ -15,7 +15,7 @@ router.get('/data', auth.authorizeRole(['admin', 'hr']), employeeController.getA
 router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), employeeController.getEmployee);
 
 /* Admin & HR: Get Employee Data by NIP*/
-router.get('/leave-letter', auth.authorizeRole(['admin', 'hr']), storageController.downloadLeaveLetter);
+router.get('/leave-letter/:leaveId', auth.authorizeRole(['admin', 'hr']), storageController.downloadLeaveLetter);
 
 /* Employee : Get self attendance data */
 router.get('/attendance', auth.authorizeRole('employee'), attendanceController.getSelfAttendance);

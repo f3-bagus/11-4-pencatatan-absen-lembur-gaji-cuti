@@ -233,40 +233,54 @@ const getRemainingLeave = async (req, res) => {
 
 /* Admin & HR: Approve Employee Leave */
 const approveLeave = async (req, res) => {
-  const {leaveId} = req.params;
-  
+  const { leaveId } = req.params;
+
   try {
     const leave = await LeaveModel.findById(leaveId);
     if (!leave) {
-        return res.status(404).json({
-            message: 'Leave request not found'
-        });
+      return res.status(404).json({
+        message: 'Leave request not found'
+      });
     }
     leave.status_leave = 'approved';
     await leave.save();
 
-    const attendanceData = await AttendanceModel({
-      nip: leave.nip,
-      date: leave.start_date,
-      clock_in: null,
-      clock_out: null,
-      status_attendance: leave.type
-    });
+    const startDate = moment(leave.start_date).startOf('day');
+    const endDate = moment(leave.end_date).endOf('day');
+    
+    let currentDate = startDate.clone();
+    let attendanceRecords = [];
 
-    await attendanceData.validate();
-    await attendanceData.save();
+    while (currentDate.isSameOrBefore(endDate)) {
+      if (currentDate.isoWeekday() !== 6 && currentDate.isoWeekday() !== 7) {
+        const attendanceData = new AttendanceModel({
+          nip: leave.nip,
+          date: currentDate.toDate(),
+          clock_in: null,
+          clock_out: null,
+          status_attendance: leave.type
+        });
+
+        await attendanceData.validate();
+        attendanceRecords.push(attendanceData);
+      }
+      currentDate.add(1, 'day');
+    }
+
+    await AttendanceModel.insertMany(attendanceRecords);
 
     res.status(200).json({
-      message: 'Leave approved and attendance updated succesfully!',
+      message: 'Leave approved and attendance updated successfully!',
       leave: leave,
-      attendance: attendanceData
+      attendance: attendanceRecords
     });
   } catch (error) {
-    res.status(500).json({ 
-        message: error.message 
+    res.status(500).json({
+      message: error.message
     });
   }
 };
+
 
 /* Admin & HR: Approve Employee Leave */
 const rejectLeave = async (req, res) => {

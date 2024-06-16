@@ -100,10 +100,6 @@ const Overtime = () => {
         accessor: "nip",
       },
       {
-        Header: "name",
-        accessor: "name",
-      },
-      {
         Header: "division",
         accessor: "division",
       },

@@ -173,11 +173,11 @@ const getLeaveHistory = async (req, res) => {
   const { nip } = req.user;
 
   try {
-    const acceptedLeave = await LeaveModel.find({nip});
+    const leaveData = await LeaveModel.findOne({nip});
 
     res.status(200).json({
       message: "Leave history retrieved successfully",
-      data: acceptedLeave
+      data: leaveData
     });
   } catch (error) {
     res.status(500).json({

@@ -14,8 +14,7 @@ import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { LuMonitorCheck } from "react-icons/lu";
 import { FaRegClock } from "react-icons/fa";
-import { PiAirplaneTilt } from "react-icons/pi";
-import { TbReportAnalytics } from "react-icons/tb";
+import { IoIosCreate } from "react-icons/io";
 
 const items = [
   {
@@ -47,13 +46,13 @@ const items = [
   {
     type: "link",
     label: "Create Employee Acount",
-    icon: LuMonitorCheck,
+    icon: IoIosCreate,
     path: "/",
   },
   {
     type: "link",
     label: "Create HR Acount",
-    icon: LuMonitorCheck,
+    icon: IoIosCreate,
     path: "/admin/createhr",
   },
   {

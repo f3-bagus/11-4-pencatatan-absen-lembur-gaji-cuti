@@ -70,7 +70,7 @@ const Attedance = () => {
     <AdminLayout>
       <Flex w="full" p="5" direction="column" gap={5}>
         <Heading as="h1" size="xl">
-          Attendance
+          Daily Attendance
         </Heading>
         <Box
           bg={useColorModeValue("white", "green.800")}

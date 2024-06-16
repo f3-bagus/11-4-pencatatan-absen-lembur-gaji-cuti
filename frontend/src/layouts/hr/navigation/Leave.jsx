@@ -282,12 +282,12 @@ const Leave = () => {
         accessor: "name",
       },
       {
-        Header: "start_date",
+        Header: "start date",
         accessor: "start_date",
         Cell: ({ value }) => formatDate(value),
       },
       {
-        Header: "end_date",
+        Header: "end date",
         accessor: "end_date",
         Cell: ({ value }) => formatDate(value),
       },
@@ -315,7 +315,7 @@ const Leave = () => {
         ),
       },
       {
-        Header: "status_leave",
+        Header: "status",
         accessor: "status_leave",
       },
       {
@@ -442,7 +442,7 @@ const Leave = () => {
       toast({
         position: "top-left",
         title: "File Downloaded",
-        description: "Leave file has been downloaded successfully.",
+        description: "Leave letter has been downloaded successfully.",
         status: "success",
         duration: 5000,
         isClosable: true,

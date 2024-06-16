@@ -111,11 +111,11 @@ const Attendance = () => {
         accessor: "name",
       },
       {
-        Header: "clock_in",
+        Header: "clock in",
         accessor: "clock_in",
       },
       {
-        Header: "clock_out",
+        Header: "clock out",
         accessor: "clock_out",
       },
       {
@@ -124,7 +124,7 @@ const Attendance = () => {
         Cell: ({ value }) => formatDateApi(value),
       },
       {
-        Header: "status_attendance",
+        Header: "status",
         accessor: "status_attendance",
       },
     ],

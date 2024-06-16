@@ -118,11 +118,11 @@ const Overtime = () => {
         accessor: "reason",
       },
       {
-        Header: "status_overtime",
+        Header: "status overtime",
         accessor: "status_overtime",
       },
       {
-        Header: "overtime_rate",
+        Header: "overtime rate",
         accessor: "overtime_rate",
       },
     ],

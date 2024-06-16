@@ -147,8 +147,8 @@ const applyLeave = async (req, res) => {
 
       const leaveData = new LeaveModel({
           nip: nip, 
-          start_date: now,
-          end_date: now,
+          start_date: start_date,
+          end_date: end_date,
           type: type,
           reason: reason,
           leave_letter: leave_letter 
@@ -173,7 +173,7 @@ const getLeaveHistory = async (req, res) => {
   const { nip } = req.user;
 
   try {
-    const leaveData = await LeaveModel.findOne({nip});
+    const leaveData = await LeaveModel.findOne({ nip });
 
     res.status(200).json({
       message: "Leave history retrieved successfully",
@@ -191,15 +191,19 @@ const getRemainingLeave = async (req, res) => {
   const { nip } = req.user;
 
   try {
-    const startOfYear = new Date(new Date().getFullYear(), 0, 1);
+    const currentYear = new Date().getFullYear();
+    const nextYear = currentYear + 1;
+    
     const takenLeaveCount = await LeaveModel.countDocuments({ 
       nip, 
       type: 'leave', 
-      start_date: { $gte: startOfYear } 
+      start_date: { 
+        $gte: new Date(currentYear, 0, 1),
+        $lt: new Date(nextYear, 0, 1)
+      }
     });
-
-    const maxYearlyLeave = 12; 
-    const remainingLeave = maxYearlyLeave - takenLeaveCount;
+ 
+    const remainingLeave = Math.max(0, 12 - takenLeaveCount);
 
     res.status(200).json({
       message: "Remaining annual leave retrieved successfully",
@@ -211,7 +215,6 @@ const getRemainingLeave = async (req, res) => {
     });
   }
 };
-
 
 /* Admin & HR: Approve Employee Leave */
 const approveLeave = async (req, res) => {

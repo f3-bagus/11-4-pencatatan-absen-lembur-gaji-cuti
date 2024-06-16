@@ -24,9 +24,9 @@ router.put('/approve/:leaveId', auth.authorizeRole(['hr', 'admin']), leaveContro
 router.put('/reject/:leaveId', auth.authorizeRole(['hr', 'admin']), leaveController.rejectLeave);
 
 /* Employee: Get History of Leave Data  */
-router.get('/data/history', auth.authorizeRole('employee'), leaveController.getLeaveHistory);
+router.get('/history', auth.authorizeRole('employee'), leaveController.getLeaveHistory);
 
 /* Employee: Get Remaining Leave Data  */
-router.get('/data/remaining', auth.authorizeRole('employee'), leaveController.getRemainingLeave);
+router.get('/remaining', auth.authorizeRole('employee'), leaveController.getRemainingLeave);
 
 module.exports = router;

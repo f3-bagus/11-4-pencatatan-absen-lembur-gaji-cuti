@@ -72,8 +72,8 @@ reject employee leave : /api/leave/reject/:leaveId
 4. Employee:
 -> GET
 get self attendance data : /api/employee/attendance
-get self history leave data : /api/leave/data/history
-get self remaining leave data : /api/leave/data/remaining
+get self history leave data : /api/leave/history
+get self remaining leave data : /api/leave/remaining
 get available overtime data : /api/overtime/data
 get self history overtime data : /api/overtime/data/history
 

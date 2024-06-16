@@ -13,13 +13,32 @@ const Payroll = () => {
   const [data, setData] = useState([]);
 
   const getPayroll = () => {
-    axios.get('http://localhost:5000/api/payroll/data/employee').then((res) =>{
-      //console.log(res.data.data);
-      setData(res.data.data)
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
+    axios.get('http://localhost:5000/api/payroll/data/employee')
+      .then((res) => {
+        console.log("Response data:", res.data.data);
+        const payrollData = res.data.data;
+
+        if (Array.isArray(payrollData)) {
+          const formattedData = payrollData.map(employee => ({
+            nip: employee.nip,
+            name: employee.name,
+            division: employee.division,
+            basic_salary: `Rp. ${employee.basic_salary}`,
+            deduction_sick: `Rp. ${employee.deduction_sick}`,
+            deduction_permission: `Rp. ${employee.deduction_permission}`,
+            deduction_absent: `Rp. ${employee.deduction_absent}`,
+            overtime_salary: `Rp. ${employee.overtime_salary}`,
+            total_salary: `Rp. ${employee.total_salary}`,
+          }));
+          setData(formattedData);
+        } else {
+          console.error("Unexpected response structure:", res.data);
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching payroll data:", err);
+      });
+  };
 
   useEffect(() => {
     getPayroll();
@@ -28,43 +47,39 @@ const Payroll = () => {
   const columns = React.useMemo(
     () => [
       {
-        Header: "nip",
+        Header: "NIP",
         accessor: "nip",
       },
       {
-        Header: "name",
+        Header: "Name",
         accessor: "name",
       },
       {
-        Header: "division",
+        Header: "Division",
         accessor: "division",
       },
       {
-        Header: "month",
-        accessor: "month",
-      },
-      {
-        Header: "basic_salary",
+        Header: "Basic Salary",
         accessor: "basic_salary",
       },
       {
-        Header: "overtime_pay",
-        accessor: "overtime_pay",
-      },
-      {
-        Header: "deduction_permission",
+        Header: "Deduction Permission",
         accessor: "deduction_permission",
       },
       {
-        Header: "deduction_sick",
+        Header: "Deduction Sick",
         accessor: "deduction_sick",
       },
       {
-        Header: "deduction_absent",
+        Header: "Deduction Absent",
         accessor: "deduction_absent",
       },
       {
-        Header: "total_salary",
+        Header: "Overtime Salary",
+        accessor: "overtime_salary",
+      },
+      {
+        Header: "Total Salary",
         accessor: "total_salary",
       },
     ],
@@ -90,4 +105,4 @@ const Payroll = () => {
   );
 }
 
-export default Payroll
+export default Payroll;

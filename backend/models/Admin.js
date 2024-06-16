@@ -1,3 +1,4 @@
+const moment = require('moment-timezone');
 const mongoose = require('mongoose');
 
 const AdminSchema = new mongoose.Schema({
@@ -36,18 +37,18 @@ const AdminSchema = new mongoose.Schema({
     },
     created_at: { 
         type: Date, 
-        default: Date.now 
+        default: () => moment().toDate() 
     },
     updated_at: { 
         type: Date, 
-        default: Date.now 
+        default: () => moment().toDate() 
     }
 }, { 
     collection: 'tbl_admins' 
 });
 
 AdminSchema.pre('save', function(next) {
-    this.updated_at = Date.now();
+    this.updated_at = moment().toDate();
     next();
 });
 

@@ -1,3 +1,4 @@
+const moment = require('moment-timezone');
 const mongoose = require('mongoose');
 
 const OvertimeSchema = new mongoose.Schema({    
@@ -11,7 +12,7 @@ const OvertimeSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        default: Date.now
+        default: () => moment().toDate()
     },
     hours: {
         type: Number, 
@@ -37,18 +38,18 @@ const OvertimeSchema = new mongoose.Schema({
     },
     created_at: { 
         type: Date, 
-        default: Date.now 
+        default: () => moment().toDate() 
     },
     updated_at: { 
         type: Date, 
-        default: Date.now 
+        default: () => moment().toDate()
     }
 }, {
     collection: 'tbl_overtimes' 
 });
 
 OvertimeSchema.pre('save', function(next) {
-    this.updated_at = Date.now();
+    this.updated_at = moment().toDate();
     next();
 });
 

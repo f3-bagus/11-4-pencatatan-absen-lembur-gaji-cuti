@@ -1,3 +1,4 @@
+const moment = require('moment-timezone');
 const mongoose = require('mongoose');
 
 const LeaveSchema = new mongoose.Schema({
@@ -8,17 +9,13 @@ const LeaveSchema = new mongoose.Schema({
     start_date: {
         type: Date,
         default: () => {
-            const startOfDay = new Date();
-            startOfDay.setHours(0, 0, 0, 0); 
-            return startOfDay;
+            return moment().startOf('day').toDate();
         }
     },
     end_date: {
         type: Date,
         default: () => {
-            const endOfDay = new Date();
-            endOfDay.setHours(23, 59, 59, 999); 
-            return endOfDay;
+            return moment().endOf('day').toDate();
         }
     },
     type: { 
@@ -45,11 +42,11 @@ const LeaveSchema = new mongoose.Schema({
     },
     created_at: { 
         type: Date, 
-        default: Date.now 
+        default: () => moment().toDate() 
     },
     updated_at: { 
         type: Date, 
-        default: Date.now 
+        default: () => moment().toDate() 
     }
 }, { 
     collection: 'tbl_leaves' 
@@ -57,15 +54,16 @@ const LeaveSchema = new mongoose.Schema({
 
 LeaveSchema.pre('save', function(next) {
     if (this.start_date) {
-        this.start_date.setHours(0, 0, 0, 0);
+        this.start_date = moment(this.start_date).startOf('day').toDate();
     }
 
     if (this.end_date) {
-        this.end_date.setHours(23, 59, 59, 999);
+        this.end_date = moment(this.end_date).endOf('day').toDate();
     }
 
-    this.updated_at = Date.now();
+    this.updated_at = moment().toDate();
     next();
 });
+
 const LeaveModel = mongoose.model("Leave", LeaveSchema);
 module.exports = LeaveModel;

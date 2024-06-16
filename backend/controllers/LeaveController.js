@@ -118,10 +118,9 @@ const getEmployeeLeaves = async (req, res) => {
 /* Employee: Apply Leave */
 const applyLeave = async (req, res) => {
   const { nip } = req.user;
-  const { start_date, end_date, type, reason } = req.body;
+  const { start_date, duration, type, reason } = req.body;
   const leave_letter = req.file ? req.file.path : null;
-  
-  const now = new Date();
+
   try {
       const user = await UserModel.findOne({ nip });
       if (!user || user.archived !== 0) {
@@ -130,25 +129,38 @@ const applyLeave = async (req, res) => {
           });
       }
 
-      if (type === 'leave') {
-        const startOfYear = new Date(new Date().getFullYear(), 0, 1); 
-        const yearlyLeaveCount = await LeaveModel.countDocuments({ 
+      const startOfYear = new Date(new Date().getFullYear(), 0, 1); 
+      const yearlyLeaveCount = await LeaveModel.countDocuments({ 
           nip, 
           type: 'leave', 
           start_date: { $gte: startOfYear } 
-        });
-        
-        if (yearlyLeaveCount >= 12) {
+      });
+      
+      const remainingLeave = Math.max(0, 12 - yearlyLeaveCount);
+
+      if (type === 'leave' && duration > remainingLeave) {
           return res.status(400).json({
-            message: 'Your annual leave quota has been exhausted. Max: 12 leave!'
+              message: 'Requested leave duration exceeds remaining annual leave. Remaining leave: ' + remainingLeave
           });
-        }
       }
+
+      const startDate = moment(start_date).startOf('day');
+      let endDate = moment(startDate).add(duration - 1, 'days');
+
+      // Adjust for weekends
+      let daysCounted = 0;
+      while (daysCounted < duration) {
+          if (startDate.isoWeekday() !== 6 && startDate.isoWeekday() !== 7) {
+              daysCounted++;
+          }
+          startDate.add(1, 'day');
+      }
+      endDate = startDate.subtract(1, 'day');
 
       const leaveData = new LeaveModel({
           nip: nip, 
-          start_date: start_date,
-          end_date: end_date,
+          start_date: moment(start_date).toDate(),
+          end_date: endDate.toDate(),
           type: type,
           reason: reason,
           leave_letter: leave_letter 
@@ -167,6 +179,7 @@ const applyLeave = async (req, res) => {
       });
   }
 };
+
 
 /* Employee: Get History of Leave */
 const getLeaveHistory = async (req, res) => {

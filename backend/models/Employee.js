@@ -57,7 +57,7 @@ const EmployeeSchema = new mongoose.Schema({
 });
 
 EmployeeSchema.pre('save', function(next) {
-    this.updated_at = Date.now();
+    this.updated_at = moment().toDate();
     next();
 });
 

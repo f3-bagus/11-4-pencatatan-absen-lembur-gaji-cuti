@@ -1,3 +1,4 @@
+const moment = require('moment-timezone');
 const mongoose = require('mongoose');
 
 const AttendanceSchema = new mongoose.Schema({    
@@ -29,11 +30,11 @@ const AttendanceSchema = new mongoose.Schema({
     },
     created_at: { 
         type: Date, 
-        default: Date.now 
+        default: () => moment().toDate() 
     },
     updated_at: { 
         type: Date, 
-        default: Date.now 
+        default: () => moment().toDate() 
     }
 }, {
     collection: 'tbl_attendances' 

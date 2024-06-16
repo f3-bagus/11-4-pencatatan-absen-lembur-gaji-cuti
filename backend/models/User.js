@@ -1,3 +1,4 @@
+const moment = require('moment-timezone');
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -19,18 +20,18 @@ const UserSchema = new mongoose.Schema({
     },
     created_at: { 
         type: Date, 
-        default: Date.now 
+        default: () => moment().toDate() 
     },
     updated_at: { 
         type: Date, 
-        default: Date.now 
+        default: () => moment().toDate() 
     }
 }, { 
     collection: 'tbl_users' 
 });
 
 UserSchema.pre('save', function(next) {
-    this.updated_at = Date.now();
+    this.updated_at = moment().toDate();
     next();
 });
 

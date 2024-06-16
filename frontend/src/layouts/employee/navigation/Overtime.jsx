@@ -136,6 +136,7 @@ const Overtime = () => {
       });
 
       getOvertime();
+      getHistory();
     } catch (error) {
       console.error("Error accepting overtime:", error);
       toast({
@@ -163,7 +164,7 @@ const Overtime = () => {
         >
           <Tabs isFitted variant="soft-rounded" colorScheme="green">
             <TabList mb="1em" flexDirection={{ base: "column", md: "row" }}>
-              <Tab color={colorMode === "light" ? "" : "white"}>Accept</Tab>
+              <Tab color={colorMode === "light" ? "" : "white"}>Available</Tab>
               <Tab color={colorMode === "light" ? "" : "white"}>History</Tab>
             </TabList>
             <TabPanels>

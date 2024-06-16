@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import HrLayout from "../HrLayout";
 import {
   useTable,
@@ -9,6 +9,7 @@ import {
 import {
   useColorModeValue,
   Flex,
+  useToast,
   Heading,
   Box,
   Stack,
@@ -30,6 +31,8 @@ import { FaSearch } from "react-icons/fa";
 import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import FileSaver from 'file-saver';
+import axios from "axios";
 
 function GlobalFilter({
   preGlobalFilteredRows,
@@ -250,6 +253,24 @@ const DataTable = ({ columns, data, filename }) => {
 };
 
 const Leave = () => {
+  const [leave, setLeave] = useState([]);
+
+  const toast = useToast();
+
+  const getDataLeave = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/leave/data");
+      console.log(response.data.data);
+      setLeave(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getDataLeave();
+  }, []);
+
   const columns = React.useMemo(
     () => [
       {
@@ -263,22 +284,35 @@ const Leave = () => {
       {
         Header: "start_date",
         accessor: "start_date",
+        Cell: ({ value }) => formatDate(value),
       },
       {
         Header: "end_date",
         accessor: "end_date",
+        Cell: ({ value }) => formatDate(value),
       },
       {
         Header: "type",
         accessor: "type",
       },
       {
-        Header: "reasons",
-        accessor: "reasons",
+        Header: "reason",
+        accessor: "reason",
       },
       {
-        Header: "photo",
-        accessor: "photo",
+        Header: "leave_letter",
+        accessor: "leave_letter",
+        Cell: ({ row }) => (
+          <>
+            <Button
+              colorScheme="blue"
+              size="sm"
+              onClick={() => handleDownload(row.original)}
+            >
+              Download
+            </Button>
+          </>
+        ),
       },
       {
         Header: "status_leave",
@@ -311,33 +345,121 @@ const Leave = () => {
     []
   );
 
-  const handleReject = (rowData) => {
-    // Lakukan operasi untuk menolak permintaan cuti
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleReject = async (rowData) => {
     console.log("Rejecting leave for:", rowData);
-    // Misalnya, Anda dapat membuat permintaan ke backend untuk mengubah status cuti menjadi ditolak
+    const { _id: leaveId } = rowData;
+
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/leave/reject/${leaveId}`
+      );
+      console.log(response.data);
+      toast({
+        position: "top-left",
+        title: "Leave Rejected",
+        description: "Leave has been rejected.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+
+      getDataLeave();
+    } catch (error) {
+      console.error("Error reject leave:", error);
+      toast({
+        position: "top-left",
+        title: "Error",
+        description: "There was an error reject leave.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
-  const handleAccept = (rowData) => {
-    // Lakukan operasi untuk menerima permintaan cuti
+  const handleAccept = async (rowData) => {
     console.log("Accepting leave for:", rowData);
-    // Misalnya, Anda dapat membuat permintaan ke backend untuk mengubah status cuti
+    const { _id: leaveId } = rowData;
+
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/leave/approve/${leaveId}`
+      );
+      console.log(response.data);
+
+      toast({
+        position: "top-left",
+        title: "Leave Accepted",
+        description: "Leave has been accepted successfully.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+
+      getDataLeave();
+    } catch (error) {
+      console.error("Error accepting leave:", error);
+
+      toast({
+        position: "top-left",
+        title: "Error",
+        description: "There was an error accepting leave.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
-  const data = React.useMemo(
-    () => [
-      {
-        nip: 33421312,
-        name: "John Doe",
-        start_date: "10-12-2024",
-        end_date: "12-12-2024",
-        type: "3",
-        reasons: "sick",
-        photo: "jpg",
-        status_leave: "pending",
-      },
-    ],
-    []
-  );
+  const handleDownload = async (rowData) => {
+    const { _id: leaveId } = rowData;
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/employee/leave-letter/${leaveId}`,
+        {
+          responseType: 'blob', // Ensure the response is treated as a Blob
+        }
+      );
+      console.log(response.data);
+  
+      // Create a new Blob object using the response data of the file
+      const file = new Blob([response.data], {
+        type: response.headers['content-type'],
+      });
+  
+      // Use FileSaver to save the file
+      FileSaver.saveAs(file, `leave-letter-${leaveId}.doc`);
+
+      toast({
+        position: "top-left",
+        title: "File Downloaded",
+        description: "Leave file has been downloaded successfully.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      toast({
+        position: "top-left",
+        title: "Error",
+        description: "There was an error downloading file.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <HrLayout>
@@ -351,7 +473,7 @@ const Leave = () => {
           borderRadius="2xl"
           shadow="lg"
         >
-          <DataTable columns={columns} data={data} filename={"table_leave"}/>
+          <DataTable columns={columns} data={leave} filename={"table_leave"} />
         </Box>
       </Flex>
     </HrLayout>

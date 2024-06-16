@@ -173,7 +173,7 @@ const getLeaveHistory = async (req, res) => {
   const { nip } = req.user;
 
   try {
-    const leaveData = await LeaveModel.findOne({ nip });
+    const leaveData = await LeaveModel.find({ nip });
 
     res.status(200).json({
       message: "Leave history retrieved successfully",

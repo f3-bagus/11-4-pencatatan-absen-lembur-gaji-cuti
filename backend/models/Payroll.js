@@ -26,6 +26,10 @@ const PayrollSchema = new mongoose.Schema({
         type: Number,
         default: null
     },
+    deduction_late: {
+        type: Number,
+        default: null
+    },
     total_salary: {
         type: Number,
         default: null

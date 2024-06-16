@@ -16,6 +16,6 @@ router.use('/attendance', require('./attendance'));
 router.use('/overtime', require('./overtime'));
 router.use('/payroll', require('./payroll'));
 router.use('/leave', require('./leave'));
-router.use('/reports', require('./reports'));
+router.use('/report', require('./report'));
 
 module.exports = router;

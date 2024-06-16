@@ -190,6 +190,10 @@ const calculateAndUpdatePayroll = async () => {
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
 
+    // Calculate the previous month
+    const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const effectiveYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
     try {
         const employees = await EmployeeModel.find({ archived: { $ne: 1 } });
 
@@ -228,26 +232,29 @@ const calculateAndUpdatePayroll = async () => {
             const attendanceData = await AttendanceModel.find({ 
                 nip, 
                 date: { 
-                    $gte: new Date(currentYear, currentMonth, 1), 
-                    $lt: new Date(currentYear, currentMonth + 1, 1) 
+                    $gte: new Date(effectiveYear, previousMonth, 1), 
+                    $lt: new Date(effectiveYear, previousMonth + 1, 1) 
                 } 
             });
 
             let deductionPermission = 0;
             let deductionAbsent = 0;
+            let deductionLate = 0;
             attendanceData.forEach(att => {
                 if (att.status_attendance === "permit") {
-                    deductionPermission += 0.5 * (1 / 24) * basicSalary;
+                    deductionPermission += 0.5 * (1 / attendanceData.length) * basicSalary;
                 } else if (att.status_attendance === "absent") {
-                    deductionAbsent += (1 / 24) * basicSalary;
+                    deductionAbsent += (1 / attendanceData.length) * basicSalary;
+                } else if (att.status_attendance === "late") {
+                    deductionLate += 0.2 * (1 / attendanceData.length) * basicSalary;
                 }
             });
 
             const overtimeData = await OvertimeModel.find({ 
                 nip, 
                 date: { 
-                    $gte: new Date(currentYear, currentMonth, 1), 
-                    $lt: new Date(currentYear, currentMonth + 1, 1) 
+                    $gte: new Date(effectiveYear, previousMonth, 1), 
+                    $lt: new Date(effectiveYear, previousMonth + 1, 1) 
                 } 
             });
 
@@ -258,15 +265,16 @@ const calculateAndUpdatePayroll = async () => {
                 }
             });
 
-            const totalSalary = basicSalary + overtimeSalary - deductionPermission - deductionAbsent;
+            const totalSalary = basicSalary + overtimeSalary - deductionPermission - deductionAbsent - deductionLate;
             
             const payrollData = {
                 nip: employee.nip,
-                date: now,
+                date: new Date(currentYear, currentMonth, 1),
                 basic_salary: basicSalary,
                 overtime_salary: overtimeSalary,
                 deduction_permission: deductionPermission,
                 deduction_absent: deductionAbsent,
+                deduction_late: deductionLate,
                 total_salary: totalSalary
             };
 
@@ -283,10 +291,120 @@ const calculateAndUpdatePayroll = async () => {
     }
 };
 
+const calculateAndUpdatePayrollForAllMonths = async () => {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    try {
+        const employees = await EmployeeModel.find({ archived: { $ne: 1 } });
+    
+        // Loop through each month from January to current month
+        for (let month = 0; month <= currentMonth; month++) {
+            const effectiveMonth = month === 0 ? 11 : month - 1;
+            const effectiveYear = month === 0 ? currentYear - 1 : currentYear;
+    
+            for (const employee of employees) {
+                const nip = employee.nip;
+                let basicSalary = 0;
+                if (employee.type === "intern") {
+                    basicSalary = 4000000;
+                } else {
+                    switch (employee.division) {
+                        case "it":
+                            basicSalary = 7000000;
+                            break;
+                        case "sales":
+                            basicSalary = 5500000;
+                            break;
+                        case "marketing":
+                            basicSalary = 5000000;
+                            break;
+                        case "accounting":
+                            basicSalary = 6500000;
+                            break;
+                        default:
+                            basicSalary = 4500000;
+                    }
+                }
+                
+                const payroll = await PayrollModel.findOne({ 
+                    nip, 
+                    date: { 
+                        $gte: new Date(currentYear, month, 1), 
+                        $lt: new Date(currentYear, month + 1, 1) 
+                    } 
+                });
+    
+                const attendanceData = await AttendanceModel.find({ 
+                    nip, 
+                    date: { 
+                        $gte: new Date(effectiveYear, effectiveMonth, 1), 
+                        $lt: new Date(effectiveYear, effectiveMonth + 1, 1) 
+                    } 
+                });
+    
+                let deductionPermission = 0;
+                let deductionAbsent = 0;
+                let deductionLate = 0;
+                attendanceData.forEach(att => {
+                    if (att.status_attendance === "permit") {
+                        countPermit++;
+                    } else if (att.status_attendance === "absent") {
+                        countAbsent++;
+                    } else if (att.status_attendance === "late") {
+                        countLate++;
+                    }
+                })
+    
+                const overtimeData = await OvertimeModel.find({ 
+                    nip, 
+                    date: { 
+                        $gte: new Date(effectiveYear, effectiveMonth, 1), 
+                        $lt: new Date(effectiveYear, effectiveMonth + 1, 1) 
+                    } 
+                });
+    
+                let overtimeSalary = 0;
+                overtimeData.forEach(ot => {
+                    if (ot.status_overtime === "taken") {
+                        overtimeSalary += ot.overtime_rate;
+                    }
+                });
+    
+                const totalSalary = basicSalary + overtimeSalary - deductionPermission - deductionAbsent - deductionLate;
+                
+                const payrollData = {
+                    nip: employee.nip,
+                    date: new Date(currentYear, month, 1),
+                    basic_salary: basicSalary,
+                    overtime_salary: overtimeSalary,
+                    deduction_permission: countPermit,
+                    deduction_absent: countAbsent,
+                    deduction_late: countLate,
+                    total_salary: totalSalary
+                };
+    
+                if (payroll) {
+                    await PayrollModel.updateOne({ _id: payroll._id }, payrollData);
+                } else {
+                    await PayrollModel.create(payrollData);
+                }
+            }
+        }
+    
+        console.log('Payroll records updated successfully for all months.');
+    } catch (error) {
+        console.error('Error updating payroll records:', error);
+    }    
+};
+
+
 
 module.exports = {
   getAllEmployeePayroll,
   getEmployeePayroll,
   getSelfPayroll,
-  calculateAndUpdatePayroll
+  calculateAndUpdatePayroll,
+  calculateAndUpdatePayrollForAllMonths
 };

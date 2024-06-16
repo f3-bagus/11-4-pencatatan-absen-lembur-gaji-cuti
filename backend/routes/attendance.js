@@ -19,7 +19,4 @@ router.get('/data', auth.authorizeRole(['admin', 'hr']), attendanceController.ge
 /* Admin & HR: Get employee attendance data by nip */
 router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), attendanceController.getEmployeeAttendance);
 
-/* Admin & HR: Get report employee attendance data */
-router.get('/report', auth.authorizeRole(['admin', 'hr']), attendanceController.getAttendanceReport);
-
 module.exports = router;

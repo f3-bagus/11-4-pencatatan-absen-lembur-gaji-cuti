@@ -236,10 +236,11 @@ const updateAttendance = async () => {
     }
 }
 
+/* Admin & HR: Get Attendance Report Monthly and Yearly */
 const getAttendanceReport = async (req, res) => {
     try {
-        const currentYearStart = moment().startOf('year').toDate(); // Start of current year
-        const currentMonthEnd = moment().endOf('month').toDate(); // End of current month
+        const currentYearStart = moment().startOf('year').toDate();
+        const currentMonthEnd = moment().endOf('month').toDate();
 
         const reportMonthly = await AttendanceModel.aggregate([
             {
@@ -330,7 +331,7 @@ const getAttendanceReport = async (req, res) => {
                     name: 1,
                     month: { $let: {
                         vars: { monthsInString: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] },
-                        in: { $arrayElemAt: ["$$monthsInString", "$_id.month"] }
+                        in: { $arrayElemAt: ["$$monthsInString", { $subtract: ["$_id.month", 1] }] }
                     }},
                     total_attendance: 1,
                     present: 1,

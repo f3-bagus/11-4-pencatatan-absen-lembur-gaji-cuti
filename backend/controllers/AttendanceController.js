@@ -1,3 +1,5 @@
+const moment = require('moment-timezone');
+
 //* Import Controller *//
 const EmployeeModel = require('../models/Employee');
 const AttendanceModel = require('../models/Attendance');
@@ -234,9 +236,218 @@ const updateAttendance = async () => {
     }
 }
 
+const getAttendanceReport = async (req, res) => {
+    try {
+        const currentYearStart = moment().startOf('year').toDate(); // Start of current year
+        const currentMonthEnd = moment().endOf('month').toDate(); // End of current month
+
+        const reportMonthly = await AttendanceModel.aggregate([
+            {
+                $match: {
+                    date: { 
+                        $gte: currentYearStart,
+                        $lte: currentMonthEnd 
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'tbl_employees',
+                    localField: 'nip',
+                    foreignField: 'nip',
+                    as: 'employee'
+                }
+            },
+            {
+                $unwind: '$employee'
+            },
+            {
+                $group: {
+                    _id: { nip: "$nip", month: { $month: "$date" } },
+                    nip: { $first: "$nip" },
+                    name: { $first: "$employee.name" },
+                    total_attendance: { $sum: 1 },
+                    present: {
+                        $sum: {
+                            $cond: {
+                                if: { $in: [ "$status_attendance", [ "present", "clock in ok without clock out" ] ] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    },
+                    late: {
+                        $sum: {
+                            $cond: {
+                                if: { $in: [ "$status_attendance", [ "late", "clock in late without clock out" ] ] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    },
+                    absent: {
+                        $sum: {
+                            $cond: {
+                                if: { $eq: [ "$status_attendance", "absent" ] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    },
+                    sick: {
+                        $sum: {
+                            $cond: {
+                                if: { $eq: [ "$status_attendance", "sick" ] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    },
+                    leave: {
+                        $sum: {
+                            $cond: {
+                                if: { $eq: [ "$status_attendance", "leave" ] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    },
+                    permit: {
+                        $sum: {
+                            $cond: {
+                                if: { $eq: [ "$status_attendance", "permit" ] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    nip: 1,
+                    name: 1,
+                    month: { $let: {
+                        vars: { monthsInString: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] },
+                        in: { $arrayElemAt: ["$$monthsInString", "$_id.month"] }
+                    }},
+                    total_attendance: 1,
+                    present: 1,
+                    late: 1,
+                    absent: 1,
+                    sick: 1,
+                    leave: 1,
+                    permit: 1
+                }
+            }
+        ]);
+
+        const reportYearly = await AttendanceModel.aggregate([
+            {
+                $match: {
+                    date: { 
+                        $gte: currentYearStart,
+                        $lte: currentMonthEnd 
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: { nip: "$nip" },
+                    total_attendance: { $sum: 1 },
+                    present: {
+                        $sum: {
+                            $cond: {
+                                if: { $in: [ "$status_attendance", [ "present", "clock in ok without clock out" ] ] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    },
+                    late: {
+                        $sum: {
+                            $cond: {
+                                if: { $in: [ "$status_attendance", [ "late", "clock in late without clock out" ] ] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    },
+                    absent: {
+                        $sum: {
+                            $cond: {
+                                if: { $eq: [ "$status_attendance", "absent" ] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    },
+                    sick: {
+                        $sum: {
+                            $cond: {
+                                if: { $eq: [ "$status_attendance", "sick" ] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    },
+                    leave: {
+                        $sum: {
+                            $cond: {
+                                if: { $eq: [ "$status_attendance", "leave" ] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    },
+                    permit: {
+                        $sum: {
+                            $cond: {
+                                if: { $eq: [ "$status_attendance", "permit" ] },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    nip: "$_id.nip",
+                    total_attendance: 1,
+                    present: 1,
+                    late: 1,
+                    absent: 1,
+                    sick: 1,
+                    leave: 1,
+                    permit: 1
+                }
+            }
+        ]);
+
+        res.status(200).json({
+            message: 'Attendance report retrieved successfully',
+            data: { 
+                reportMonthly: reportMonthly,
+                reportYearly: reportYearly 
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+
+
+  
 module.exports = {
     getAllEmployeeAttendance,
     getEmployeeAttendance,
     getSelfAttendance,
-    updateAttendance
+    updateAttendance,
+    getAttendanceReport
 };

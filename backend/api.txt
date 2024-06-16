@@ -31,6 +31,7 @@ get employee leave data by nip: /api/leave/data/:nip
 get all employee payroll data : /api/payroll/data/employee
 get employee payroll by nip : /api/payroll/data/employee/:nip
 download leave letter : /api/employee/leave-letter/:leaveId
+get report attendance : /api/attendance/report
 
 -> POST
 create employee account : /api/admin/create-employee
@@ -57,6 +58,7 @@ get employee leave data by nip: /api/leave/data/:nip
 get all employee payroll : /api/payroll/data/employee
 get employee payroll by nip : /api/payroll/data/employee/:nip
 download leave letter : /api/employee/leave-letter/:leaveId
+get report attendance : /api/attendance/report
 
 -> POST
 create-overtime : /api/hr/overtime
@@ -82,7 +84,7 @@ get self payroll data : /api/overtime/data
 clock-in : /api/attendance/clock-in
 clock-out : /api/attendance/clock-out
 accept overtime : /api/employee/accept-overtime/:overtimeId
-apply leave : /api/leave/apply (?)
+apply leave : /api/leave/apply
 
 -> PUT
 

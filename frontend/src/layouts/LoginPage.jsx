@@ -35,7 +35,7 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    setIsLoading(true); 
+    setIsLoading(true);
     try {
       await login(values.nip, values.password, rememberMe);
     } catch (error) {
@@ -84,7 +84,7 @@ const LoginPage = () => {
                       isInvalid={form.errors.nip && form.touched.nip}
                     >
                       <FormLabel htmlFor="nip">
-                        NIP
+                        NIP{" "}
                         <Text as="span" color="red.500">
                           *
                         </Text>
@@ -107,9 +107,10 @@ const LoginPage = () => {
                   {({ field, form }) => (
                     <FormControl
                       isInvalid={form.errors.password && form.touched.password}
+                      mt={3}
                     >
                       <FormLabel htmlFor="password">
-                        Password
+                        Password{" "}
                         <Text as="span" color="red.500">
                           *
                         </Text>
@@ -158,7 +159,7 @@ const LoginPage = () => {
                   <Button
                     type="submit"
                     colorScheme="green"
-                    isLoading={isLoading} 
+                    isLoading={isLoading}
                     isDisabled={!isValid || isSubmitting}
                   >
                     Sign in

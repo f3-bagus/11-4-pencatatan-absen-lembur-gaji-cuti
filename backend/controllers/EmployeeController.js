@@ -1,4 +1,4 @@
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 //* Import Controller *//
 const EmployeeModel = require('../models/Employee');

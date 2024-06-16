@@ -30,6 +30,7 @@ get all employee leave data : /api/leave/data
 get employee leave data by nip: /api/leave/data/:nip
 get all employee payroll data : /api/payroll/data/employee
 get employee payroll by nip : /api/payroll/data/employee/:nip
+download leave letter : /api/employee/leave-letter/:leaveId
 
 -> POST
 create employee account : /api/admin/create-employee

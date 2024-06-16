@@ -292,8 +292,6 @@ const getAcceptedOvertimeHistory = async (req, res) => {
 
 
 /* Employee: Accept Overtime */
-const moment = require('moment');
-
 const acceptOvertime = async (req, res) => {
   const { overtimeId } = req.params; 
   const { nip } = req.user;

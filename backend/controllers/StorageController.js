@@ -1,6 +1,9 @@
 const multer = require('multer');
 const path = require('path');
 
+
+const LeaveModel = require('../models/Leave');
+
 /* All User: Handle Upload File Photo Profile */
 const profilePhotoStorage = multer.diskStorage({
     destination: function (req, file, cb) {

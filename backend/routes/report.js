@@ -10,7 +10,11 @@ const overtimeController = require('../controllers/OvertimeController');
 /* Admin & HR: Get report employee attendance data */
 router.get('/attendance', auth.authorizeRole(['admin', 'hr']), attendanceController.getAttendanceReport);
 
-/* Admin & HR: Get report employee attendance data */
-router.get('/overtime', auth.authorizeRole(['admin', 'hr']), overtimeController.getOvertimeReport);
+/* Admin & HR: Get monthly report employee attendance data */
+router.get('/overtime/monthly', auth.authorizeRole(['admin', 'hr']), overtimeController.getMonthlyOvertimeReport);
+
+/* Admin & HR: Get yearly report employee attendance data */
+router.get('/overtime/yearly', auth.authorizeRole(['admin', 'hr']), overtimeController.getYearlyOvertimeReport);
+
 
 module.exports = router;

@@ -21,7 +21,7 @@ router.post('/apply', auth.authorizeRole('employee'), uploadLeaveLetter.single('
 router.put('/approve/:leaveId', auth.authorizeRole(['hr', 'admin']), leaveController.approveLeave);
 
 /* Admin & HR: Rejected Employee Leave */
-router.put('/reject/:leaveId', leaveController.rejectLeave);
+router.put('/reject/:leaveId', auth.authorizeRole(['hr', 'admin']), leaveController.rejectLeave);
 
 /* Employee: Get History of Leave Data  */
 router.get('/data/history', auth.authorizeRole('employee'), leaveController.getLeaveHistory);

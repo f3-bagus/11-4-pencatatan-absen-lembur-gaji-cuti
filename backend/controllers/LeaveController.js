@@ -121,6 +121,7 @@ const applyLeave = async (req, res) => {
   const { start_date, end_date, type, reason } = req.body;
   const leave_letter = req.file ? req.file.path : null;
   
+  const now = new Date();
   try {
       const user = await UserModel.findOne({ nip });
       if (!user || user.archived !== 0) {
@@ -146,8 +147,8 @@ const applyLeave = async (req, res) => {
 
       const leaveData = new LeaveModel({
           nip: nip, 
-          start_date: start_date,
-          end_date: end_date,
+          start_date: now,
+          end_date: now,
           type: type,
           reason: reason,
           leave_letter: leave_letter 
@@ -227,8 +228,8 @@ const approveLeave = async (req, res) => {
     await leave.save();
 
     const attendanceData = await AttendanceModel({
-      nip: nip,
-      date:leave.start_date,
+      nip: leave.nip,
+      date: leave.start_date,
       clock_in: null,
       clock_out: null,
       status_attendance: leave.type

@@ -26,7 +26,7 @@ const getAllEmployeeLeaves = async (req, res) => {
           },
           {
               $project: {
-                  _id: 0,
+                  _id: 1,
                   name: "$employee.name",
                   nip: "$nip",
                   email: "$employee.email",
@@ -80,7 +80,7 @@ const getEmployeeLeaves = async (req, res) => {
           },
           {
               $project: {
-                  _id: 0,
+                  _id: 1,
                   name: "$employee.name",
                   nip: "$nip",
                   email: "$employee.email",

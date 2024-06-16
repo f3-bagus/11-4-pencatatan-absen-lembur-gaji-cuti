@@ -1,9 +1,10 @@
 const multer = require('multer');
 const path = require('path');
 
-
+//* Import Controller *//
 const LeaveModel = require('../models/Leave');
 
+//* All Method *//
 /* All User: Handle Upload File Photo Profile */
 const profilePhotoStorage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -31,7 +32,7 @@ const downloadLeaveLetter = async (req, res) => {
     const { leaveId } = req.params; 
 
     try {
-        const leave = await LeaveModel.findById(id);
+        const leave = await LeaveModel.findById(leaveId);
 
         if (!leave) {
             return res.status(404).json({ message: "Leave not found" });

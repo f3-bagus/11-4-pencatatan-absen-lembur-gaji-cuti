@@ -311,7 +311,6 @@ const acceptOvertime = async (req, res) => {
       });
     }
 
-    // Check for existing overtime on the same day
     const startOfDay = moment(overtime.date).startOf('day').toDate();
     const endOfDay = moment(overtime.date).endOf('day').toDate();
     const dailyOvertime = await OvertimeModel.find({
@@ -327,7 +326,6 @@ const acceptOvertime = async (req, res) => {
       });
     }
 
-    // Check for existing overtime in the same week
     const startOfWeek = moment(overtime.date).startOf('isoWeek').toDate();
     const endOfWeek = moment(overtime.date).endOf('isoWeek').toDate();
     const weeklyOvertime = await OvertimeModel.find({
@@ -343,7 +341,6 @@ const acceptOvertime = async (req, res) => {
       });
     }
 
-    // Check for existing overtime in the same month
     const startOfMonth = moment(overtime.date).startOf('month').toDate();
     const endOfMonth = moment(overtime.date).endOf('month').toDate();
     const monthlyOvertime = await OvertimeModel.find({
@@ -359,7 +356,6 @@ const acceptOvertime = async (req, res) => {
       });
     }
 
-    // Accept the overtime
     if (!overtime.nip) {
       overtime.nip = nip;
     }
@@ -377,20 +373,6 @@ const acceptOvertime = async (req, res) => {
   }
 };
 
-//history leave employee
-const getLeaveHistory = async (req, res) => {
-  const { nip } = req.params;
-  
-  try {
-    const leaves = await LeaveModel.find({ nip }).sort({ start_date: -1 });
-    res.status(200).json(leaves);
-  } catch (error) {
-    res.status(500).json({ 
-        message: error.message 
-    });
-  }
-};
-
 module.exports = {
   clockIn,
   clockOut,
@@ -399,5 +381,4 @@ module.exports = {
   getAvailableOvertime,
   getAcceptedOvertimeHistory,
   acceptOvertime,
-  getLeaveHistory
 };

@@ -5,13 +5,14 @@ const router = express.Router();
 const auth = require('../controllers/AuthController');
 const attendanceController = require('../controllers/AttendanceController');
 const overtimeController = require('../controllers/OvertimeController');
+const employeeController = require('../controllers/EmployeeController');
 
 //* Routes *//
 /* Admin & HR: Get monthly report employee attendance data */
 router.get('/attendance/monthly', auth.authorizeRole(['admin', 'hr']), attendanceController.getMonthlyAttendanceReport);
 
 /* Admin & HR: Get yearly report employee attendance data */
-router.get('/attendance/yearly', auth.authorizeRole(['admin', 'hr']), attendanceController.getMonthlyAttendanceReport);
+router.get('/attendance/yearly', auth.authorizeRole(['admin', 'hr']), attendanceController.getYearlyAttendanceReport);
 
 /* Admin & HR: Get monthly report employee attendance data */
 router.get('/overtime/monthly', auth.authorizeRole(['admin', 'hr']), overtimeController.getMonthlyOvertimeReport);
@@ -19,5 +20,7 @@ router.get('/overtime/monthly', auth.authorizeRole(['admin', 'hr']), overtimeCon
 /* Admin & HR: Get yearly report employee attendance data */
 router.get('/overtime/yearly', auth.authorizeRole(['admin', 'hr']), overtimeController.getYearlyOvertimeReport);
 
+/* Admin & HR: Get yearly report employee attendance data */
+router.get('/all/monthly', auth.authorizeRole(['admin', 'hr']), employeeController.getMonthlyPointsReport);
 
 module.exports = router;

@@ -46,11 +46,11 @@ const Attedance = () => {
         accessor: "division",
       },
       {
-        Header: "clock_in",
+        Header: "clock in",
         accessor: "clock_in",
       },
       {
-        Header: "clock_out",
+        Header: "clock out",
         accessor: "clock_out",
       },
       {
@@ -59,7 +59,7 @@ const Attedance = () => {
         Cell: ({ value }) => formatDate(value),
       },
       {
-        Header: "status_attendance",
+        Header: "status",
         accessor: "status_attendance",
       },
     ],

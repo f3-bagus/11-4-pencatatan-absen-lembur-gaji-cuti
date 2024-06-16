@@ -502,7 +502,7 @@ const getMonthlyPointsReport = async (req, res) => {
                             { $cond: [ { $in: ["$status_attendance", ["present", "clock in ok without clock out"]] }, 1, 0 ] },
                             { $cond: [ { $in: ["$status_attendance", ["late", "clock in late without clock out"]] }, -0.5, 0 ] },
                             { $cond: [ { $eq: ["$status_attendance", "leave"] }, 0, 0 ] },
-                            { $cond: [ { $eq: ["$status_attendance", "permit"] }, 0, 0 ] },
+                            { $cond: [ { $eq: ["$status_attendance", "permit"] }, -0.2, 0 ] },
                             { $cond: [ { $eq: ["$status_attendance", "sick"] }, 0, 0 ] },
                             { $cond: [ { $eq: ["$status_attendance", "absent"] }, -1, 0 ] }
                         ]
@@ -542,13 +542,13 @@ const getMonthlyPointsReport = async (req, res) => {
               month: { $month: "$date" },
               nip: "$nip"
             },
-            totalEntries: { $sum: 1 } // Menghitung total entri per karyawan per bulan
+            totalEntries: { $sum: 1 } 
           }
         },
         {
           $group: {
             _id: "$_id.month",
-            maxPointsAttendance: { $max: "$totalEntries" } // Mengambil nilai maksimum dari total entri per bulan
+            maxPointsAttendance: { $max: "$totalEntries" } 
           }
         },
         {
@@ -699,81 +699,113 @@ const getMonthlyPointsReport = async (req, res) => {
         }
       ]);
 
-      // Menggabungkan semua laporan ke dalam satu struktur data
+      // Membuat objek untuk menyimpan hasil penggabungan
       const combinedReports = [];
-
-      // Membuat objek sementara untuk menyimpan hasil per entitas (karyawan)
-      const tempMap = new Map();
 
       // Memproses attendanceReport
       attendanceReport.forEach(report => {
           const { nip, name, division, month, PointsAttendance } = report;
-          const key = `${nip}-${division}`;
+          let existingEntry = combinedReports.find(entry => entry.nip === nip && entry.month === month);
 
-          if (!tempMap.has(key)) {
-              tempMap.set(key, {
+          if (!existingEntry) {
+              existingEntry = {
                   nip,
                   name,
                   division,
-                  monthlyReport: []
-              });
+                  month,
+                  PointsAttendance,
+                  PointsOvertime: null,
+                  MaxPointsAttendance: null,
+                  TotalPointOvertimeDivision: null,
+                  MinPointOvertime: null
+              };
+              combinedReports.push(existingEntry);
+          } else {
+              existingEntry.PointsAttendance += PointsAttendance; // Contoh: Menggabungkan nilai PointsAttendance jika sudah ada entri sebelumnya untuk bulan yang sama
           }
-
-          const entry = tempMap.get(key);
-          entry.monthlyReport.push({
-              month,
-              PointsAttendance,
-              PointsOvertime: 0, // Default nilai PointsOvertime sebelum digabungkan
-              MaxPointsAttendance: 0, // Default nilai MaxPointsAttendance sebelum digabungkan
-              TotalPointOvertimeDivision: 0, // Default nilai TotalPointOvertimeDivision sebelum digabungkan
-              MinPointOvertime: 0 // Default nilai MinPointOvertime sebelum digabungkan
-          });
       });
 
       // Memproses attendancePointReport
       attendancePointReport.forEach(report => {
-          const { month, maxPointsAttendance } = report;
+          const { month: reportMonth, maxPointsAttendance } = report;
           combinedReports.forEach(entry => {
-              entry.monthlyReport.forEach(monthly => {
-                  if (monthly.month === month) {
-                      monthly.MaxPointsAttendance = maxPointsAttendance;
-                  }
-              });
+              if (entry.month === reportMonth) {
+                  entry.MaxPointsAttendance = maxPointsAttendance;
+              }
           });
       });
 
       // Memproses overtimeDivisionReport
       overtimeDivisionReport.forEach(report => {
-          const { division, month, TotalPointOvertimeDivision, MinPointOvertime } = report;
+          const { division, month: reportMonth, TotalPointOvertimeDivision, MinPointOvertime } = report;
           combinedReports.forEach(entry => {
-              if (entry.division === division) {
-                  entry.monthlyReport.forEach(monthly => {
-                      if (monthly.month === month) {
-                          monthly.TotalPointOvertimeDivision = TotalPointOvertimeDivision;
-                          monthly.MinPointOvertime = MinPointOvertime;
-                      }
-                  });
+              if (entry.month === reportMonth && entry.division === division) {
+                  entry.TotalPointOvertimeDivision = TotalPointOvertimeDivision;
+                  entry.MinPointOvertime = MinPointOvertime;
               }
           });
       });
 
       // Memproses overtimeEmployeeReport
       overtimeEmployeeReport.forEach(report => {
-          const { nip, division, month, PointsOvertime } = report;
+          const { nip, division, month: reportMonth, PointsOvertime } = report;
           combinedReports.forEach(entry => {
-              if (entry.nip === nip && entry.division === division) {
-                  entry.monthlyReport.forEach(monthly => {
-                      if (monthly.month === month) {
-                          monthly.PointsOvertime = PointsOvertime;
-                      }
-                  });
+              if (entry.nip === nip && entry.division === division && entry.month === reportMonth) {
+                  entry.PointsOvertime = PointsOvertime;
               }
           });
       });
 
-      // Mengonversi Map ke array untuk mendapatkan hasil akhir
-      tempMap.forEach(value => {
-          combinedReports.push(value);
+      // Iterasi melalui setiap entri dalam combinedReports
+      combinedReports.forEach(entry => {
+        const {
+            PointsAttendance,
+            MaxPointsAttendance,
+            PointsOvertime,
+            MinPointOvertime
+        } = entry;
+
+        // Tentukan nilai review berdasarkan kondisi yang diberikan
+        if (
+            PointsAttendance === MaxPointsAttendance &&
+            PointsOvertime >= MinPointOvertime
+        ) {
+            entry.review = "excellent performance";
+        } else if (
+            PointsAttendance > 0.75 * MaxPointsAttendance &&
+            PointsAttendance <= MaxPointsAttendance &&
+            PointsOvertime >= 0.75 * MinPointOvertime &&
+            PointsOvertime < MinPointOvertime
+        ) {
+            entry.review = "enough performance";
+        } else if (
+            PointsAttendance === MaxPointsAttendance &&
+            PointsOvertime >= 0.75 * MinPointOvertime &&
+            PointsOvertime < MinPointOvertime
+        ) {
+            entry.review = "enough performance";
+        } else if (
+            PointsAttendance > 0.75 * MaxPointsAttendance &&
+            PointsAttendance < MaxPointsAttendance &&
+            PointsOvertime >= MinPointOvertime
+        ) {
+            entry.review = "good performance";
+        } else if (
+            PointsAttendance >= 0.6 * MaxPointsAttendance &&
+            PointsAttendance < 0.75 * MaxPointsAttendance
+        ) {
+            entry.review = "bad performance";
+        } else if (
+            PointsAttendance < 0.6 * MaxPointsAttendance
+        ) {
+            entry.review = "very bad performance";
+        } else if (
+            PointsOvertime < 0.5 * MinPointOvertime
+        ) {
+            entry.review = "very bad performance";
+        } else {
+            entry.review = "very bad performance";
+        }
       });
 
       res.status(200).json({

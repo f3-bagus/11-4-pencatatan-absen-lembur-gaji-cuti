@@ -21,6 +21,6 @@ router.get('/overtime/monthly', auth.authorizeRole(['admin', 'hr']), overtimeCon
 router.get('/overtime/yearly', auth.authorizeRole(['admin', 'hr']), overtimeController.getYearlyOvertimeReport);
 
 /* Admin & HR: Get yearly report employee attendance data */
-router.get('/all/monthly', auth.authorizeRole(['admin', 'hr']), employeeController.getMonthlyPointsReport);
+router.get('/all', auth.authorizeRole(['admin', 'hr']), employeeController.getMonthlyPointsReport);
 
 module.exports = router;

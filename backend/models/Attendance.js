@@ -40,6 +40,10 @@ const AttendanceSchema = new mongoose.Schema({
 });
 
 AttendanceSchema.pre('save', function(next) {
+    if (this.date) {
+        this.date.setHours(0, 0, 0, 0);
+    }
+    
     this.updated_at = Date.now();
     next();
 });

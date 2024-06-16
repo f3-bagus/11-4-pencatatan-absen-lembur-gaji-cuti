@@ -40,7 +40,7 @@ const downloadLeaveLetter = async (req, res) => {
             });
         }
 
-        const filename = leave.leave_letter;
+        const filename = path.basename(leave.leave_letter);
 
         if (!filename) {
             return res.status(404).json({ 

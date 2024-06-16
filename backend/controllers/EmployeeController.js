@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 //* Import Controller *//
 const EmployeeModel = require('../models/Employee');
 const AttendanceModel = require('../models/Attendance');
@@ -290,6 +292,8 @@ const getAcceptedOvertimeHistory = async (req, res) => {
 
 
 /* Employee: Accept Overtime */
+const moment = require('moment');
+
 const acceptOvertime = async (req, res) => {
   const { overtimeId } = req.params; 
   const { nip } = req.user;
@@ -309,6 +313,55 @@ const acceptOvertime = async (req, res) => {
       });
     }
 
+    // Check for existing overtime on the same day
+    const startOfDay = moment(overtime.date).startOf('day').toDate();
+    const endOfDay = moment(overtime.date).endOf('day').toDate();
+    const dailyOvertime = await OvertimeModel.find({
+      nip,
+      date: { $gte: startOfDay, $lte: endOfDay },
+      status_overtime: 'taken'
+    });
+
+    const totalDailyHours = dailyOvertime.reduce((total, record) => total + record.hours, 0);
+    if (totalDailyHours + overtime.hours > 5) {
+      return res.status(400).json({
+        message: "Exceeds daily overtime limit of 5 hours"
+      });
+    }
+
+    // Check for existing overtime in the same week
+    const startOfWeek = moment(overtime.date).startOf('isoWeek').toDate();
+    const endOfWeek = moment(overtime.date).endOf('isoWeek').toDate();
+    const weeklyOvertime = await OvertimeModel.find({
+      nip,
+      date: { $gte: startOfWeek, $lte: endOfWeek },
+      status_overtime: 'taken'
+    });
+
+    const totalWeeklyHours = weeklyOvertime.reduce((total, record) => total + record.hours, 0);
+    if (totalWeeklyHours + overtime.hours > 15) {
+      return res.status(400).json({
+        message: "Exceeds weekly overtime limit of 15 hours"
+      });
+    }
+
+    // Check for existing overtime in the same month
+    const startOfMonth = moment(overtime.date).startOf('month').toDate();
+    const endOfMonth = moment(overtime.date).endOf('month').toDate();
+    const monthlyOvertime = await OvertimeModel.find({
+      nip,
+      date: { $gte: startOfMonth, $lte: endOfMonth },
+      status_overtime: 'taken'
+    });
+
+    const totalMonthlyHours = monthlyOvertime.reduce((total, record) => total + record.hours, 0);
+    if (totalMonthlyHours + overtime.hours > 40) {
+      return res.status(400).json({
+        message: "Exceeds monthly overtime limit of 40 hours"
+      });
+    }
+
+    // Accept the overtime
     if (!overtime.nip) {
       overtime.nip = nip;
     }
@@ -325,7 +378,6 @@ const acceptOvertime = async (req, res) => {
     });
   }
 };
-
 
 //history leave employee
 const getLeaveHistory = async (req, res) => {

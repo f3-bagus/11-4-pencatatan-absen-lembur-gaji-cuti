@@ -56,9 +56,16 @@ const LeaveSchema = new mongoose.Schema({
 });
 
 LeaveSchema.pre('save', function(next) {
+    if (this.start_date) {
+        this.start_date.setHours(0, 0, 0, 0);
+    }
+
+    if (this.end_date) {
+        this.end_date.setHours(23, 59, 59, 999);
+    }
+
     this.updated_at = Date.now();
     next();
 });
-
 const LeaveModel = mongoose.model("Leave", LeaveSchema);
 module.exports = LeaveModel;

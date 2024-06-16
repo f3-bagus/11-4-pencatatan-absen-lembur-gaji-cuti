@@ -25,8 +25,9 @@ get employee data by nip (all info): /api/employee/data/:nip
 get all employee attendance data : /api/attendance/data
 get employee attendance data by nip : /api/attendance/data/:nip
 get all employee overtime data : /api/employee/data/all
+get overtime data by nip : /api/overtime/data/:nip
 get all employee leave data : /api/leave/data
-get all employee leave data by nip: /api/leave/data/:nip
+get employee leave data by nip: /api/leave/data/:nip
 get all employee payroll data : /api/payroll/data/employee
 get employee payroll by nip : /api/payroll/data/employee/:nip
 
@@ -49,8 +50,12 @@ get employee data by nip (all info): /api/employee/data/:nip
 get all employee attendance data : /api/attendance/data
 get employee attendance data by nip : /api/attendance/data/:nip
 get all overtime data : /api/overtime/data/all
+get overtime data by nip : /api/overtime/data/:nip
+get all employee leave data : /api/leave/data
+get employee leave data by nip: /api/leave/data/:nip
 get all employee payroll : /api/payroll/data/employee
 get employee payroll by nip : /api/payroll/data/employee/:nip
+download leave letter : /api/employee/leave-letter/:leaveId
 
 -> POST
 create-overtime : /api/hr/overtime
@@ -74,7 +79,7 @@ get self history overtime data : /api/overtime/data/history
 -> POST
 clock-in : /api/attendance/clock-in
 clock-out : /api/attendance/clock-out
-accept overtime : /api/employee/accept-overtime/:id
+accept overtime : /api/employee/accept-overtime/:overtimeId
 apply leave : /api/leave/apply (?)
 
 -> PUT

@@ -1,5 +1,8 @@
 //* Import Controller *//
 const PayrollModel = require('../models/Payroll');
+const EmployeeModel = require('../models/Employee');
+const AttendanceModel = require('../models/Attendance');
+const OvertimeModel = require('../models/Overtime');
 
 //* All Method *//
 /* Only Get Date without Time */
@@ -184,7 +187,6 @@ const getSelfPayroll = async (req, res) => {
 /* Sistem: Auto Calculate And Update All Employee Payroll  */
 const calculateAndUpdatePayroll = async () => {
     const now = new Date();
-    const todayDate = formatDate(now);
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
 
@@ -202,6 +204,8 @@ const calculateAndUpdatePayroll = async () => {
                         basicSalary = 7000000;
                         break;
                     case "sales":
+                        basicSalary = 5500000;
+                        break;
                     case "marketing":
                         basicSalary = 5000000;
                         break;
@@ -258,7 +262,7 @@ const calculateAndUpdatePayroll = async () => {
             
             const payrollData = {
                 nip: employee.nip,
-                date: todayDate,
+                date: now,
                 basic_salary: basicSalary,
                 overtime_salary: overtimeSalary,
                 deduction_permission: deductionPermission,

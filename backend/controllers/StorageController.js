@@ -23,7 +23,43 @@ const leaveLetterStorage = multer.diskStorage({
 });
 const uploadLeaveLetter = multer({ storage: leaveLetterStorage });
 
+/* Admin & HR : Download File Leave Letter */
+const downloadLeaveLetter = async (req, res) => {
+    const { leaveId } = req.params; 
+
+    try {
+        const leave = await LeaveModel.findById(id);
+
+        if (!leave) {
+            return res.status(404).json({ message: "Leave not found" });
+        }
+
+        const filename = leave.leave_letter;
+
+        if (!filename) {
+            return res.status(404).json({ message: "Leave letter not found" });
+        }
+
+        const filePath = path.join(__dirname, 'uploads', 'leave_letter', filename);
+
+        res.download(filePath, (err) => {
+            if (err) {
+                res.status(500).send({
+                    message: "File not found or error occurred",
+                    error: err.message,
+                });
+            }
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: "Internal server error",
+            error: error.message,
+        });
+    }
+};
+
 module.exports = { 
     uploadProfilePhoto,
-    uploadLeaveLetter
+    uploadLeaveLetter,
+    downloadLeaveLetter
 };

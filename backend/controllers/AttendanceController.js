@@ -236,8 +236,8 @@ const updateAttendance = async () => {
     }
 }
 
-/* Admin & HR: Get Attendance Report Monthly and Yearly */
-const getAttendanceReport = async (req, res) => {
+/* Admin & HR: Get Monthly Attendance Report  and Yearly */
+const getMonthlyAttendanceReport = async (req, res) => {
     try {
         const currentYearStart = moment().startOf('year').toDate();
         const currentMonthEnd = moment().endOf('month').toDate();
@@ -344,6 +344,25 @@ const getAttendanceReport = async (req, res) => {
             }
         ]);
 
+        res.status(200).json({
+            message: 'Monthly attendance report retrieved successfully',
+            data: { 
+                reportMonthly: reportMonthly
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+/* Admin & HR: Get Yearly Attendance Report  */
+const getYearlyAttendanceReport = async (req, res) => {
+    try {
+        const currentYearStart = moment().startOf('year').toDate();
+        const currentMonthEnd = moment().endOf('month').toDate();
+
         const reportYearly = await AttendanceModel.aggregate([
             {
                 $match: {
@@ -429,9 +448,8 @@ const getAttendanceReport = async (req, res) => {
         ]);
 
         res.status(200).json({
-            message: 'Attendance report retrieved successfully',
+            message: 'Yearly attendance report retrieved successfully',
             data: { 
-                reportMonthly: reportMonthly,
                 reportYearly: reportYearly 
             }
         });
@@ -443,12 +461,12 @@ const getAttendanceReport = async (req, res) => {
 };
 
 
-
   
 module.exports = {
     getAllEmployeeAttendance,
     getEmployeeAttendance,
     getSelfAttendance,
     updateAttendance,
-    getAttendanceReport
+    getMonthlyAttendanceReport,
+    getYearlyAttendanceReport
 };

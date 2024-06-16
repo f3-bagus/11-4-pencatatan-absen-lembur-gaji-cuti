@@ -67,7 +67,10 @@ const Profile = () => {
                 {name}
               </Text>
               <Text fontSize="md" color="gray.500">
-                Account type: <b>Hr</b>
+                Account type:{" "}
+                <Text as="span" fontWeight="bold" textTransform="capitalize">
+                  Hr
+                </Text>
               </Text>
             </VStack>
           </Box>

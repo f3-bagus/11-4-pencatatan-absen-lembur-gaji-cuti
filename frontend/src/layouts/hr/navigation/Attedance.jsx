@@ -59,7 +59,7 @@ const Attedance = () => {
         Cell: ({ value }) => formatDate(value),
       },
       {
-        Header: "status_attendance",
+        Header: "status",
         accessor: "status_attendance",
       },
     ],

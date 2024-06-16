@@ -62,15 +62,15 @@ const Leave = () => {
 
   const [formValues, setFormValues] = useState({
     start_date: "",
-    end_date: "",
+    duration: "",
     type: "",
     reason: "",
     leave_letter: null,
   });
 
   const validateForm = () => {
-    const { start_date, end_date, type, reason, leave_letter } = formValues;
-    return start_date && end_date && type && reason && leave_letter;
+    const { start_date, duration, type, reason, leave_letter } = formValues;
+    return start_date && duration && type && reason && leave_letter;
   };
 
   useEffect(() => {
@@ -116,7 +116,8 @@ const Leave = () => {
         duration: 5000,
         isClosable: true,
       });
-      console.log("Response:", response.data);
+      getDataHistory();
+      getDataRemaining();
     } catch (error) {
       console.error("Error submitting leave:", error.response || error.message);
       toast({
@@ -159,12 +160,12 @@ const Leave = () => {
   const columns = React.useMemo(
     () => [
       {
-        Header: "start_date",
+        Header: "start date",
         accessor: "start_date",
         Cell: ({ value }) => formatDate(value),
       },
       {
-        Header: "end_date",
+        Header: "end date",
         accessor: "end_date",
         Cell: ({ value }) => formatDate(value),
       },
@@ -177,7 +178,7 @@ const Leave = () => {
         accessor: "reason",
       },
       {
-        Header: "status_leave",
+        Header: "status",
         accessor: "status_leave",
       },
     ],
@@ -187,7 +188,10 @@ const Leave = () => {
   return (
     <EmployeeLayout>
       <Flex w="full" p="5" direction="column" gap={5}>
-        <Stack direction="row" justifyContent="space-between">
+        <Stack
+          direction={{ base: "column", md: "row" }}
+          justifyContent="space-between"
+        >
           <Heading as="h1" size="xl">
             Leave
           </Heading>
@@ -256,11 +260,11 @@ const Leave = () => {
                   </FormControl>
 
                   <FormControl mt={3} isRequired>
-                    <FormLabel>End Date</FormLabel>
+                    <FormLabel>Duration</FormLabel>
                     <Input
-                      type="date"
-                      name="end_date"
-                      value={formValues.end_date}
+                      type="number"
+                      name="duration"
+                      value={formValues.duration}
                       onChange={handleChange}
                       focusBorderColor="green.500"
                     />

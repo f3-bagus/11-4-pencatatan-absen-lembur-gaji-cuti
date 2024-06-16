@@ -2,46 +2,64 @@ import React, { useEffect, useState } from "react";
 import EmployeeLayout from "../EmployeeLayout";
 import { useColorModeValue, Flex, Heading, Box } from "@chakra-ui/react";
 import DataTable from "../../../components/employee/table/DataTabel";
+import axios from "axios";
 
 const Payroll = () => {
+  const [data, setData] = useState([]);
+
+  const getPayrollData = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/payroll/data"
+      );
+      
+      setData([{
+        basic_salary: `Rp. ${response.data.data.basic_salary}`,
+        deduction_sick: `Rp. ${response.data.data.deduction_sick}`,
+        deduction_permission: `Rp. ${response.data.data.deduction_permission}`,
+        deduction_absent: `Rp. ${response.data.data.deduction_absent}`,
+        overtime_salary: `Rp. ${response.data.data.overtime_salary}`,
+        total_salary: `Rp. ${response.data.data.total_salary}`,
+      }]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getPayrollData();
+  }, []);
+
   const columns = React.useMemo(
     () => [
       {
-        Header: "basic_salary",
+        Header: "Basic Salary",
         accessor: "basic_salary",
       },
       {
-        Header: "deduction_sick",
+        Header: "Deduction Sick",
         accessor: "deduction_sick",
       },
       {
-        Header: "deduction_permission",
+        Header: "Deduction Permission",
         accessor: "deduction_permission",
       },
       {
-        Header: "deduction_absent",
+        Header: "Deduction Absent",
         accessor: "deduction_absent",
       },
       {
-        Header: "total_salary",
+        Header: "Overtime Salary",
+        accessor: "overtime_salary",
+      },
+      {
+        Header: "Total Salary",
         accessor: "total_salary",
       },
     ],
     []
   );
 
-  const data = React.useMemo(
-    () => [
-      {
-        basic_salary: "Rp. 5.000.000",
-        deduction_sick: "Rp. 1.000.000",
-        deduction_permission: "-",
-        deduction_absent: "-",
-        total_salary: "Rp. 4.000.000",
-      },
-    ],
-    []
-  );
   return (
     <EmployeeLayout>
       <Flex w="full" p="5" direction="column" gap={5}>

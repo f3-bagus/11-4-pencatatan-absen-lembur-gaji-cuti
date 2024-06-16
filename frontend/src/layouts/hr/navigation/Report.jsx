@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import HrLayout from "../HrLayout";
 import {
   Flex,
@@ -13,9 +13,28 @@ import {
   TabPanels,
 } from "@chakra-ui/react";
 import DataTable from "../../../components/hr/table/DataTabel";
+import axios from "axios";
 
 const Report = () => {
+  const [monthly, setMonthly] = useState([]);
+  const [yearly, setYearly] = useState([]);
   const { colorMode } = useColorMode();
+
+  const getReport = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/attendance/report"
+      );
+      console.log(response.data.data.reportMonthly);
+      console.log(response.data.data.reportYearly);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getReport();
+  }, []);
 
   const attendanceColumns = React.useMemo(
     () => [
@@ -89,24 +108,6 @@ const Report = () => {
     []
   );
 
-  const overtimeColumns = React.useMemo(
-    () => [
-      {
-        Header: "nip",
-        accessor: "nip",
-      },
-      {
-        Header: "name",
-        accessor: "name",
-      },
-      {
-        Header: "division",
-        accessor: "division",
-      },
-    ],
-    []
-  );
-
   const attendanceData = React.useMemo(
     () => [
       {
@@ -138,17 +139,6 @@ const Report = () => {
     []
   );
 
-  const overtimeData = React.useMemo(
-    () => [
-      {
-        nip: 33421312,
-        name: "John Doe",
-        division: "IT",
-      },
-    ],
-    []
-  );
-
   return (
     <HrLayout>
       <Flex w="full" p="5" direction="column" gap={5}>
@@ -163,19 +153,23 @@ const Report = () => {
         >
           <Tabs isFitted variant="soft-rounded" colorScheme="green">
             <TabList mb="1em" flexDirection={{ base: "column", md: "row" }}>
-              <Tab color={colorMode === 'light' ? '' : 'white'}>Attendance</Tab>
-              <Tab color={colorMode === 'light' ? '' : 'white'}>Payroll</Tab>
-              <Tab color={colorMode === 'light' ? '' : 'white'}>Overtime</Tab>
+              <Tab color={colorMode === "light" ? "" : "white"}>Monthly</Tab>
+              <Tab color={colorMode === "light" ? "" : "white"}>Yearly</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
-                <DataTable columns={attendanceColumns} data={attendanceData} filename={"attendance_report"}/>
+                <DataTable
+                  columns={attendanceColumns}
+                  data={attendanceData}
+                  filename={"monthly_report"}
+                />
               </TabPanel>
               <TabPanel>
-                <DataTable columns={payrollColumns} data={payrollData} filename={"payroll_report"}/>
-              </TabPanel>
-              <TabPanel>
-                <DataTable columns={overtimeColumns} data={overtimeData} filename={"overtime_report"}/>
+                <DataTable
+                  columns={payrollColumns}
+                  data={payrollData}
+                  filename={"yearly_report"}
+                />
               </TabPanel>
             </TabPanels>
           </Tabs>

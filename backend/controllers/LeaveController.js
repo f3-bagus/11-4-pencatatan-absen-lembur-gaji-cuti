@@ -120,7 +120,7 @@ const applyLeave = async (req, res) => {
   const { nip } = req.user;
   const { start_date, end_date, type, reason } = req.body;
   const leave_letter = req.file ? req.file.path : null;
-
+  
   try {
       const user = await UserModel.findOne({ nip });
       if (!user || user.archived !== 0) {
@@ -160,7 +160,6 @@ const applyLeave = async (req, res) => {
           data: savedLeave
       });
   } catch (error) {
-      console.error(error);
       res.status(500).json({
           message: 'Failed to submit leave application',
           error: error.message

@@ -20,7 +20,7 @@ const OvertimeSchema = new mongoose.Schema({
     reason: {
         type: String, 
         default: null
-    },  
+    },
     status_overtime: { 
         type: String, 
         enum: ["available", "taken", "overdue"],

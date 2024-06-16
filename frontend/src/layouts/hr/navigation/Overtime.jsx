@@ -20,6 +20,7 @@ import {
   Input,
   Select,
   FormErrorMessage,
+  Text,
 } from "@chakra-ui/react";
 import DataTable from "../../../components/hr/table/DataTabel";
 import { IoIosAddCircleOutline } from "react-icons/io";
@@ -88,8 +89,8 @@ const Overtime = () => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
@@ -180,7 +181,12 @@ const Overtime = () => {
                               form.errors.division && form.touched.division
                             }
                           >
-                            <FormLabel>Division</FormLabel>
+                            <FormLabel>
+                              Division{" "}
+                              <Text as="span" color="red.500">
+                                *
+                              </Text>
+                            </FormLabel>
                             <Select
                               {...field}
                               placeholder="Select division"
@@ -204,7 +210,12 @@ const Overtime = () => {
                             isInvalid={form.errors.date && form.touched.date}
                             mt={3}
                           >
-                            <FormLabel>Date</FormLabel>
+                            <FormLabel>
+                              Date{" "}
+                              <Text as="span" color="red.500">
+                                *
+                              </Text>
+                            </FormLabel>
                             <Input
                               {...field}
                               type="date"
@@ -221,13 +232,15 @@ const Overtime = () => {
                       <Field name="hours">
                         {({ field, form }) => (
                           <FormControl
-                            isInvalid={
-                              form.errors.hours &&
-                              form.touched.hours
-                            }
+                            isInvalid={form.errors.hours && form.touched.hours}
                             mt={3}
                           >
-                            <FormLabel>Hours</FormLabel>
+                            <FormLabel>
+                              Hours{" "}
+                              <Text as="span" color="red.500">
+                                *
+                              </Text>
+                            </FormLabel>
                             <Input
                               {...field}
                               type="number"
@@ -249,7 +262,12 @@ const Overtime = () => {
                             }
                             mt={3}
                           >
-                            <FormLabel>Reason</FormLabel>
+                            <FormLabel>
+                              Reason{" "}
+                              <Text as="span" color="red.500">
+                                *
+                              </Text>
+                            </FormLabel>
                             <Input
                               {...field}
                               type="text"
@@ -272,7 +290,12 @@ const Overtime = () => {
                             }
                             mt={3}
                           >
-                            <FormLabel>Overtime Rate</FormLabel>
+                            <FormLabel>
+                              Overtime Rate{" "}
+                              <Text as="span" color="red.500">
+                                *
+                              </Text>
+                            </FormLabel>
                             <Input
                               {...field}
                               type="number"

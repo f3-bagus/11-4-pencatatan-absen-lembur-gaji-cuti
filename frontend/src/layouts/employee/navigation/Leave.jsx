@@ -20,6 +20,8 @@ import {
   FormLabel,
   Input,
   Textarea,
+  Text,
+  Stack,
 } from "@chakra-ui/react";
 import DataTable from "../../../components/employee/table/DataTabel";
 import { IoIosAddCircleOutline } from "react-icons/io";
@@ -29,6 +31,7 @@ import axios from "axios";
 const Leave = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [history, setHistory] = useState([]);
+  const [remaining, setRemaining] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
   const toast = useToast();
@@ -36,9 +39,22 @@ const Leave = () => {
   const getDataHistory = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/leave/data/history"
+        "http://localhost:5000/api/leave/history"
       );
-      console.log(response.data);
+      //console.log(response.data.data);
+      setHistory(response.data.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const getDataRemaining = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/leave/remaining"
+      );
+      console.log(response.data.remaining_leave);
+      setRemaining(response.data.remaining_leave);
     } catch (error) {
       console.log(error.message);
     }
@@ -59,6 +75,7 @@ const Leave = () => {
 
   useEffect(() => {
     getDataHistory();
+    getDataRemaining();
     setIsFormValid(validateForm());
   }, [formValues]);
 
@@ -131,55 +148,37 @@ const Leave = () => {
     document.body.removeChild(link);
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const columns = React.useMemo(
     () => [
       {
-        Header: "nip",
-        accessor: "nip",
+        Header: "start_date",
+        accessor: "start_date",
+        Cell: ({ value }) => formatDate(value),
       },
       {
-        Header: "name",
-        accessor: "name",
+        Header: "end_date",
+        accessor: "end_date",
+        Cell: ({ value }) => formatDate(value),
       },
       {
-        Header: "division",
-        accessor: "division",
+        Header: "type",
+        accessor: "type",
       },
       {
-        Header: "date",
-        accessor: "date",
+        Header: "reason",
+        accessor: "reason",
       },
       {
-        Header: "hours",
-        accessor: "hours",
-      },
-      {
-        Header: "reasons",
-        accessor: "reasons",
-      },
-      {
-        Header: "status_overtime",
-        accessor: "status_overtime",
-      },
-      {
-        Header: "overtime_rate",
-        accessor: "overtime_rate",
-      },
-    ],
-    []
-  );
-
-  const data = React.useMemo(
-    () => [
-      {
-        nip: 33421312,
-        name: "John Doe",
-        division: "IT",
-        date: "12-12-2024",
-        hours: "3",
-        reasons: "overtime",
-        status_overtime: "attend",
-        overtime_rate: "Rp. 100.000",
+        Header: "status_leave",
+        accessor: "status_leave",
       },
     ],
     []
@@ -188,9 +187,26 @@ const Leave = () => {
   return (
     <EmployeeLayout>
       <Flex w="full" p="5" direction="column" gap={5}>
-        <Heading as="h1" size="xl">
-          Leave
-        </Heading>
+        <Stack direction="row" justifyContent="space-between">
+          <Heading as="h1" size="xl">
+            Leave
+          </Heading>
+          <Box
+            bg={useColorModeValue("green.500", "green.800")}
+            alignItems="center"
+            py={2}
+            px={4}
+            borderRadius="2xl"
+            boxShadow="lg"
+          >
+            <Text color="white">
+              Leave Remaining:{" "}
+              <Text as="span" fontWeight="bold">
+                {remaining}
+              </Text>
+            </Text>
+          </Box>
+        </Stack>
         <Box
           bg={useColorModeValue("white", "green.800")}
           p="3"
@@ -307,7 +323,11 @@ const Leave = () => {
             </ModalContent>
           </Modal>
 
-          <DataTable columns={columns} data={data} filename={"leave_history"} />
+          <DataTable
+            columns={columns}
+            data={history}
+            filename={"leave_history"}
+          />
         </Box>
       </Flex>
     </EmployeeLayout>

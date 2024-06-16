@@ -24,11 +24,18 @@ const clockIn = async (req, res) => {
           });
       }
 
-      const now = new Date();
-      const clockInTime = formatTime(now);
-      const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+      const now = moment();
+      const clockInTime = now.format('HH:mm:ss');
+      const todayDate = moment().startOf('day').toDate();
 
-      if (now.getHours() < 6) {
+      // Check if today is Saturday or Sunday
+      if (now.isoWeekday() === 6 || now.isoWeekday() === 7) {
+          return res.status(400).json({
+              message: "Clock in is not allowed on weekends"
+          });
+      }
+
+      if (now.hour() < 6) {
           return res.status(400).json({
               message: `It is not yet time to clock in today (${clockInTime})`
           });
@@ -51,7 +58,7 @@ const clockIn = async (req, res) => {
           clock_in: clockInTime
       });
 
-      if (now.getHours() < 8) {
+      if (now.hour() < 8) {
           attendance.status_attendance = 'clock in ok';
       } else {
           attendance.status_attendance = 'clock in late';
@@ -69,7 +76,7 @@ const clockIn = async (req, res) => {
           message: error.message
       });
   }
-};
+}
 
 
 /* Employee: clock Out */
@@ -84,9 +91,16 @@ const clockOut = async (req, res) => {
       });
     }
 
-    const now = new Date();
-    const clockOutTime = formatTime(now);
-    const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+    const now = moment();
+    const clockOutTime = now.format('HH:mm:ss');
+    const todayDate = moment().startOf('day').toDate();
+
+    // Check if today is Saturday or Sunday
+    if (now.isoWeekday() === 6 || now.isoWeekday() === 7) {
+        return res.status(400).json({
+            message: "Clock out is not allowed on weekends"
+        });
+    }
 
     // Check if the employee has clocked in today
     const attendanceToday = await AttendanceModel.findOne({
@@ -106,7 +120,7 @@ const clockOut = async (req, res) => {
       });
     }
 
-    if (now.getHours() < 16 || (now.getHours() === 16 && now.getMinutes() < 30)) {
+    if (now.hour() < 16 || (now.hour() === 16 && now.minute() < 30)) {
       return res.status(400).json({
         message: `It is not yet time to clock out today (${clockOutTime})`
       });

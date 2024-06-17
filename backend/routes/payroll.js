@@ -13,6 +13,6 @@ router.get('/data/employee', auth.authorizeRole(['admin', 'hr']), payrollControl
 router.get('/data/employee/:nip', auth.authorizeRole(['admin', 'hr']), payrollController.getEmployeePayroll);
 
 /* Employee : Get Self Salary Data */
-router.get('/data', auth.authorizeRole('employee'), payrollController.getSelfPayroll);
+router.get('/data', auth.authorizeRole('employee'), payrollController.getMonthlySelfPayroll);
 
 module.exports = router;

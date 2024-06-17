@@ -86,7 +86,7 @@ get self history leave data : /api/leave/history
 get self remaining leave data : /api/leave/remaining
 get available overtime data : /api/overtime/data
 get self history overtime data : /api/overtime/data/history
-get self payroll data : /api/overtime/data
+get self payroll data : /api/payroll/data
 get self data for dashboard : /api/employee/dashboard/data
 
 -> POST

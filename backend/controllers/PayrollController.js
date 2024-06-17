@@ -159,65 +159,97 @@ const getEmployeePayroll = async (req, res) => {
   
 
 /* Employee : Get employee payroll data */
-const getSelfPayroll = async (req, res) => {
-  const { nip } = req.user;
+const getMonthlySelfPayroll = async (req, res) => {
+    const { nip } = req.user;
 
-  try {
-      const employeePayrollData = await PayrollModel.aggregate([
-          {
-              $match: { nip: nip }
-          },
-          {
-              $lookup: {
-                  from: "tbl_employees",
-                  localField: "nip",
-                  foreignField: "nip",
-                  as: "employee"
-              }
-          },
-          {
-              $unwind: "$employee"
-          },
-          {
-              $match: { "employee.archived": { $ne: 1 } }
-          },
-          {
-              $project: {
-                  _id: 0,
-                  nip: "$employee.nip",
-                  name: "$employee.name",
-                  email: "$employee.email",
-                  phone: "$employee.phone",
-                  division: "$employee.division",
-                  type: "$employee.type",
-                  date: "$date",
-                  basic_salary: "$basic_salary",
-                  overtime_salary: "$overtime_salary",
-                  deduction_permission: "$deduction_permission",
-                  late: "$deduction_late",
-                  deduction_absent: "$deduction_absent",
-                  total_salary: "$total_salary"
-              }
-          }
-      ]);
+    try {
+        const currentYearStart = moment().startOf('year').toDate();
+        const currentMonthEnd = moment().endOf('month').toDate();
 
-      if (employeePayrollData.length === 0) {
-          return res.status(404).json({
-              message: 'Data not found'
-          });
-      }
+        const monthlyPayrollData = await PayrollModel.aggregate([
+            {
+                $match: {
+                    nip: nip,
+                    date: {
+                        $gte: currentYearStart,
+                        $lte: currentMonthEnd
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'tbl_employees',
+                    localField: 'nip',
+                    foreignField: 'nip',
+                    as: 'employee'
+                }
+            },
+            {
+                $unwind: '$employee'
+            },
+            {
+                $match: { "employee.archived": { $ne: 1 } }
+            },
+            {
+                $group: {
+                    _id: { nip: "$nip", month: { $month: "$date" } },
+                    nip: { $first: "$nip" },
+                    name: { $first: "$employee.name" },
+                    email: { $first: "$employee.email" },
+                    phone: { $first: "$employee.phone" },
+                    division: { $first: "$employee.division" },
+                    type: { $first: "$employee.type" },
+                    basic_salary: { $sum: "$basic_salary" },
+                    overtime_salary: { $sum: "$overtime_salary" },
+                    deduction_permission: { $sum: "$deduction_permission" },
+                    deduction_late: { $sum: "$deduction_late" },
+                    deduction_absent: { $sum: "$deduction_absent" },
+                    total_salary: { $sum: "$total_salary" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    nip: 1,
+                    name: 1,
+                    email: 1,
+                    phone: 1,
+                    division: 1,
+                    type: 1,
+                    month: {
+                        $let: {
+                            vars: { monthsInString: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] },
+                            in: { $arrayElemAt: ["$$monthsInString", { $subtract: ["$_id.month", 1] }] }
+                        }
+                    },
+                    basic_salary: 1,
+                    overtime_salary: 1,
+                    deduction_permission: 1,
+                    deduction_late: 1,
+                    deduction_absent: 1,
+                    total_salary: 1
+                }
+            }
+        ]);
 
-      res.status(200).json({
-          message: 'Success',
-          data: employeePayrollData[0]
-      });
-  } catch (error) {
-      res.status(500).json({
-          message: `Failed to get data for employee with NIP '${nip}'`,
-          error: error.message
-      });
-  }
+        if (monthlyPayrollData.length === 0) {
+            return res.status(404).json({
+                message: 'No payroll data found for the given period'
+            });
+        }
+
+        res.status(200).json({
+            message: 'Monthly payroll report retrieved successfully',
+            data: monthlyPayrollData
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: `Failed to get monthly payroll data for employee with NIP '${nip}'`,
+            error: error.message
+        });
+    }
 };
+
 
 /* Sistem: Auto Calculate And Update All Employee Payroll  */
 const calculateAndUpdatePayroll = async () => {
@@ -329,6 +361,6 @@ const calculateAndUpdatePayroll = async () => {
 module.exports = {
   getAllEmployeePayroll,
   getEmployeePayroll,
-  getSelfPayroll,
+  getMonthlySelfPayroll,
   calculateAndUpdatePayroll
 };

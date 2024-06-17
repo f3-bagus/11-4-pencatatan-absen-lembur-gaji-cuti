@@ -92,9 +92,10 @@ const getEmployeePayroll = async (req, res) => {
         {
           $group: {
             _id: {
-              month: { $dateToString: { format: "%Y-%m", date: "$date" } },
+              month: { $month: "$date" },
               nip: "$nip"
             },
+            date: { $first: "$date" },
             name: { $first: "$employee.name" },
             email: { $first: "$employee.email" },
             phone: { $first: "$employee.phone" },
@@ -111,8 +112,14 @@ const getEmployeePayroll = async (req, res) => {
         {
           $project: {
             _id: 0,
-            month: "$_id.month",
+            month: {
+              $let: {
+                vars: { monthsInString: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] },
+                in: { $arrayElemAt: ["$$monthsInString", { $subtract: ["$_id.month", 1] }] }
+              }
+            },
             nip: "$_id.nip",
+            date: "$date",
             name: "$name",
             email: "$email",
             phone: "$phone",
@@ -127,7 +134,7 @@ const getEmployeePayroll = async (req, res) => {
           }
         },
         {
-          $sort: { month: 1 } // Sort by month in ascending order
+          $sort: { month: 1 }
         }
       ]);
   
@@ -147,7 +154,8 @@ const getEmployeePayroll = async (req, res) => {
         error: error.message
       });
     }
-  };
+};
+  
   
 
 /* Employee : Get employee payroll data */

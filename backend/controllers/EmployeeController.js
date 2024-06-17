@@ -863,7 +863,17 @@ const getDashboardEmployee = async (req, res) => {
         $group: {
           _id: { $month: "$date" },
           monthlySalary: { $sum: "$basic_salary" },
-          monthlyTotalSalary: { $sum: "$total_salary" }
+          monthlyTotalSalary: { $sum: "$total_salary" },
+          monthlyOvertimeSalary: { $sum: "$overtime_salary" },
+          monthlyTotalDeduction: { 
+            $sum: { 
+              $add: [
+                "$deduction_permission", 
+                "$deduction_absent", 
+                "$deduction_late"
+              ]
+            }
+          }
         }
       },
       {
@@ -957,11 +967,15 @@ const getDashboardEmployee = async (req, res) => {
     const salaryLabels = moment.months();
     const salaryData = Array(12).fill(0);
     const totalSalaryData = Array(12).fill(0);
+    const overtimeSalaryData = Array(12).fill(0);
+    const totalDeductionData = Array(12).fill(0);
 
     salaryResult.forEach(item => {
       const monthIndex = item._id - 1;
       salaryData[monthIndex] = item.monthlySalary;
       totalSalaryData[monthIndex] = item.monthlyTotalSalary;
+      overtimeSalaryData[monthIndex] = item.monthlyOvertimeSalary;
+      totalDeductionData[monthIndex] = item.monthlyTotalDeduction;
     });
 
     const salaryChartData = {
@@ -974,6 +988,14 @@ const getDashboardEmployee = async (req, res) => {
         {
           label: 'Total Salary',
           data: totalSalaryData
+        },
+        {
+          label: 'Overtime Salary',
+          data: overtimeSalaryData
+        },
+        {
+          label: 'Total Deduction',
+          data: totalDeductionData
         }
       ]
     };
@@ -991,9 +1013,7 @@ const getDashboardEmployee = async (req, res) => {
       },
       data_salary: salaryChartData,
       total_hours: totalOvertimeHours,
-      remaining_leave: remainingLeave,
-      currentMonthStart: currentMonthStart,
-      currentMonthEnd: currentMonthEnd
+      remaining_leave: remainingLeave
     });
 
   } catch (error) {

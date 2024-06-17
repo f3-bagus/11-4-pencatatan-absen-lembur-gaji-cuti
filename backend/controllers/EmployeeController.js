@@ -246,7 +246,7 @@ const getEmployee = async (req, res) => {
 
       res.status(200).json({
           message: 'Success',
-          data: userData[0]
+          data: employeeData[0]  // Corrected variable name
       });
   } catch (error) {
       res.status(500).json({ 
@@ -254,6 +254,7 @@ const getEmployee = async (req, res) => {
       });
   }
 };
+
 
 /* Employee: Get Available Overtime */
 const getAvailableOvertime = async (req, res) => {

@@ -15,7 +15,7 @@ const createEmployee = async (req, res) => {
         const hashedPassword = await bcrypt.hash('user12345', 10);
 
         const newUser = new UserModel({
-            nip,
+            nip: nip,
             password: hashedPassword,
             role: 'employee'
         });
@@ -23,13 +23,13 @@ const createEmployee = async (req, res) => {
         await newUser.save();
 
         const newEmployee = new EmployeeModel({
-            nip,
-            name,
-            gender,
-            email,
-            phone,
-            type,
-            division
+            nip: nip,
+            name: name,
+            gender: gender,
+            email: email,
+            phone: phone,
+            type: type,
+            division: division
         });
 
         

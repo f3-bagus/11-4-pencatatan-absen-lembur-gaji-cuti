@@ -1,0 +1,96 @@
+import React, { useEffect, useState } from "react";
+import HrLayout from "../HrLayout";
+import { Flex, Heading, Box, useColorModeValue, Text } from "@chakra-ui/react";
+import DataTable from "../../../components/hr/table/DataTabel";
+import axios from "axios";
+
+const ReportAll = () => {
+  const [report, setReport] = useState([]);
+
+  const getReportAll = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/report/all");
+      console.log(response.data.data.reports);
+      setReport(response.data.data.reports);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getReportAll();
+  }, []);
+
+  const reportColumns = React.useMemo(
+    () => [
+      {
+        Header: "nip",
+        accessor: "nip",
+      },
+      {
+        Header: "name",
+        accessor: "name",
+      },
+      {
+        Header: "division",
+        accessor: "division",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
+      },
+      {
+        Header: "month",
+        accessor: "month",
+      },
+      {
+        Header: "Points Attendance",
+        accessor: "PointsAttendance",
+      },
+      {
+        Header: "Points Overtime",
+        accessor: "PointsOvertime",
+      },
+      {
+        Header: "MinPoint Overtime",
+        accessor: "MinPointOvertime",
+      },
+      {
+        Header: "MaxPoints Attendance",
+        accessor: "MaxPointsAttendance",
+      },
+      {
+        Header: "TotalPoint Overtime Division",
+        accessor: "TotalPointOvertimeDivision",
+      },
+      {
+        Header: "review",
+        accessor: "review",
+      },
+    ],
+    []
+  );
+
+  return (
+    <HrLayout>
+      <Flex w="full" p="5" direction="column" gap={5}>
+        <Heading as="h1" size="xl">
+          Reports All
+        </Heading>
+        <Box
+          bg={useColorModeValue("white", "green.800")}
+          p="3"
+          borderRadius="2xl"
+          shadow="lg"
+        >
+          <DataTable
+            columns={reportColumns}
+            data={report}
+            filename={"report_all"}
+          />
+        </Box>
+      </Flex>
+    </HrLayout>
+  );
+};
+
+export default ReportAll;

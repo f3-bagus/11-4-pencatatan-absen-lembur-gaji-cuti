@@ -4,4 +4,6 @@ export { default as HrSalary } from "./Salary";
 export { default as HrOvertime } from "./Overtime";
 export { default as HrLeave } from "./Leave";
 export { default as HrReportAttendance } from "./ReportAttendance";
+export { default as HrReportOvertime } from "./ReportOvertime";
+export { default as HrReportAll } from "./ReportAll";
 export { default as HrProfile } from "./Profile";

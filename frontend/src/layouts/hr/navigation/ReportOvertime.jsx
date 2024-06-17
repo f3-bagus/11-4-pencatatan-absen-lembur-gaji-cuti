@@ -11,11 +11,12 @@ import {
   TabList,
   TabPanel,
   TabPanels,
+  Text,
 } from "@chakra-ui/react";
 import DataTable from "../../../components/hr/table/DataTabel";
 import axios from "axios";
 
-const ReportAttendace = () => {
+const ReportOvertime = () => {
   const [monthly, setMonthly] = useState([]);
   const [yearly, setYearly] = useState([]);
   const { colorMode } = useColorMode();
@@ -23,7 +24,7 @@ const ReportAttendace = () => {
   const getReportMonthly = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/report/attendance/monthly"
+        "http://localhost:5000/api/report/overtime/monthly"
       );
       setMonthly(response.data.data.reportMonthly);
     } catch (error) {
@@ -34,9 +35,10 @@ const ReportAttendace = () => {
   const getReportYearly = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/report/attendance/yearly"
+        "http://localhost:5000/api/report/overtime/yearly"
       );
       setYearly(response.data.data.reportYearly);
+      console.log(response.data.data.reportYearly);
     } catch (error) {
       console.log(error);
     }
@@ -58,36 +60,21 @@ const ReportAttendace = () => {
         accessor: "name",
       },
       {
+        Header: "division",
+        accessor: "division",
+        Cell: ({ cell }) => <Text textTransform="capitalize">{cell.value}</Text>,
+      },
+      {
         Header: "month",
         accessor: "month",
       },
       {
-        Header: "present",
-        accessor: "present",
+        Header: "total hours",
+        accessor: "total_hours",
       },
       {
-        Header: "late",
-        accessor: "late",
-      },
-      {
-        Header: "absent",
-        accessor: "absent",
-      },
-      {
-        Header: "leave",
-        accessor: "leave",
-      },
-      {
-        Header: "permit",
-        accessor: "permit",
-      },
-      {
-        Header: "sick",
-        accessor: "sick",
-      },
-      {
-        Header: "total attendance",
-        accessor: "total_attendance",
+        Header: "total overtime",
+        accessor: "total_overtime",
       },
     ],
     []
@@ -100,32 +87,21 @@ const ReportAttendace = () => {
         accessor: "nip",
       },
       {
-        Header: "present",
-        accessor: "present",
+        Header: "name",
+        accessor: "name",
       },
       {
-        Header: "late",
-        accessor: "late",
+        Header: "division",
+        accessor: "division",
+        Cell: ({ cell }) => <Text textTransform="capitalize">{cell.value}</Text>,
       },
       {
-        Header: "absent",
-        accessor: "absent",
+        Header: "total hours",
+        accessor: "total_hours",
       },
       {
-        Header: "leave",
-        accessor: "leave",
-      },
-      {
-        Header: "permit",
-        accessor: "permit",
-      },
-      {
-        Header: "sick",
-        accessor: "sick",
-      },
-      {
-        Header: "total attendance",
-        accessor: "total_attendance",
+        Header: "total overtime",
+        accessor: "total_overtime",
       },
     ],
     []
@@ -135,7 +111,7 @@ const ReportAttendace = () => {
     <HrLayout>
       <Flex w="full" p="5" direction="column" gap={5}>
         <Heading as="h1" size="xl">
-          Reports Attendance
+          Reports Overtime
         </Heading>
         <Box
           bg={useColorModeValue("white", "green.800")}
@@ -171,4 +147,4 @@ const ReportAttendace = () => {
   );
 };
 
-export default ReportAttendace;
+export default ReportOvertime;

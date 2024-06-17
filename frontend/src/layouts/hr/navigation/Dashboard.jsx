@@ -9,7 +9,6 @@ import axios from "axios";
 
 const Dashboard = () => {
   const [roleCounts, setRoleCounts] = useState({});
-  const [totalDivisions, setTotalDivisions] = useState(0);
 
   const getData = () => {
     axios
@@ -17,7 +16,6 @@ const Dashboard = () => {
       .then((res) => {
         const employees = res.data.data;
         countRoles(employees);
-        countDivisions(employees);
         console.log(employees);
       })
       .catch((err) => {
@@ -31,14 +29,6 @@ const Dashboard = () => {
       return acc;
     }, {});
     setRoleCounts(counts);
-  };
-
-  const countDivisions = (employees) => {
-    const divisions = employees.reduce((acc, employee) => {
-      acc.add(employee.division);
-      return acc;
-    }, new Set());
-    setTotalDivisions(divisions.size);
   };
 
   useEffect(() => {
@@ -97,14 +87,14 @@ const Dashboard = () => {
             >
               <Stack direction="column">
                 <Heading as="h1" size="sm" color="gray.400">
-                  Total Managers
+                  Total Divisions
                 </Heading>
                 <Heading as="h1" size="lg">
-                  {roleCounts.manager || 0}
+                  4
                 </Heading>
               </Stack>
               <Box bg="green.500" p="3" borderRadius="full">
-                <FaUserTie size={30} color="white" />
+                <RiTeamFill size={30} color="white" />
               </Box>
             </Stack>
           </Box>
@@ -123,14 +113,14 @@ const Dashboard = () => {
             >
               <Stack direction="column">
                 <Heading as="h1" size="sm" color="gray.400">
-                  Total Divisions
+                  Total Managers
                 </Heading>
                 <Heading as="h1" size="lg">
-                  {totalDivisions}
+                  {roleCounts.manager || 0}
                 </Heading>
               </Stack>
               <Box bg="green.500" p="3" borderRadius="full">
-                <RiTeamFill size={30} color="white" />
+                <FaUserTie size={30} color="white" />
               </Box>
             </Stack>
           </Box>

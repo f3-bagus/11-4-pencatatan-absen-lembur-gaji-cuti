@@ -35,6 +35,8 @@ import {
   HrOvertime,
   HrLeave,
   HrReportAttendance,
+  HrReportOvertime,
+  HrReportAll,
   HrProfile,
 } from "./layouts/hr/navigation";
 
@@ -61,6 +63,8 @@ function App() {
             <Route path="/hr/overtime" element={<HrOvertime />} />
             <Route path="/hr/leave" element={<HrLeave />} />
             <Route path="/hr/report/attendance" element={<HrReportAttendance />} />
+            <Route path="/hr/report/overtime" element={<HrReportOvertime />} />
+            <Route path="/hr/report/all" element={<HrReportAll />} />
             <Route path="/hr/profile" element={<HrProfile />} />
           </Route>
           <Route element={<ProtectedRoute role="employee" />}>

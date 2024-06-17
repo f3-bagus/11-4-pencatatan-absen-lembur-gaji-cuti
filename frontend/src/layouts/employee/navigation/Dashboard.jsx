@@ -30,6 +30,17 @@ const Dashboard = () => {
       });
   };
 
+  const getDataDashboard = () => {
+    axios
+      .get("http://localhost:5000/api/employee/dashboard")
+      .then((res) => {
+        console.log(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   const determineGreeting = (date) => {
     const hours = date.getHours();
     if (hours < 12) return "Good Morning";
@@ -39,14 +50,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     getProfile();
+    getDataDashboard();
 
     const interval = setInterval(() => {
       const now = new Date();
       setCurrentTime(now);
       setGreeting(determineGreeting(now));
-    }, 1000); 
+    }, 1000);
 
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, []);
 
   const formatDate = (date) => {
@@ -74,7 +86,7 @@ const Dashboard = () => {
         >
           <Box w="full" px="3" flexDirection="column">
             <Heading as="h1" size="lg" mb={1}>
-            {greeting}, {name}
+              {greeting}, {name}
             </Heading>
             <Text color="gray.500" mb={8}>
               It's {formatDate(currentTime)}

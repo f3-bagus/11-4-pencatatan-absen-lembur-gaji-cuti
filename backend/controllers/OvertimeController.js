@@ -29,17 +29,64 @@ const getAllOvertime = async (req, res) => {
 /* Admin & HR: Get Overtime Employee by NIP */
 const getOvertime = async (req, res) => {
     const { nip } = req.params;
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1; // getMonth() returns 0-11, so we add 1
+
     try {
-        const overtimeData = await OvertimeModel.findOne({ nip });
+        const overtimeData = await OvertimeModel.aggregate([
+            { $match: { nip: nip } },
+            {
+                $project: {
+                    month: { $month: "$date" },
+                    year: { $year: "$date" },
+                    hours: 1,
+                    nip: 1,
+                    division: 1,
+                    date: 1,
+                    reason: 1,
+                    status_overtime: 1,
+                    overtime_rate: 1,
+                    archived: 1,
+                    created_at: 1,
+                    updated_at: 1
+                }
+            },
+            {
+                $match: {
+                    year: currentYear,
+                    month: { $lte: currentMonth }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        month: "$month",
+                        year: "$year"
+                    },
+                    totalOvertime: { $sum: "$hours" },
+                    details: { $push: "$$ROOT" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    month: "$_id.month",
+                    year: "$_id.year",
+                    totalOvertime: 1,
+                    details: 1
+                }
+            },
+            { $sort: { year: 1, month: 1 } } // Sort by year and month
+        ]);
 
         if (!overtimeData || overtimeData.length === 0) {
             return res.status(404).json({
-            message: "No overtime data found"
+                message: "No overtime data found"
             });
         }
 
         res.status(200).json({
-            message: "All overtime data retrieved successfully",
+            message: "Overtime data retrieved successfully",
             data: overtimeData
         });
     } catch (error) {
@@ -48,6 +95,8 @@ const getOvertime = async (req, res) => {
         });
     }
 };
+
+
 
 /* Admin & HR: Get Monthly Overtime Report  */
 const getMonthlyOvertimeReport = async (req, res) => {

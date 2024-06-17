@@ -50,7 +50,7 @@ const Overtime = () => {
     getDataOvertime();
   }, []);
 
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
@@ -66,6 +66,7 @@ const Overtime = () => {
         isClosable: true,
       });
       console.log("Response:", response.data);
+      resetForm();
     } catch (error) {
       console.error(
         "Error submitting overtime:",
@@ -100,9 +101,7 @@ const Overtime = () => {
         Header: "nip",
         accessor: "nip",
         Cell: ({ cell }) => (
-          <Text>
-            {cell.value === null ? '-' : cell.value}
-          </Text>
+          <Text>{cell.value === null ? "-" : cell.value}</Text>
         ),
       },
       {
@@ -121,9 +120,7 @@ const Overtime = () => {
         Header: "hours",
         accessor: "hours",
         Cell: ({ cell }) => (
-          <Text>
-            {cell.value === null ? '-' : cell.value}
-          </Text>
+          <Text>{cell.value === null ? "-" : cell.value}</Text>
         ),
       },
       {

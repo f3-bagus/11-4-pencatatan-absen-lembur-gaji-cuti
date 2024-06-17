@@ -18,6 +18,9 @@ export const validationSchemaOvertime = Yup.object().shape({
   overtime_rate: Yup.number()
     .required("Overtime rate is required")
     .positive("Overtime rate must be positive"),
+  hours: Yup.number()
+    .required("Hours are required")
+    .max(5, "Hours cannot be more than 5"),
 });
 
 export const validationSchemaChangePassword = Yup.object().shape({

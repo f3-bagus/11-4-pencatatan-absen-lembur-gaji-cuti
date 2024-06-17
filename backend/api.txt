@@ -36,6 +36,7 @@ get yearly report attendance : /api/report/attendance/yearly
 get monthly overtime attendance : /api/report/overtime/monthly
 get yearly overtime attendance : /api/report/overtime/yearly
 get all report : /api/report/all
+get self data for dashboard : /api/admin/dashboard/data
 
 -> POST
 create employee account : /api/admin/create-employee
@@ -67,6 +68,7 @@ get yearly report attendance : /api/report/attendance/yearly
 get monthly overtime attendance : /api/report/overtime/monthly
 get yearly overtime attendance : /api/report/overtime/yearly
 get all report : /api/report/all
+get self data for dashboard : /api/hr/dashboard/data
 
 -> POST
 create-overtime : /api/hr/overtime
@@ -76,7 +78,6 @@ approve employee leave : /api/leave/approve/:leaveId
 reject employee leave : /api/leave/reject/:leaveId
 
 ->DELETE
-
 
 
 4. Employee:

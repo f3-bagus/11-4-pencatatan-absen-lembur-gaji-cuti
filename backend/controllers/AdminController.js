@@ -385,11 +385,45 @@ const getUser = async (req, res) => {
     }
 };
 
+const getDashboardAdmin = async (req, res) => {
+    try {
+        const [totalEmployees, divisionCounts] = await Promise.all([
+          EmployeeModel.countDocuments(),
+          EmployeeModel.aggregate([
+              {
+                  $group: {
+                      _id: "$division",
+                      count: { $sum: 1 }
+                  }
+              },
+              {
+                  $project: {
+                      _id: 0,
+                      division: "$_id",
+                      count: 1
+                  }
+              }
+          ])
+        ]);
+  
+        res.json({
+            total_employee: totalEmployees,
+            total_division: divisionCounts
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: error.message
+        });
+    }
+  };
+  
+
 module.exports = {
     createEmployee,
     createHR,
     resetUserPassword,
     deleteUser,
     getAllUserData,
-    getUser
+    getUser,
+    getDashboardAdmin
 };

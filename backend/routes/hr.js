@@ -9,7 +9,7 @@ const hrController = require('../controllers/HRController');
 /* HR : Create Overtime */
 router.post('/overtime', auth.authorizeRole('hr'), hrController.createOvertime);
 
-/* Employee : Get Salary for Employee Dashboard */
+/* HR : Get Data for Dashboard */
 router.get('/dashboard/data', auth.authorizeRole('hr'), hrController.getDashboardHR);
 
 module.exports = router;

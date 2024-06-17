@@ -24,7 +24,7 @@ router.get('/attendance', auth.authorizeRole('employee'), attendanceController.g
 /* Employee : Accept Overtime */
 router.post('/accept-overtime/:overtimeId', auth.authorizeRole('employee'), employeeController.acceptOvertime);
 
-/* Employee : Get Salary for Employee Dashboard */
+/* Employee :  Get Data for Dashboard*/
 router.get('/dashboard/data', auth.authorizeRole('employee'), employeeController.getDashboardEmployee);
 
 module.exports = router;

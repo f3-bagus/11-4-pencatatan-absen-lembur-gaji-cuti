@@ -21,4 +21,7 @@ router.post('/reset-password/:nip', adminController.resetUserPassword);
 /* Admin: Delete User by NIP*/
 router.delete('/delete-user/:nip', adminController.deleteUser);
 
+/* Employee :  Get Data for Dashboard*/
+router.get('/dashboard/data', auth.authorizeRole('admin'), adminController.getDashboardAdmin);
+
 module.exports = router;

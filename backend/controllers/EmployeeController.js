@@ -24,12 +24,17 @@ const clockIn = async (req, res) => {
       const clockInTime = now.format('HH:mm:ss');
       const todayDate = moment().startOf('day').toDate();
 
-      // Check if today is Saturday or Sunday
       if (now.isoWeekday() === 6 || now.isoWeekday() === 7) {
           return res.status(400).json({
               message: "Clock in is not allowed on weekends"
           });
       }
+
+      if (now.isAfter(moment().set({ hour: 16, minute: 30, second: 0 }))) {
+        return res.status(400).json({
+            message: `Clock in is not allowed after 16:30 (${clockInTime})`
+        });
+    }
 
       if (now.hour() < 6) {
           return res.status(400).json({
@@ -116,7 +121,8 @@ const clockOut = async (req, res) => {
       });
     }
 
-    if (now.hour() < 16 || (now.hour() === 16 && now.minute() < 30)) {
+    const clockOutLimit = moment().set({ hour: 23, minute: 30, second: 0 });
+    if (now.isBefore(clockOutLimit)) {
       return res.status(400).json({
         message: `It is not yet time to clock out today (${clockOutTime})`
       });
@@ -382,81 +388,6 @@ const acceptOvertime = async (req, res) => {
       message: error.message
     });
   }
-};
-
-
-///////////////////////////////////////////////
-// Method untuk menghitung point berdasarkan laporan kehadiran
-const calculateAttendancePoints = (attendanceData) => {
-  let totalPoints = 0;
-
-  attendanceData.forEach(data => {
-      const { present, late, leave, permit, sick, absent } = data;
-      
-      // Kalkulasi poin berdasarkan aturan
-      totalPoints += (present * 1) + (late * -0.5) + (leave * 0) + (permit * -1) + (sick * 0) + (absent * -1);
-  });
-
-  return totalPoints;
-};
-
-// Method untuk menghitung point berdasarkan laporan lembur
-const calculateOvertimePoints = (overtimeData) => {
-  const overtimePointsMap = {};
-
-  // Loop melalui setiap data lembur
-  overtimeData.forEach(data => {
-      const { nip, hours } = data;
-
-      // Jika karyawan belum ada di objek, inisialisasi dengan 0
-      if (!overtimePointsMap[nip]) {
-          overtimePointsMap[nip] = {
-              totalHours: 0,
-              totalPoints: 0
-          };
-      }
-
-      // Tambahkan jam lembur dan poin lembur ke karyawan tersebut (+1 point per jam lembur)
-      overtimePointsMap[nip].totalHours += hours;
-      overtimePointsMap[nip].totalPoints += hours; // 1 point per jam lembur
-  });
-
-  // Ubah objek menjadi array dengan format yang diinginkan
-  return Object.keys(overtimePointsMap).map(nip => ({
-      nip,
-      totalHours: overtimePointsMap[nip].totalHours,
-      totalPoints: overtimePointsMap[nip].totalPoints
-  }));
-};
-
-// Method untuk menghitung max_hours dan min_hours per divisi berdasarkan laporan lembur
-const calculateDivisionOvertimeHours = (overtimeData) => {
-  const divisionHoursMap = {};
-
-  overtimeData.forEach(data => {
-      const { division, hours } = data;
-
-      if (!divisionHoursMap[division]) {
-          divisionHoursMap[division] = {
-              totalHours: 0,
-              maxHours: 0,
-              minHours: 0
-          };
-      }
-
-      divisionHoursMap[division].totalHours += hours;
-  });
-
-  Object.keys(divisionHoursMap).forEach(division => {
-      const { totalHours } = divisionHoursMap[division];
-      const maxHours = totalHours;
-      const minHours = Math.max(0.7 * maxHours, 0); 
-
-      divisionHoursMap[division].maxHours = maxHours;
-      divisionHoursMap[division].minHours = minHours;
-  });
-
-  return divisionHoursMap;
 };
 
 /* Admin & HR: Get Monthly Point Report adn Review All Employee */

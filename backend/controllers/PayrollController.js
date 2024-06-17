@@ -155,8 +155,6 @@ const getEmployeePayroll = async (req, res) => {
       });
     }
 };
-  
-  
 
 /* Employee : Get employee payroll data */
 const getMonthlySelfPayroll = async (req, res) => {

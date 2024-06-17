@@ -222,12 +222,12 @@ const getMonthlySelfPayroll = async (req, res) => {
                             in: { $arrayElemAt: ["$$monthsInString", { $subtract: ["$_id.month", 1] }] }
                         }
                     },
-                    basic_salary: 1,
-                    overtime_salary: 1,
-                    deduction_permission: 1,
-                    deduction_late: 1,
-                    deduction_absent: 1,
-                    total_salary: 1
+                    basic_salary: { $round: ["$basic_salary", 2] },
+                    overtime_salary: { $round: ["$overtime_salary", 2] },
+                    deduction_permission: { $round: ["$deduction_permission", 2] },
+                    deduction_late: { $round: ["$deduction_late", 2] },
+                    deduction_absent: { $round: ["$deduction_absent", 2] },
+                    total_salary: { $round: ["$total_salary", 2] }
                 }
             }
         ]);
@@ -249,6 +249,7 @@ const getMonthlySelfPayroll = async (req, res) => {
         });
     }
 };
+
 
 
 /* Sistem: Auto Calculate And Update All Employee Payroll  */

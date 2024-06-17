@@ -72,7 +72,7 @@ const Payroll = () => {
           borderRadius="2xl"
           shadow="lg"
         >
-          <DataTable columns={columns} data={data} filename={"table_payroll"} />
+          <DataTable columns={columns} data={data} filename={"payroll_report"} />
         </Box>
       </Flex>
     </EmployeeLayout>

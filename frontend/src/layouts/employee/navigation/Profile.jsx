@@ -140,17 +140,7 @@ const Profile = () => {
         }
       );
 
-      toast({
-        position: "top-left",
-        title: "Profile Updated",
-        description: "Profile has been updated successfully.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-
-      //indow.location.reload();
-      getProfile();
+      window.location.reload();
     } catch (error) {
       console.error(
         "Error submitting profile:",

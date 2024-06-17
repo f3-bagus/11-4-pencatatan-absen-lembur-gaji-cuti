@@ -23,7 +23,7 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Text,
-  Link as LinkChakra
+  Link as LinkChakra,
 } from "@chakra-ui/react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { MdMenu } from "react-icons/md";
@@ -135,16 +135,19 @@ export default function Topbar() {
                     </Text>
                   </Center>
                   <MenuDivider />
-                  <MenuItem
-                    bg={useColorModeValue("white", "green.900")}
-                    _hover={{
-                      bg: useColorModeValue("gray.100", "green.600"),
-                    }}
+                  <LinkChakra
+                    href="/employee/profile"
+                    _hover={{ textDecoration: "none" }}
                   >
-                    <LinkChakra href="/employee/profile" _hover={{ textDecoration: "none" }}>
+                    <MenuItem
+                      bg={useColorModeValue("white", "green.900")}
+                      _hover={{
+                        bg: useColorModeValue("gray.100", "green.600"),
+                      }}
+                    >
                       Profile
-                    </LinkChakra>
-                  </MenuItem>
+                    </MenuItem>
+                  </LinkChakra>
                   <MenuItem
                     as="button"
                     bg={useColorModeValue("white", "green.900")}

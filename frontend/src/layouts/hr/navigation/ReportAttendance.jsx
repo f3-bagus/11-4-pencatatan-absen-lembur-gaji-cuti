@@ -153,14 +153,14 @@ const ReportAttendace = () => {
                 <DataTable
                   columns={monthlyColumns}
                   data={monthly}
-                  filename={"monthly_report"}
+                  filename={"monthly_attendance_report"}
                 />
               </TabPanel>
               <TabPanel>
                 <DataTable
                   columns={yearlyColumns}
                   data={yearly}
-                  filename={"yearly_report"}
+                  filename={"yearly_attendance_report"}
                 />
               </TabPanel>
             </TabPanels>

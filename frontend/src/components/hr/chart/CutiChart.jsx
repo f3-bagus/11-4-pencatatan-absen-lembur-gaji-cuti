@@ -1,5 +1,5 @@
-import React from 'react';
-import { Bar } from 'react-chartjs-2';
+import React, { useState, useEffect } from "react";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,8 +8,9 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { useColorMode } from '@chakra-ui/react';
+} from "chart.js";
+import { useColorMode } from "@chakra-ui/react";
+import axios from "axios";
 
 ChartJS.register(
   CategoryScale,
@@ -22,26 +23,57 @@ ChartJS.register(
 
 const CutiChart = () => {
   const { colorMode } = useColorMode();
+  const [labels, setLabels] = useState([]);
+  const [marketing, setMarketing] = useState([]);
+  const [it, setIt] = useState([]);
+  const [sales, setSales] = useState([]);
+
+  const getDataDashboard = () => {
+    axios
+      .get("http://localhost:5000/api/hr/dashboard/data")
+      .then((res) => {
+        const data = res.data;
+        //console.log(data.data_leave);
+        setIt(data.data_overtime.datasets[0].data);
+        setSales(data.data_overtime.datasets[1].data);
+        setMarketing(data.data_overtime.datasets[2].data);
+        setLabels(data.data_overtime.labels);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getDataDashboard();
+  }, []);
 
   const data = {
-    labels: [
-      'January', 'February', 'March', 'April', 'May', 'June', 
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ],
+    labels: labels,
     datasets: [
       {
-        label: 'IT',
-        data: [10, 12, 8, 15, 18, 14, 12, 16, 20, 25, 22, 18],
-        backgroundColor: '#C6F6D5',
-        borderColor: '#38A169',
-        borderWidth: 3,
+        label: "IT",
+        data: it,
+        fill: false,
+        backgroundColor: "#C6F6D5",
+        borderColor: "#38A169",
+        borderWidth: 1.5,
       },
       {
-        label: 'Accounting',
-        data: [12, 15, 10, 18, 20, 16, 14, 19, 22, 28, 25, 21],
-        backgroundColor: '#BEE3F8',
-        borderColor: '#3182CE',
-        borderWidth: 3,
+        label: "Sales",
+        data: sales,
+        fill: false,
+        backgroundColor: "#BEE3F8",
+        borderColor: "#3182CE",
+        borderWidth: 1.5,
+      },
+      {
+        label: "Marketing",
+        data: marketing,
+        fill: false,
+        backgroundColor: "#D6BCFA",
+        borderColor: "#805AD5",
+        borderWidth: 1.5,
       },
     ],
   };
@@ -50,30 +82,36 @@ const CutiChart = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top',
+        position: "top",
         labels: {
-          color: colorMode === 'light' ? 'gray' : 'white'
-        }
+          color: colorMode === "light" ? "gray" : "white",
+        },
       },
     },
     scales: {
       x: {
         ticks: {
-          color: colorMode === 'light' ? 'gray' : 'white'
+          color: colorMode === "light" ? "gray" : "white",
         },
         grid: {
-          color: colorMode === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)'
-        }
+          color:
+            colorMode === "light"
+              ? "rgba(0, 0, 0, 0.1)"
+              : "rgba(255, 255, 255, 0.1)",
+        },
       },
       y: {
         ticks: {
-          color: colorMode === 'light' ? 'gray' : 'white'
+          color: colorMode === "light" ? "gray" : "white",
         },
         grid: {
-          color: colorMode === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)'
-        }
-      }
-    }
+          color:
+            colorMode === "light"
+              ? "rgba(0, 0, 0, 0.1)"
+              : "rgba(255, 255, 255, 0.1)",
+        },
+      },
+    },
   };
 
   return <Bar data={data} options={options} />;

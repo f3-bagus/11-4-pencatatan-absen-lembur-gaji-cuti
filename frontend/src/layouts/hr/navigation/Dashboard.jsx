@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import HrLayout from "../HrLayout";
-import { Flex, Stack, Box, Heading, useColorModeValue } from "@chakra-ui/react";
+import {
+  Flex,
+  Stack,
+  Box,
+  Heading,
+  useColorModeValue,
+  Text,
+} from "@chakra-ui/react";
 import { FaUserTie, FaUser } from "react-icons/fa";
 import { RiTeamFill } from "react-icons/ri";
 import LemburChart from "../../../components/hr/chart/LemburChart";
@@ -9,30 +16,24 @@ import axios from "axios";
 
 const Dashboard = () => {
   const [roleCounts, setRoleCounts] = useState({});
+  const [totalEmp, setTotalEmp] = useState("");
+  const [totalDiv, setTotalDiv] = useState(0);
 
-  const getData = () => {
+  const getDataDashboard = () => {
     axios
-      .get("http://localhost:5000/api/employee/data")
+      .get("http://localhost:5000/api/hr/dashboard/data")
       .then((res) => {
-        const employees = res.data.data;
-        countRoles(employees);
-        console.log(employees);
+        const data = res.data;
+        setTotalEmp(data.total_employee)
+        setTotalDiv(data.total_division.length);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const countRoles = (employees) => {
-    const counts = employees.reduce((acc, employee) => {
-      acc[employee.role] = (acc[employee.role] || 0) + 1;
-      return acc;
-    }, {});
-    setRoleCounts(counts);
-  };
-
   useEffect(() => {
-    getData();
+    getDataDashboard();
   }, []);
 
   return (
@@ -63,9 +64,7 @@ const Dashboard = () => {
                 <Heading as="h1" size="sm" color="gray.400">
                   Total Employees
                 </Heading>
-                <Heading as="h1" size="lg">
-                  {roleCounts.employee || 0}
-                </Heading>
+                <Heading as="h1" size="lg">{totalEmp}</Heading>
               </Stack>
               <Box bg="green.500" p="3" borderRadius="full">
                 <FaUser size={30} color="white" />
@@ -90,7 +89,7 @@ const Dashboard = () => {
                   Total Divisions
                 </Heading>
                 <Heading as="h1" size="lg">
-                  4
+                  {totalDiv}
                 </Heading>
               </Stack>
               <Box bg="green.500" p="3" borderRadius="full">
@@ -113,14 +112,14 @@ const Dashboard = () => {
             >
               <Stack direction="column">
                 <Heading as="h1" size="sm" color="gray.400">
-                  Total Managers
+                  Type of Employee
                 </Heading>
-                <Heading as="h1" size="lg">
-                  {roleCounts.manager || 0}
-                </Heading>
+                <Text fontWeight="500">Permanent, Contract, Intern</Text>
               </Stack>
-              <Box bg="green.500" p="3" borderRadius="full">
-                <FaUserTie size={30} color="white" />
+              <Box p="3">
+                <Heading as="h1" size="lg">
+                  3
+                </Heading>
               </Box>
             </Stack>
           </Box>

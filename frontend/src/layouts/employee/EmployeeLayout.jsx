@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  Flex,
-  HStack,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Flex, HStack, useColorModeValue } from "@chakra-ui/react";
 import { Sidebar } from "../../components/employee/Sidebar";
 import Topbar from "../../components/employee/Topbar";
 

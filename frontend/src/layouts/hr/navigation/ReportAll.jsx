@@ -45,22 +45,47 @@ const ReportAll = () => {
       {
         Header: "Points Attendance",
         accessor: "PointsAttendance",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : cell.value  }
+          </Text>
+        ),
       },
       {
         Header: "Points Overtime",
         accessor: "PointsOvertime",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : cell.value  }
+          </Text>
+        ),
       },
       {
         Header: "MinPoint Overtime",
         accessor: "MinPointOvertime",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : cell.value  }
+          </Text>
+        ),
       },
       {
         Header: "MaxPoints Attendance",
         accessor: "MaxPointsAttendance",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : cell.value  }
+          </Text>
+        ),
       },
       {
         Header: "TotalPoint Overtime Division",
         accessor: "TotalPointOvertimeDivision",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : cell.value  }
+          </Text>
+        ),
       },
       {
         Header: "review",

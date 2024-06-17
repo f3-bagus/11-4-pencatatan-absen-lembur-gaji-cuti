@@ -42,6 +42,15 @@ const Attendance = () => {
     });
   };
 
+  
+  const formatTimeToHHMM = (timeString) => {
+    if (!timeString) return "-";
+    const date = new Date(`1970-01-01T${timeString}Z`);
+    const hours = String(date.getUTCHours()).padStart(2, '0');
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+  
   const formatDateApi = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -113,10 +122,20 @@ const Attendance = () => {
       {
         Header: "clock in",
         accessor: "clock_in",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : formatTimeToHHMM(cell.value)}
+          </Text>
+        ),
       },
       {
         Header: "clock out",
         accessor: "clock_out",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : formatTimeToHHMM(cell.value)}
+          </Text>
+        ),
       },
       {
         Header: "date",
@@ -126,6 +145,9 @@ const Attendance = () => {
       {
         Header: "status",
         accessor: "status_attendance",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
     ],
     []
@@ -191,7 +213,6 @@ const Attendance = () => {
           />
           </Box>
         </Flex>
-
       </Flex>
     </EmployeeLayout>
   );

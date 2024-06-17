@@ -172,14 +172,23 @@ const Leave = () => {
       {
         Header: "type",
         accessor: "type",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "reason",
         accessor: "reason",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "status",
         accessor: "status_leave",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
     ],
     []

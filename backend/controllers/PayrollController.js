@@ -1,3 +1,5 @@
+const moment = require('moment-timezone');
+
 //* Import Controller *//
 const PayrollModel = require('../models/Payroll');
 const EmployeeModel = require('../models/Employee');
@@ -5,11 +7,6 @@ const AttendanceModel = require('../models/Attendance');
 const OvertimeModel = require('../models/Overtime');
 
 //* All Method *//
-/* Only Get Date without Time */
-function formatDate(date) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-}
-
 /* Admin & HR : Get all employee payroll data */
 const getAllEmployeePayroll = async (req, res) => {
   try {
@@ -290,7 +287,6 @@ const calculateAndUpdatePayroll = async () => {
         console.error('Error updating payroll records:', error);
     }
 };
-
 
 module.exports = {
   getAllEmployeePayroll,

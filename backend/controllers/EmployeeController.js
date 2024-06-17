@@ -4,6 +4,7 @@ const moment = require('moment-timezone');
 const EmployeeModel = require('../models/Employee');
 const AttendanceModel = require('../models/Attendance');
 const OvertimeModel = require('../models/Overtime');
+const PayrollModel = require('../models/Payroll');
 const LeaveModel = require('../models/Leave');
 
 //* All Method *//
@@ -462,7 +463,7 @@ const calculateDivisionOvertimeHours = (overtimeData) => {
   return divisionHoursMap;
 };
 
-// Method untuk menggabungkan dan menghitung total point serta hours per divisi
+/* Admin & HR: Get Monthly Point Report adn Review All Employee */
 const getMonthlyPointsReport = async (req, res) => {
   try {
       const currentYearStart = moment().startOf('year').toDate();
@@ -821,6 +822,305 @@ const getMonthlyPointsReport = async (req, res) => {
   }
 };
 
+/* Employee: Get Employee Dashboard */
+// const getDashboardEmployee = async (req, res) => {
+//   const { nip } = req.user;
+//   try {
+//     const currentMonth = moment().month() + 1;
+//     const currentYear = moment().year();
+
+//     const attendancePromise = AttendanceModel.aggregate([
+//       {
+//         $match: {
+//           archived: 0,
+//           nip: nip,
+//           date: {
+//             $gte: new Date(currentYear, currentMonth - 1, 1),
+//             $lt: new Date(currentYear, currentMonth, 1)
+//           }
+//         }
+//       },
+//       {
+//         $group: {
+//           _id: "$status_attendance",
+//           count: { $sum: 1 }
+//         }
+//       }
+//     ]);
+
+//     const salaryPromise = PayrollModel.aggregate([
+//       {
+//         $match: {
+//           nip: nip,
+//           archived: 0
+//         }
+//       },
+//       {
+//         $group: {
+//           _id: { $month: "$date" },
+//           monthlySalary: { $sum: "$basic_salary" },
+//           monthlyTotalSalary: { $sum: "$total_salary" }
+//         }
+//       },
+//       {
+//         $sort: { "_id": 1 }
+//       }
+//     ]);
+
+//     const [attendanceResult, salaryResult] = await Promise.all([attendancePromise, salaryPromise]);
+
+//     // Process attendance data
+//     const labels = ["present", "late", "absent", "sick", "leave", "permit"];
+//     const statusData = {
+//       present: 0,
+//       late: 0,
+//       absent: 0,
+//       sick: 0,
+//       leave: 0,
+//       permit: 0
+//     };
+
+//     attendanceResult.forEach(item => {
+//       if (["present", "clock in ok", "clock in ok without clock out"].includes(item._id)) {
+//         statusData.present += item.count;
+//       } else if (["late", "clock in late", "clock in late without clock out"].includes(item._id)) {
+//         statusData.late += item.count;
+//       } else if (statusData.hasOwnProperty(item._id)) {
+//         statusData[item._id] = item.count;
+//       }
+//     });
+
+//     const attendanceData = {
+//       labels,
+//       datasets: [
+//         {
+//           label: "# of total",
+//           data: [
+//             statusData.present,
+//             statusData.late,
+//             statusData.absent,
+//             statusData.sick,
+//             statusData.leave,
+//             statusData.permit
+//           ],
+//         },
+//       ],
+//     };
+
+//     // Process salary data
+//     const salaryLabels = moment.months();
+//     const salaryData = Array(12).fill(0);
+//     const totalSalaryData = Array(12).fill(0);
+
+//     salaryResult.forEach(item => {
+//       const monthIndex = item._id - 1;
+//       salaryData[monthIndex] = item.monthlySalary;
+//       totalSalaryData[monthIndex] = item.monthlyTotalSalary;
+//     });
+
+//     const salaryChartData = {
+//       labels: salaryLabels,
+//       datasets: [
+//         {
+//           label: 'Salary',
+//           data: salaryData
+//         },
+//         {
+//           label: 'Total Salary',
+//           data: totalSalaryData
+//         }
+//       ]
+//     };
+
+//     res.json({
+//       data_attendance: {
+//         month: moment().format('MMMM'),
+//         data: attendanceData
+//       },
+//       data_salary: salaryChartData
+//     });
+
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+
+const getDashboardEmployee = async (req, res) => {
+  const { nip } = req.user;
+  try {
+    const currentMonth = moment().month() + 1;
+    const currentYear = moment().year();
+    const currentYearStart = moment().startOf('year').toDate();
+    const currentMonthEnd = moment().endOf('month').toDate();
+    const nextYear = currentYear + 1;
+
+    const attendancePromise = AttendanceModel.aggregate([
+      {
+        $match: {
+          archived: 0,
+          nip: nip,
+          date: {
+            $gte: new Date(currentYear, currentMonth - 1, 1),
+            $lt: new Date(currentYear, currentMonth, 1)
+          }
+        }
+      },
+      {
+        $group: {
+          _id: "$status_attendance",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const salaryPromise = PayrollModel.aggregate([
+      {
+        $match: {
+          nip: nip,
+          archived: 0
+        }
+      },
+      {
+        $group: {
+          _id: { $month: "$date" },
+          monthlySalary: { $sum: "$basic_salary" },
+          monthlyTotalSalary: { $sum: "$total_salary" }
+        }
+      },
+      {
+        $sort: { "_id": 1 }
+      }
+    ]);
+
+    const overtimePromise = OvertimeModel.aggregate([
+      {
+        $match: {
+          nip: nip,
+          status_overtime: "taken",
+          date: {
+            $gte: currentYearStart,
+            $lte: currentMonthEnd
+          }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          total_hours: { $sum: "$hours" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          total_hours: 1
+        }
+      }
+    ]);
+
+    const leavePromise = LeaveModel.countDocuments({
+      nip: nip,
+      type: 'leave',
+      start_date: {
+        $gte: new Date(currentYear, 0, 1)
+      },
+      end_date: {
+        $lt: new Date(nextYear, 0, 1)
+      },
+      status_leave: "approved"
+    });
+    
+
+    const [attendanceResult, salaryResult, overtimeResult, takenLeaveCount] = await Promise.all([
+      attendancePromise,
+      salaryPromise,
+      overtimePromise,
+      leavePromise
+    ]);
+
+    // Process attendance data
+    const labels = ["present", "late", "absent", "sick", "leave", "permit"];
+    const statusData = {
+      present: 0,
+      late: 0,
+      absent: 0,
+      sick: 0,
+      leave: 0,
+      permit: 0
+    };
+
+    attendanceResult.forEach(item => {
+      if (["present", "clock in ok", "clock in ok without clock out"].includes(item._id)) {
+        statusData.present += item.count;
+      } else if (["late", "clock in late", "clock in late without clock out"].includes(item._id)) {
+        statusData.late += item.count;
+      } else if (statusData.hasOwnProperty(item._id)) {
+        statusData[item._id] = item.count;
+      }
+    });
+
+    const attendanceData = {
+      labels,
+      datasets: [
+        {
+          label: "# of total",
+          data: [
+            statusData.present,
+            statusData.late,
+            statusData.absent,
+            statusData.sick,
+            statusData.leave,
+            statusData.permit
+          ],
+        },
+      ],
+    };
+
+    // Process salary data
+    const salaryLabels = moment.months();
+    const salaryData = Array(12).fill(0);
+    const totalSalaryData = Array(12).fill(0);
+
+    salaryResult.forEach(item => {
+      const monthIndex = item._id - 1;
+      salaryData[monthIndex] = item.monthlySalary;
+      totalSalaryData[monthIndex] = item.monthlyTotalSalary;
+    });
+
+    const salaryChartData = {
+      labels: salaryLabels,
+      datasets: [
+        {
+          label: 'Salary',
+          data: salaryData
+        },
+        {
+          label: 'Total Salary',
+          data: totalSalaryData
+        }
+      ]
+    };
+
+    // Process overtime data
+    const totalOvertimeHours = overtimeResult.length > 0 ? overtimeResult[0].total_hours : 0;
+
+    // Calculate remaining leave
+    const remainingLeave = Math.max(0, 12 - takenLeaveCount);
+
+    res.json({
+      data_attendance: {
+        month: moment().format('MMMM'),
+        data: attendanceData
+      },
+      data_salary: salaryChartData,
+      total_hours: totalOvertimeHours,
+      remaining_leave: remainingLeave
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   clockIn,
@@ -830,5 +1130,6 @@ module.exports = {
   getAvailableOvertime,
   getAcceptedOvertimeHistory,
   acceptOvertime,
-  getMonthlyPointsReport
+  getMonthlyPointsReport,
+  getDashboardEmployee
 };

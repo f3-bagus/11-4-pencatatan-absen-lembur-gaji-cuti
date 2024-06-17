@@ -5,6 +5,7 @@ const router = express.Router();
 const auth = require('../controllers/AuthController');
 const employeeController = require('../controllers/EmployeeController');
 const attendanceController = require('../controllers/AttendanceController');
+const payrollController = require('../controllers/PayrollController');
 const storageController = require('../controllers/StorageController');
 
 //* Routes *//
@@ -23,6 +24,7 @@ router.get('/attendance', auth.authorizeRole('employee'), attendanceController.g
 /* Employee : Accept Overtime */
 router.post('/accept-overtime/:overtimeId', auth.authorizeRole('employee'), employeeController.acceptOvertime);
 
-
+/* Employee : Get Salary for Employee Dashboard */
+router.get('/dashboard', auth.authorizeRole('employee'), employeeController.getDashboardEmployee);
 
 module.exports = router;

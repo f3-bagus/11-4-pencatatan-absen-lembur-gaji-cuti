@@ -459,8 +459,6 @@ const getYearlyAttendanceReport = async (req, res) => {
         });
     }
 };
-
-
   
 module.exports = {
     getAllEmployeeAttendance,

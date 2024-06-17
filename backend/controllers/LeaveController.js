@@ -206,28 +206,31 @@ const getRemainingLeave = async (req, res) => {
   const { nip } = req.user;
 
   try {
-    const currentYear = new Date().getFullYear();
-    const nextYear = currentYear + 1;
-    
-    const takenLeaveCount = await LeaveModel.countDocuments({ 
-      nip, 
-      type: 'leave', 
-      start_date: { 
-        $gte: new Date(currentYear, 0, 1),
-        $lt: new Date(nextYear, 0, 1)
-      }
-    });
- 
-    const remainingLeave = Math.max(0, 12 - takenLeaveCount);
+    const currentYearStart = moment().startOf('year').toDate();
+    const currentMonthEnd = moment().endOf('month').toDate();
 
-    res.status(200).json({
-      message: "Remaining annual leave retrieved successfully",
-      remaining_leave: remainingLeave
+      const takenLeave = LeaveModel.countDocuments({
+        nip: nip,
+        type: 'leave',
+        start_date: {
+          $gte: new Date(currentYearStart, 0, 1)
+        },
+        end_date: {
+          $lt: new Date(currentMonthEnd, 0, 1)
+        },
+        status_leave: "approved"
+      });
+
+      const remainingLeave = 12 - takenLeave;
+      
+      res.json({ 
+        message: "Remaining annual leave retrieved successfully",
+        remaining_leave: remainingLeave 
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message
-    });
+      res.status(500).json({ 
+        message: error 
+      });
   }
 };
 

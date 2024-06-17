@@ -218,7 +218,7 @@ const Leave = () => {
             <Text color="white">
               Leave Remaining:{" "}
               <Text as="span" fontWeight="bold">
-                {remaining}
+                {remaining !== null ? remaining : 0}
               </Text>
             </Text>
           </Box>

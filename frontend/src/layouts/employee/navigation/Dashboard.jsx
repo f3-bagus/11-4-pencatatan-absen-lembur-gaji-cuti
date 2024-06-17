@@ -47,8 +47,8 @@ const Dashboard = () => {
 
   const determineGreeting = (date) => {
     const hours = date.getHours();
-    if (hours < 12) return "Good Morning";
-    if (hours < 18) return "Good Afternoon";
+    if (hours < 10) return "Good Morning";
+    if (hours < 15) return "Good Afternoon";
     return "Good Evening";
   };
 

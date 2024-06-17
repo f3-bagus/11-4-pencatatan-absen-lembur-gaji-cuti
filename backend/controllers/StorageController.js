@@ -11,9 +11,8 @@ const profilePhotoStorage = multer.diskStorage({
         cb(null, 'public/uploads/profile_photo');
     },
     filename: function (req, file, cb) {
-        const nip = req.user; // Asumsikan NIP diambil dari req.user
         const date = Date.now();
-        const filename = `${nip}_profile_${date}_${file.originalname}`;
+        const filename = `profile_${date}_${file.originalname}`;
         cb(null, filename);
     }
 });
@@ -25,9 +24,8 @@ const leaveLetterStorage = multer.diskStorage({
         cb(null, 'public/uploads/leave_letter');
     },
     filename: function (req, file, cb) {
-        const nip = req.user; // Asumsikan NIP diambil dari req.user
         const date = Date.now();
-        const filename = `${nip}_leaveletter_${date}_${file.originalname}`;
+        const filename = `leaveletter_${date}_${file.originalname}`;
         cb(null, filename);
     }
 });

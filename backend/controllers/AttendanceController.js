@@ -45,6 +45,9 @@ const getAllEmployeeAttendance = async (req, res) => {
                     clock_out: "$attendances.clock_out",
                     status_attendance: "$attendances.status_attendance"
                 }
+            },
+            {
+                $sort: { nip: 1, date: -1 }
             }
         ]);
 
@@ -169,6 +172,9 @@ const getSelfAttendance = async (req, res) => {
                     clock_out: "$attendances.clock_out",
                     status_attendance: "$attendances.status_attendance"
                 }
+            },
+            {
+                $sort: { date: -1 } 
             }
         ]);
 

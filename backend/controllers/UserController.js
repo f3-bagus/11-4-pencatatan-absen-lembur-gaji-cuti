@@ -26,7 +26,7 @@ const resetPassword = async (req, res) => {
 
         const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
         if (!isPasswordValid) {
-            return res.status(401).json({ 
+            return res.status(403).json({ 
                 message: 'Invalid old password' 
             });
         }

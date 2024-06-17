@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const secretKey = '639AqKEkrQjms2grEgcFTRP60m67jGSjrCeOZteT8R';
+const secretKey = process.env.secret;
 const bcrypt = require('bcrypt');
 const blacklist = new Set();
 
@@ -132,7 +132,7 @@ const login = async (req, res) => {
                 token 
             });
         } else {
-            return res.status(401).json({ 
+            return res.status(400).json({ 
                 message: 'Wrong Password' 
             });
         }

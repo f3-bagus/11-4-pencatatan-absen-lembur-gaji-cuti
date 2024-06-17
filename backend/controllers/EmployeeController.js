@@ -273,7 +273,7 @@ const getAvailableOvertime = async (req, res) => {
     const availableOvertime = await OvertimeModel.find({
       division: employee.division,
       status_overtime: 'available'
-    });
+    }).sort({ date: -1 });;
 
     res.status(200).json({
       message: "Available overtime retrieved successfully",
@@ -294,7 +294,7 @@ const getAcceptedOvertimeHistory = async (req, res) => {
     const acceptedOvertime = await OvertimeModel.find({
       nip,
       status_overtime: 'taken'
-    });
+    }).sort({ date: -1 });;
 
     res.status(200).json({
       message: "Accepted overtime history retrieved successfully",
@@ -877,7 +877,7 @@ const getDashboardEmployee = async (req, res) => {
       labels,
       datasets: [
         {
-          label: "# of total",
+          label: "total",
           data: [
             statusData.present,
             statusData.late,

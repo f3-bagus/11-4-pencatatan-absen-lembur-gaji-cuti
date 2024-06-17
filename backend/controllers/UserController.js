@@ -13,7 +13,7 @@ const HRModel = require('../models/HR');
 /* All User : Reset Self Account Password */
 const resetPassword = async (req, res) => {
     const { nip } = req.user;
-    const { oldPassword, newPassword } = req.body;
+    const { oldPassword, newPassword, confirmPassword } = req.body;
 
     try {
         const user = await UserModel.findOne({ nip });
@@ -30,6 +30,12 @@ const resetPassword = async (req, res) => {
             });
         }
 
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ 
+                message: 'New password and confirm password do not match' 
+            });
+        }
+
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
         await user.save();
@@ -43,6 +49,7 @@ const resetPassword = async (req, res) => {
         });
     }
 };
+
 
 /* All User : Get Self User Data */
 const getSelfData = async (req, res) => {
@@ -121,7 +128,7 @@ const getUserProfileData = async (req, res) => {
 /* All User : Update Profile Data */
 const updateProfile = async (req, res) => {
     const { nip } = req.user;
-    const { name, gender, email, phone } = req.body;
+    const { name, email, phone } = req.body;
     const profilePhoto = req.file ? req.file.path : null;
 
     try {
@@ -156,7 +163,6 @@ const updateProfile = async (req, res) => {
         }
 
         if (name) userData.name = name;
-        if (gender) userData.gender = gender;
         if (email) userData.email = email;
         if (phone) userData.phone = phone;
         if (profilePhoto) userData.profile_photo = profilePhoto;

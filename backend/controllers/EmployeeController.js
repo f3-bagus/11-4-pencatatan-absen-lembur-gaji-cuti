@@ -830,6 +830,7 @@ const getDashboardEmployee = async (req, res) => {
     const currentMonth = moment().month() + 1;
     const currentYear = moment().year();
     const currentYearStart = moment().startOf('year').toDate();
+    const currentMonthStart = moment().startOf('month').toDate();
     const currentMonthEnd = moment().endOf('month').toDate();
     const nextYear = currentYear + 1;
 
@@ -839,8 +840,8 @@ const getDashboardEmployee = async (req, res) => {
           archived: 0,
           nip: nip,
           date: {
-            $gte: new Date(currentYear, currentMonth - 1, 1),
-            $lt: new Date(currentYear, currentMonth, 1)
+            $gte: currentMonthStart,
+            $lt: currentMonthEnd
           }
         }
       },
@@ -908,7 +909,6 @@ const getDashboardEmployee = async (req, res) => {
       status_leave: "approved"
     });
     
-
     const [attendanceResult, salaryResult, overtimeResult, takenLeaveCount] = await Promise.all([
       attendancePromise,
       salaryPromise,
@@ -916,7 +916,7 @@ const getDashboardEmployee = async (req, res) => {
       leavePromise
     ]);
 
-    // Process attendance data
+    // Proses data kehadiran
     const labels = ["present", "late", "absent", "sick", "leave", "permit"];
     const statusData = {
       present: 0,
@@ -954,7 +954,7 @@ const getDashboardEmployee = async (req, res) => {
       ],
     };
 
-    // Process salary data
+    // Proses data gaji
     const salaryLabels = moment.months();
     const salaryData = Array(12).fill(0);
     const totalSalaryData = Array(12).fill(0);
@@ -979,10 +979,10 @@ const getDashboardEmployee = async (req, res) => {
       ]
     };
 
-    // Process overtime data
+    // Proses data lembur
     const totalOvertimeHours = overtimeResult.length > 0 ? overtimeResult[0].total_hours : 0;
 
-    // Calculate remaining leave
+    // Hitung cuti yang tersisa
     const remainingLeave = Math.max(0, 12 - takenLeaveCount);
 
     res.json({
@@ -1001,6 +1001,7 @@ const getDashboardEmployee = async (req, res) => {
     });
   }
 };
+
 
 module.exports = {
   clockIn,

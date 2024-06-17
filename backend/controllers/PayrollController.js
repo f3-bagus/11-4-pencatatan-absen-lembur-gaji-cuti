@@ -194,7 +194,7 @@ const getSelfPayroll = async (req, res) => {
                   basic_salary: "$basic_salary",
                   overtime_salary: "$overtime_salary",
                   deduction_permission: "$deduction_permission",
-                  deduction_sick: "$deduction_sick",
+                  late: "$deduction_late",
                   deduction_absent: "$deduction_absent",
                   total_salary: "$total_salary"
               }

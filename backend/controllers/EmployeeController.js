@@ -8,11 +8,6 @@ const PayrollModel = require('../models/Payroll');
 const LeaveModel = require('../models/Leave');
 
 //* All Method *//
-/* Sistem: Casting Date to Time */
-function formatTime(date) {
-  return date.toTimeString().split(' ')[0];
-}
-
 /* Employee : clock In */
 const clockIn = async (req, res) => {
   const { nip } = req.user;

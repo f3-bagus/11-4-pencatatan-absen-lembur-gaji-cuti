@@ -47,7 +47,7 @@ const getAllEmployeeAttendance = async (req, res) => {
                 }
             },
             {
-                $sort: { nip: 1, date: -1 }
+                $sort: { date: -1, nip: 1 }
             }
         ]);
 

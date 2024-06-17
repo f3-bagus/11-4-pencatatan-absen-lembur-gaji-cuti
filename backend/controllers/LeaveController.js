@@ -42,6 +42,9 @@ const getAllEmployeeLeaves = async (req, res) => {
                   status_leave: 1,
                   leave_letter: 1
               }
+          },
+          {
+            $sort: {start_date: -1, nip: 1}
           }
       ]);
 

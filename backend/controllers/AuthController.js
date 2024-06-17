@@ -122,7 +122,7 @@ const login = async (req, res) => {
                 role: user.role
             };
     
-            const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
+            const token = jwt.sign(payload, secretKey, { expiresIn: '12h' });
     
             return res.json({
                 data: {
@@ -171,6 +171,5 @@ module.exports = {
     authorizeRole,
     login,
     logout,
-    isLogin,
-    secretKey
+    isLogin
 };

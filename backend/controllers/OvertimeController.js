@@ -7,7 +7,7 @@ const OvertimeModel = require('../models/Overtime');
 /* Admin & HR: Get All Overtime */
 const getAllOvertime = async (req, res) => {
     try {
-    const allOvertime = await OvertimeModel.find();
+    const allOvertime = await OvertimeModel.find().sort({ date: -1, nip: 1 });
 
     if (!allOvertime || allOvertime.length === 0) {
         return res.status(404).json({

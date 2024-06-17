@@ -56,13 +56,13 @@ const createEmployee = async (req, res) => {
 
 /* Admin: Create HR Account */
 const createHR = async (req, res) => {
-    const { nip } = req.body;
+    const { nip, name, gender, email, phone } = req.body;
 
     try {
         const hashedPassword = await bcrypt.hash('user12345', 10);
 
         const newUser = new UserModel({
-            nip,
+            nip: nip,
             password: hashedPassword,
             role: 'hr'
         });
@@ -70,11 +70,11 @@ const createHR = async (req, res) => {
         await newUser.save();
 
         const newHR = new HRModel({
-            nip,
-            name,
-            gender,
-            email,
-            phone
+            nip: nip,
+            name: name,
+            gender: gender,
+            email: email,
+            phone: phone
         });
 
         await newHR.validate();

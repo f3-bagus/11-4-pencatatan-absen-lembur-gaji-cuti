@@ -27,15 +27,20 @@ const GajiChart = () => {
   const { colorMode } = useColorMode();
   const [labels, setLabels] = useState([]);
   const [basicSalary, setBasicSalary] = useState([]);
-  const [totalSalary, setTotalSalary] = useState([])
+  const [totalSalary, setTotalSalary] = useState([]);
+  const [overtime, setOvertime] = useState([]);
+  const [deduction, setDeduction] = useState([]);
 
   const getDataDashboard = () => {
     axios
       .get("http://localhost:5000/api/employee/dashboard/data")
       .then((res) => {
+        console.log(res.data.data_salary);
         setLabels(res.data.data_salary.labels);
         setBasicSalary(res.data.data_salary.datasets[0].data);
         setTotalSalary(res.data.data_salary.datasets[1].data);
+        setOvertime(res.data.data_salary.datasets[2].data);
+        setDeduction(res.data.data_salary.datasets[3].data);
       })
       .catch((err) => {
         console.log(err.message);
@@ -55,6 +60,22 @@ const GajiChart = () => {
         fill: false,
         backgroundColor: "#BEE3F8",
         borderColor: "#3182CE",
+        tension: 0.1,
+      },
+      {
+        label: "Overtime Salary",
+        data: overtime,
+        fill: false,
+        backgroundColor: "#D6BCFA",
+        borderColor: "#805AD5",
+        tension: 0.1,
+      },
+      {
+        label: "Total Deduction",
+        data: deduction,
+        fill: false,
+        backgroundColor: "#FEB2B2",
+        borderColor: "#E53E3E",
         tension: 0.1,
       },
       {

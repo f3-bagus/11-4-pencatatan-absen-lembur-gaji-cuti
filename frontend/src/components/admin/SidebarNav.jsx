@@ -14,7 +14,7 @@ import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { LuMonitorCheck } from "react-icons/lu";
 import { FaRegClock } from "react-icons/fa";
-import { IoIosCreate } from "react-icons/io";
+import { IoCreateOutline } from "react-icons/io5";
 
 const items = [
   {
@@ -45,15 +45,15 @@ const items = [
   },
   {
     type: "link",
-    label: "Employee Account",
-    icon: IoIosCreate,
-    path: "/admin/createemp",
+    label: "Employee",
+    icon: IoCreateOutline,
+    path: "/admin/create/employee",
   },
   {
     type: "link",
-    label: "HR Account",
-    icon: IoIosCreate,
-    path: "/admin/createhr",
+    label: "HR",
+    icon: IoCreateOutline,
+    path: "/admin/create/hr",
   },
   {
     type: "header",

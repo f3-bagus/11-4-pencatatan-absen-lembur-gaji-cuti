@@ -54,8 +54,8 @@ function App() {
             <Route path="/admin/payroll" element={<AdmPayroll />} />
             <Route path="/admin/overtime" element={<AdmOvertime />} />
             <Route path="/admin/profile" element={<AdmProfile />} />
-            <Route path="/admin/createhr" element={<AdmCreatehr />} />
-            <Route path="/admin/createemp" element={<AdmCreateemp />} />
+            <Route path="/admin/create/hr" element={<AdmCreatehr />} />
+            <Route path="/admin/create/employee" element={<AdmCreateemp />} />
             <Route path="/admin/monthly" element={<AdmMonthly />} />
           </Route>
           <Route element={<ProtectedRoute role="hr" />}>

@@ -7,7 +7,12 @@ const AdminLayout = ({ children }) => {
   const [collapse, setCollapse] = useState(false);
 
   return (
-    <HStack w="full" h="100vh" bg={useColorModeValue("gray.100", "green.900")} padding={6}>
+    <HStack
+      w="full"
+      h="100vh"
+      bg={useColorModeValue("gray.100", "green.900")}
+      padding={6}
+    >
       {/* Sidebar */}
       <Flex
         as="aside"
@@ -27,7 +32,6 @@ const AdminLayout = ({ children }) => {
       </Flex>
 
       <Flex w="full" h="full" flexDirection="column" gap={2}>
-
         {/* Header */}
         <Flex
           as="header"
@@ -45,15 +49,13 @@ const AdminLayout = ({ children }) => {
           as="main"
           w="full"
           h="full"
-          flexDirection="column" // Changed to column for proper layout
+          flexDirection="column"
           bg={useColorModeValue("gray.100", "green.900")}
           borderRadius="2xl"
           overflow="scroll"
-          p={6} // Added padding for content spacing
         >
-          {children} {/* Render children component */}
+          {children} 
         </Flex>
-
       </Flex>
     </HStack>
   );

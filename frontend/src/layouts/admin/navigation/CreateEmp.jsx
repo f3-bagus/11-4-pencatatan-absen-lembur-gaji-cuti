@@ -14,12 +14,13 @@ import {
   AlertDialogHeader,
   AlertDialogBody,
   AlertDialogFooter,
+  Heading,
 } from "@chakra-ui/react";
 import AdminLayout from "../AdminLayout";
 import axios from "axios";
 
 const CreateEmp = () => {
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     nip: "",
     name: "",
     gender: "",
@@ -28,8 +29,9 @@ const CreateEmp = () => {
     type: "",
     division: "",
     profilePhoto: null,
-  });
+  };
 
+  const [formData, setFormData] = useState(initialFormData);
   const [isInvalidNIPAlertOpen, setIsInvalidNIPAlertOpen] = useState(false);
   const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
 
@@ -65,13 +67,16 @@ const CreateEmp = () => {
 
   const closeSuccessAlert = () => {
     setIsSuccessAlertOpen(false);
+    setFormData(initialFormData); // Reset form data to initial state
   };
 
   return (
     <AdminLayout>
-      <Flex
-        w="full" p="5" direction="column" gap={5}>
-        
+      <Flex w="full" p="5" direction="column" gap={5}>
+        <Heading as="h1" size="xl" mb={4} textAlign="left">
+          Form Employee Account
+        </Heading>
+
         <Box
           bg={useColorModeValue("white", "green.800")}
           p="2"
@@ -158,14 +163,11 @@ const CreateEmp = () => {
                 onChange={handleChange}
               />
             </FormControl>
-            <Button
-              type="submit"
-              colorScheme="green"
-              mt={6}
-              w="full"
-            >
-              Create Account
-            </Button>
+            <Flex justifyContent="flex-end" mt={6}>
+              <Button type="submit" colorScheme="green" w="200px">
+                Create Account
+              </Button>
+            </Flex>
           </form>
         </Box>
       </Flex>

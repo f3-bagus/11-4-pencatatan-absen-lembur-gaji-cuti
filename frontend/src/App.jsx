@@ -6,7 +6,7 @@ import NotFound from "./layouts/NotFound";
 
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
-
+import PublicRoute from "./routes/PublicRoute";
 
 import {
   AdmDashboard,
@@ -17,7 +17,7 @@ import {
   AdmCreatehr,
   AdmMonthly,
   AdmCreateemp,
-} from './layouts/admin/navigation';
+} from "./layouts/admin/navigation";
 
 import {
   EmpDashboard,
@@ -25,8 +25,8 @@ import {
   EmpLeave,
   EmpOvertime,
   EmpPayroll,
-  EmpProfile
-} from './layouts/employee/navigation';
+  EmpProfile,
+} from "./layouts/employee/navigation";
 
 import {
   HrDashboard,
@@ -45,7 +45,9 @@ function App() {
     <Router>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route element={<PublicRoute />}>
+            <Route path="/" element={<LoginPage />} />
+          </Route>
           <Route element={<ProtectedRoute role="admin" />}>
             <Route path="/admin" element={<AdmDashboard />} />
             <Route path="/admin/attendance" element={<AdmAttendance />} />
@@ -62,7 +64,10 @@ function App() {
             <Route path="/hr/payroll" element={<HrSalary />} />
             <Route path="/hr/overtime" element={<HrOvertime />} />
             <Route path="/hr/leave" element={<HrLeave />} />
-            <Route path="/hr/report/attendance" element={<HrReportAttendance />} />
+            <Route
+              path="/hr/report/attendance"
+              element={<HrReportAttendance />}
+            />
             <Route path="/hr/report/overtime" element={<HrReportOvertime />} />
             <Route path="/hr/report/all" element={<HrReportAll />} />
             <Route path="/hr/profile" element={<HrProfile />} />

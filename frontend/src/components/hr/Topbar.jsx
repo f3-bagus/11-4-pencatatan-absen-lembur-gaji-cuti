@@ -80,9 +80,11 @@ export default function Topbar() {
       });
   };
 
-  const pathPhoto = avatarUrl;
-  const slicedPath = pathPhoto.substring(7);
-  const photoUrl = `http://localhost:5000/${slicedPath}`;
+  let photoUrl = "";
+  if (avatarUrl) {
+    const slicedPath = avatarUrl.substring(7);
+    photoUrl = `http://localhost:5000/${slicedPath}`;
+  }
 
   return (
     <>

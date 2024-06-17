@@ -160,9 +160,11 @@ const Profile = () => {
     document.getElementById("update-profile").reset();
   };
 
-  const pathPhoto = photo;
-  const slicedPath = pathPhoto.substring(7);
-  const photoUrl = `http://localhost:5000/${slicedPath}`;
+  let photoUrl = "";
+  if (photo) {
+    const slicedPath = photo.substring(7);
+    photoUrl = `http://localhost:5000/${slicedPath}`;
+  }
 
   return (
     <HrLayout>

@@ -29,9 +29,11 @@ import { MdMenu } from "react-icons/md";
 import { SidebarNav } from "./SidebarNav";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
 export default function Topbar() {
-  const [nip, setNip] = useState("");
+  const [name, setName] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
@@ -39,10 +41,7 @@ export default function Topbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedNip = localStorage.getItem("nip");
-    if (storedNip) {
-      setNip(storedNip);
-    }
+    getProfile();
   }, []);
 
   const handleLogout = async () => {
@@ -68,7 +67,21 @@ export default function Topbar() {
     });
   };
 
-  console.log("dari topbar");
+  const getProfile = () => {
+    axios
+      .get("http://localhost:5000/api/user/profile")
+      .then((res) => {
+        setAvatarUrl(res.data.data.profile_photo);
+        setName(res.data.data.name);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const pathPhoto = avatarUrl;
+  const slicedPath = pathPhoto.substring(7);
+  const photoUrl = `http://localhost:5000/${slicedPath}`;
 
   return (
     <>
@@ -101,13 +114,7 @@ export default function Topbar() {
                   cursor={"pointer"}
                   minW={0}
                 >
-                  <Avatar
-                    size={"sm"}
-                    src={
-                      ""
-                    }
-                    bgColor="gray.500"
-                  />
+                  <Avatar size={"sm"} src={photoUrl} bgColor="gray.500" />
                 </MenuButton>
                 <MenuList
                   alignItems={"center"}
@@ -115,20 +122,14 @@ export default function Topbar() {
                 >
                   <br />
                   <Center>
-                    <Avatar
-                      size={"xl"}
-                      src={
-                        ""
-                      }
-                      bgColor="gray.500"
-                    />
+                    <Avatar size={"xl"} src={photoUrl} bgColor="gray.500" />
                   </Center>
                   <br />
                   <Center flexDirection="column">
-                    <Text fontWeight="bold" fontSize="sm">
-                      NIP :{" "}{nip}
+                    <Text fontWeight="bold" fontSize="md">
+                      {name}
                     </Text>
-                    <Text color="gray.400" fontSize="md" fontWeight="bold">
+                    <Text color="gray.400" fontSize="sm" fontWeight="bold">
                       Employee
                     </Text>
                   </Center>

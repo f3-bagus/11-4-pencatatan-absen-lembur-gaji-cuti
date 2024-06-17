@@ -36,7 +36,7 @@ const Dashboard = () => {
     axios
       .get("http://localhost:5000/api/employee/dashboard/data")
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         setRemainingLeave(res.data.remaining_leave);
         setTotalHours(res.data.total_hours);
       })

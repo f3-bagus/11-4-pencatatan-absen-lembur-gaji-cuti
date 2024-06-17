@@ -149,8 +149,8 @@ const Profile = () => {
         isClosable: true,
       });
 
+      //indow.location.reload();
       getProfile();
-
     } catch (error) {
       console.error(
         "Error submitting profile:",
@@ -373,6 +373,15 @@ const Profile = () => {
               </Text>
             </VStack>
             <Stack py={2} direction={{ base: "column", md: "row" }}>
+              <FormControl>
+                <FormLabel>NIP</FormLabel>
+                <Input
+                  type="text"
+                  placeholder={nip}
+                  focusBorderColor="green.500"
+                  isDisabled
+                />
+              </FormControl>
               <FormControl isRequired>
                 <FormLabel>Fullname</FormLabel>
                 <Input

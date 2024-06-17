@@ -1,3 +1,5 @@
+const moment = require('moment-timezone');
+
 //* Import Controller *//
 const HRModel = require('../models/HR');
 const OvertimeModel = require('../models/Overtime');
@@ -29,18 +31,17 @@ const createOvertime = async (req, res) => {
   }
 };
 
-const overtimeDashboard = async (req, res) => {
-  const { nip } = req.user; 
-  try {
+const getOvertimeDashboard = async (req, res) => {
 
+  try {
     const sevenDaysAgo = moment().subtract(7, 'days').startOf('day');
+    const today = moment().endOf('day');
 
     const result = await OvertimeModel.aggregate([
       {
         $match: {
-          nip: nip,
           archived: 0,
-          date: { $gte: sevenDaysAgo.toDate() }
+          date: { $gte: sevenDaysAgo.toDate(), $lte: today.toDate() }
         }
       },
       {
@@ -51,8 +52,7 @@ const overtimeDashboard = async (req, res) => {
       }
     ]);
 
-    
-    const divisions = ["it", "sales", "marketing", "accounting"]; 
+    const divisions = ["it", "sales", "marketing", "accounting"];
     const data = {
       labels: ["IT", "Sales", "Marketing", "Accounting"],
       datasets: divisions.map(division => {
@@ -65,15 +65,17 @@ const overtimeDashboard = async (req, res) => {
     };
 
     res.json({
-      data_overtime: {
-        data
-      }
+      data_overtime: data
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ 
+      error: error.message 
+    });
   }
 };
 
+
 module.exports = {
-  createOvertime
+  createOvertime,
+  getOvertimeDashboard
 };

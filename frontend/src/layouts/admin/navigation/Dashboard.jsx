@@ -9,6 +9,12 @@ import {
   useColorModeValue,
   Text,
   Button,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
 } from "@chakra-ui/react";
 import { FaUserTie, FaUser } from "react-icons/fa";
 import { RiTeamFill } from "react-icons/ri";
@@ -16,19 +22,34 @@ import axios from "axios";
 
 const Dashboard = () => {
   const [roleCounts, setRoleCounts] = useState({});
-  const [totalDivisions, setTotalDivisions] = useState(0);
+  const [totalDiv, setTotalDiv] = useState(0);
+  const [totalEmp, setTotalEmp] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [greeting, setGreeting] = useState("");
   const [data, setData] = useState([]);
   const [name, setName] = useState("");
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const [selectedNip, setSelectedNip] = useState(null);
 
-
+  const getDataDashboard = () => {
+    axios
+      .get("http://localhost:5000/api/admin/dashboard/data")
+      .then((res) => {
+        const data = res.data;
+        setTotalEmp(data.total_employee)
+        setTotalDiv(data.total_division.length);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const determineGreeting = (date) => {
     const hours = date.getHours();
     if (hours < 12) return "Good Morning";
     if (hours < 18) return "Good Afternoon";
     return "Good Evening";
   };
+
   const getProfile = () => {
     axios
       .get("http://localhost:5000/api/user/profile")
@@ -54,22 +75,6 @@ const Dashboard = () => {
       });
   };
 
-  const countRoles = (employees) => {
-    const counts = employees.reduce((acc, employee) => {
-      acc[employee.role] = (acc[employee.role] || 0) + 1;
-      return acc;
-    }, {});
-    setRoleCounts(counts);
-  };
-
-  const countDivisions = (employees) => {
-    const divisions = employees.reduce((acc, employee) => {
-      acc.add(employee.division);
-      return acc;
-    }, new Set());
-    setTotalDivisions(divisions.size);
-  };
-
   const getAttendance = () => {
     axios
       .get("http://localhost:5000/api/attendance/data")
@@ -82,15 +87,19 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    getDataDashboard();
+  }, []);
+
+  useEffect(() => {
     getProfile();
 
     const interval = setInterval(() => {
       const now = new Date();
       setCurrentTime(now);
       setGreeting(determineGreeting(now));
-    }, 1000); 
+    }, 1000);
 
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -116,13 +125,37 @@ const Dashboard = () => {
   };
 
   const handleReset = (nip) => {
-    // Logic to handle reset action
-    console.log(`Reset clicked for NIP: ${nip}`);
+    axios
+      .post(`http://localhost:5000/api/employee/reset-password`, { nip })
+      .then((response) => {
+        console.log(`Password reset for NIP: ${nip}`);
+        alert(`Password reset link sent to email associated with NIP: ${nip}`);
+      })
+      .catch((error) => {
+        console.error(`Error resetting password for NIP: ${nip}`, error);
+        alert(`Error resetting password for NIP: ${nip}`);
+      });
   };
 
   const handleDelete = (nip) => {
-    // Logic to handle delete action
-    console.log(`Delete clicked for NIP: ${nip}`);
+    setSelectedNip(nip);
+    setIsDeleteAlertOpen(true);
+  };
+
+  const confirmDelete = () => {
+    axios
+      .delete(`http://localhost:5000/api/employee/${selectedNip}`)
+      .then((response) => {
+        console.log(`Deleted employee with NIP: ${selectedNip}`);
+        setIsDeleteAlertOpen(false);
+        setSelectedNip(null);
+        getData();
+      })
+      .catch((error) => {
+        console.error(`Error deleting employee with NIP: ${selectedNip}`, error);
+        setIsDeleteAlertOpen(false);
+        setSelectedNip(null);
+      });
   };
 
   const columns = React.useMemo(
@@ -187,9 +220,7 @@ const Dashboard = () => {
               <Heading as="h1" size="xl">
                 {greeting}, {name}
               </Heading>
-              <Text color="gray.500">
-                {formatDate(currentTime)}
-              </Text>
+              <Text color="gray.500">{formatDate(currentTime)}</Text>
             </Stack>
           </Stack>
         </Box>
@@ -219,9 +250,7 @@ const Dashboard = () => {
                 <Heading as="h1" size="sm" color="gray.400">
                   Total Employees
                 </Heading>
-                <Heading as="h1" size="lg">
-                  {roleCounts.employee || 0}
-                </Heading>
+                <Heading as="h1" size="lg">{totalEmp}</Heading>
               </Stack>
               <Box bg="green.500" p="3" borderRadius="full">
                 <FaUser size={30} color="white" />
@@ -243,10 +272,10 @@ const Dashboard = () => {
             >
               <Stack direction="column">
                 <Heading as="h1" size="sm" color="gray.400">
-                  Total Managers
+                  Total Divisions
                 </Heading>
                 <Heading as="h1" size="lg">
-                  {roleCounts.manager || 0}
+                  {totalDiv}
                 </Heading>
               </Stack>
               <Box bg="green.500" p="3" borderRadius="full">
@@ -269,14 +298,14 @@ const Dashboard = () => {
             >
               <Stack direction="column">
                 <Heading as="h1" size="sm" color="gray.400">
-                  Total Divisions
+                  Type of Employee
                 </Heading>
-                <Heading as="h1" size="lg">
-                  {totalDivisions}
-                </Heading>
+                <Text fontWeight="500">Permanent, Contract, Intern</Text>
               </Stack>
-              <Box bg="green.500" p="3" borderRadius="full">
-                <RiTeamFill size={30} color="white" />
+              <Box p="3">
+                <Heading as="h1" size="lg">
+                  3
+                </Heading>
               </Box>
             </Stack>
           </Box>
@@ -293,6 +322,30 @@ const Dashboard = () => {
           <DataTable columns={columns} data={data} filename={"table_attendance"} />
         </Box>
       </Flex>
+
+      {/* Alert Dialog for Delete Confirmation */}
+      <AlertDialog
+        isOpen={isDeleteAlertOpen}
+        leastDestructiveRef={undefined}
+        onClose={() => setIsDeleteAlertOpen(false)}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Account
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              Are you sure you want to delete this account?
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button onClick={() => setIsDeleteAlertOpen(false)}>No</Button>
+              <Button colorScheme="red" onClick={confirmDelete} ml={3}>
+                Yes
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </AdminLayout>
   );
 };

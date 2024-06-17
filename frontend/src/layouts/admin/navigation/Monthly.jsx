@@ -9,7 +9,7 @@ const Monthly = () => {
 
   const getAttendance = () => {
     axios
-      .get("http://localhost:5000/api/attendance/data")
+      .get("http://localhost:5000/api/attendance/monthly")
       .then((res) => {
         //console.log(res.data.data);
         setData(res.data.data);
@@ -50,24 +50,24 @@ const Monthly = () => {
         accessor: "total_attendance",
       },
       {
-        Header: "total present",
-        accessor: "total_present",
+        Header: "present",
+        accessor: "present",
       },
       {
-        Header: "total absent",
-        accessor: "total_absent",
+        Header: "absent",
+        accessor: "absent",
       },
       {
-        Header: "total sick",
-        accessor: "total_sick",
+        Header: "sick",
+        accessor: "sick",
       },
       {
-        Header: "total permission",
-        accessor: "total_permission",
+        Header: "permit",
+        accessor: "permit",
       },
       {
-        Header: "total leave",
-        accessor: "total_leave",
+        Header: "leave",
+        accessor: "leave",
       },
     ],
     []
@@ -77,7 +77,7 @@ const Monthly = () => {
     <AdminLayout>
       <Flex w="full" p="5" direction="column" gap={5}>
         <Heading as="h1" size="xl">
-          Daily Attendance
+          Monthly Attendance
         </Heading>
         <Box
           bg={useColorModeValue("white", "green.800")}

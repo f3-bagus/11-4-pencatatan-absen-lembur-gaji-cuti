@@ -57,6 +57,9 @@ const Payroll = () => {
       {
         Header: "Division",
         accessor: "division",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "Basic Salary",

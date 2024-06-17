@@ -68,6 +68,8 @@ export default function Topbar() {
     });
   };
 
+  console.log("dari topbar");
+
   return (
     <>
       <Box w="full" h="full">

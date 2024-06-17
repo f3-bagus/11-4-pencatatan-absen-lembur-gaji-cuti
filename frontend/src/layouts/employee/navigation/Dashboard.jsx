@@ -18,6 +18,8 @@ const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [name, setName] = useState("");
   const [greeting, setGreeting] = useState("");
+  const [remainingLeave, setRemainingLeave] = useState("");
+  const [totalHours, setTotalHours] = useState("");
 
   const getProfile = () => {
     axios
@@ -32,9 +34,11 @@ const Dashboard = () => {
 
   const getDataDashboard = () => {
     axios
-      .get("http://localhost:5000/api/employee/dashboard")
+      .get("http://localhost:5000/api/employee/dashboard/data")
       .then((res) => {
-        console.log(res.data.data);
+        console.log(res.data);
+        setRemainingLeave(res.data.remaining_leave);
+        setTotalHours(res.data.total_hours);
       })
       .catch((err) => {
         console.log(err.message);
@@ -112,7 +116,7 @@ const Dashboard = () => {
                 </Heading>
                 <Box p="3" borderRadius="full">
                   <Heading as="h1" size="xl">
-                    100
+                    {remainingLeave}
                   </Heading>
                 </Box>
               </Stack>
@@ -132,7 +136,7 @@ const Dashboard = () => {
                 </Heading>
                 <Box p="3" borderRadius="full">
                   <Heading as="h1" size="xl">
-                    100
+                    {totalHours}
                   </Heading>
                 </Box>
               </Stack>

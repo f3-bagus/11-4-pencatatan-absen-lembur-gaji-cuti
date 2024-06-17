@@ -76,6 +76,9 @@ const Leave = () => {
   useEffect(() => {
     getDataHistory();
     getDataRemaining();
+  }, []);
+
+  useEffect(() => {
     setIsFormValid(validateForm());
   }, [formValues]);
 

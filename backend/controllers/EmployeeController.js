@@ -827,7 +827,6 @@ const getDashboardEmployee = async (req, res) => {
   const { nip } = req.user;
   
   try {
-    const currentMonth = moment().month() + 1;
     const currentYear = moment().year();
     const currentYearStart = moment().startOf('year').toDate();
     const currentMonthStart = moment().startOf('month').toDate();

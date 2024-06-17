@@ -1,4 +1,5 @@
 const moment = require('moment-timezone');
+moment.tz.setDefault('Asia/Jakarta');
 const mongoose = require('mongoose');
 
 const EmployeeSchema = new mongoose.Schema({    

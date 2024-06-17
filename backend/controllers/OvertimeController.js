@@ -58,6 +58,7 @@ const getMonthlyOvertimeReport = async (req, res) => {
         const reportMonthly = await OvertimeModel.aggregate([
             {
                 $match: {
+                    archived: 0,
                     status_overtime: "taken",
                     date: { 
                         $gte: currentYearStart,

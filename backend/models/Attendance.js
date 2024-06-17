@@ -1,4 +1,5 @@
 const moment = require('moment-timezone');
+moment.tz.setDefault('Asia/Jakarta');
 const mongoose = require('mongoose');
 
 const AttendanceSchema = new mongoose.Schema({    
@@ -42,10 +43,10 @@ const AttendanceSchema = new mongoose.Schema({
 
 AttendanceSchema.pre('save', function(next) {
     if (this.date) {
-        this.date.setHours(0, 0, 0, 0);
+        this.date = moment(this.date).startOf('day').toDate();
     }
     
-    this.updated_at = Date.now();
+    this.updated_at = moment().toDate();
     next();
 });
 

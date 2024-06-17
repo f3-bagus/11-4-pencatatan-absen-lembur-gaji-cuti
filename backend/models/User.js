@@ -1,4 +1,5 @@
 const moment = require('moment-timezone');
+moment.tz.setDefault('Asia/Jakarta');
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -11,7 +12,7 @@ const UserSchema = new mongoose.Schema({
     role: { 
         type: String, 
         enum: ["admin", "employee", "hr"],
-        default: "employee"
+        default: "employee" 
     },
     archived: { 
         type: Number,

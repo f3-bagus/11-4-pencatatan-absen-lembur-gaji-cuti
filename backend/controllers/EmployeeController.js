@@ -841,7 +841,7 @@ const getDashboardEmployee = async (req, res) => {
           nip: nip,
           date: {
             $gte: currentMonthStart,
-            $lt: currentMonthEnd
+            $lte: currentMonthEnd
           }
         }
       },
@@ -904,7 +904,7 @@ const getDashboardEmployee = async (req, res) => {
         $gte: new Date(currentYear, 0, 1)
       },
       end_date: {
-        $lt: new Date(nextYear, 0, 1)
+        $lte: new Date(nextYear, 0, 1)
       },
       status_leave: "approved"
     });
@@ -992,7 +992,9 @@ const getDashboardEmployee = async (req, res) => {
       },
       data_salary: salaryChartData,
       total_hours: totalOvertimeHours,
-      remaining_leave: remainingLeave
+      remaining_leave: remainingLeave,
+      currentMonthStart: currentMonthStart,
+      currentMonthEnd: currentMonthEnd
     });
 
   } catch (error) {

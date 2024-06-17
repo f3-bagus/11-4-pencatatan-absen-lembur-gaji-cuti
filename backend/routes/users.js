@@ -15,7 +15,7 @@ router.get('/', userController.getSelfData);
 router.get('/profile', userController.getUserProfileData);
 
 /* All User: update user profile */
-router.put('/update-profile', uploadProfilePhoto.single('profile_photo'), userController.updateProfile);
+router.put('/update/profile', uploadProfilePhoto.single('profile_photo'), userController.updateProfile);
 
 /* All User: reset self user password */
 router.put('/reset-password', userController.resetPassword);

@@ -93,6 +93,7 @@ const LoginPage = () => {
                         {...field}
                         id="nip"
                         type="text"
+                        placeholder="Enter nip"
                         focusBorderColor="green.500"
                         _autofill={{
                           boxShadow: "0 0 0 30px #9AE6B4 inset !important",
@@ -119,6 +120,7 @@ const LoginPage = () => {
                         <Input
                           {...field}
                           id="password"
+                          placeholder="Enter password"
                           type={showPassword ? "text" : "password"}
                           focusBorderColor="green.500"
                           _autofill={{

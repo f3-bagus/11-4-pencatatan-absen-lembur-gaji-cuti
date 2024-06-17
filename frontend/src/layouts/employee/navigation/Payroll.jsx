@@ -28,6 +28,10 @@ const Payroll = () => {
   const columns = React.useMemo(
     () => [
       {
+        Header: "Month",
+        accessor: "month",
+      },
+      {
         Header: "Basic Salary",
         accessor: "basic_salary",
         Cell: ({ value }) => (

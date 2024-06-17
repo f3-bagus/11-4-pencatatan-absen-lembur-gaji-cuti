@@ -23,6 +23,22 @@ const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          logout();
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, []);
+
   const login = async (nip, password, rememberMe) => {
     try {
       const response = await axios.post(
@@ -45,7 +61,6 @@ const AuthProvider = ({ children }) => {
       navigate(`/${userData.data.role}`);
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Login failed";
-      //console.error("Login failed", error);
       toast({
         title: "Login failed.",
         description: errorMessage,
@@ -67,7 +82,6 @@ const AuthProvider = ({ children }) => {
       navigate("/");
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Logout failed";
-      //console.error("Login failed", error);
       toast({
         title: "Logout failed.",
         description: errorMessage,

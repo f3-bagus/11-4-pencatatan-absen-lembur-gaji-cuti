@@ -208,6 +208,9 @@ const Overtime = () => {
                               placeholder="Select division"
                               focusBorderColor="green.500"
                             >
+                              <option value="" disabled>
+                                Select division
+                              </option>
                               <option value="it">IT</option>
                               <option value="sales">Sales</option>
                               <option value="marketing">Marketing</option>

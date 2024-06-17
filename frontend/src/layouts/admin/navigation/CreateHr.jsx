@@ -1,203 +1,215 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Button,
   Flex,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Input,
   Select,
   useColorModeValue,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
   Heading,
+  Stack,
 } from "@chakra-ui/react";
 import AdminLayout from "../AdminLayout";
-import axios from "axios";
+import { Formik, Form, Field } from "formik";
+import { validationSchemaCreateAccountHr } from "../../../utils/validationSchema";
 
 const CreateHr = () => {
-  const initialFormData = {
-    nip: "",
-    name: "",
-    gender: "",
-    email: "",
-    phone: "",
-    profilePhoto: null,
-  };
-
-  const [formData, setFormData] = useState(initialFormData);
-  const [isInvalidNIPAlertOpen, setIsInvalidNIPAlertOpen] = useState(false);
-  const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Validate NIP format (must be numeric and exactly 7 digits)
-    const isValidNIP = /^\d{7}$/.test(formData.nip);
-
-    if (!isValidNIP) {
-      setIsInvalidNIPAlertOpen(true);
-      return;
-    }
-
-    console.log(formData); // Replace with your API call or further logic
-    // Here you would typically handle form submission, e.g., send data to backend
-    
-    // Show success alert
-    setIsSuccessAlertOpen(true);
-  };
-
-  const closeInvalidNIPAlert = () => {
-    setIsInvalidNIPAlertOpen(false);
-  };
-
-  const closeSuccessAlert = () => {
-    setIsSuccessAlertOpen(false);
-    setFormData(initialFormData); // Reset form data to initial state
+  const handleSubmit = (values, { setSubmitting }) => {
+    const { firstName, lastName, ...rest } = values;
+    const submitValues = {
+      ...rest,
+      name: `${firstName} ${lastName}`,
+    };
+    // Handle form submission with submitValues
+    console.log(submitValues);
+    setSubmitting(false);
   };
 
   return (
     <AdminLayout>
       <Flex w="full" p="5" direction="column" gap={5}>
         <Heading as="h1" size="xl" mb={4} textAlign="left">
-          Form HR Account
+          Create HR Account
         </Heading>
-
         <Box
           bg={useColorModeValue("white", "green.800")}
-          p="2"
+          px="5"
+          py="2"
           borderRadius="2xl"
           shadow="lg"
         >
-          <form onSubmit={handleSubmit}>
-            <FormControl id="nip" isRequired>
-              <FormLabel>NIP</FormLabel>
-              <Input
-                name="nip"
-                value={formData.nip}
-                onChange={handleChange}
-                isInvalid={!/^\d*$/.test(formData.nip)}
-              />
-            </FormControl>
-            <FormControl id="name" isRequired mt={4}>
-              <FormLabel>Name</FormLabel>
-              <Input
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-              />
-            </FormControl>
-            <FormControl id="gender" isRequired mt={4}>
-              <FormLabel>Gender</FormLabel>
-              <Select
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-              >
-                <option value="">Select Gender</option>
-                <option value="female">Female</option>
-                <option value="male">Male</option>
-              </Select>
-            </FormControl>
-            <FormControl id="email" isRequired mt={4}>
-              <FormLabel>Email</FormLabel>
-              <Input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="example@gmail.com"
-                pattern="[a-z0-9._%+-]+@gmail\.com$"
-              />
-            </FormControl>
-            <FormControl id="phone" isRequired mt={4}>
-              <FormLabel>Phone</FormLabel>
-              <Input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-              />
-            </FormControl>
-            <FormControl id="profilePhoto" mt={4}>
-              <FormLabel>Profile Photo</FormLabel>
-              <Input
-                type="file"
-                name="profilePhoto"
-                accept="image/*"
-                onChange={handleChange}
-              />
-            </FormControl>
-            <Flex justifyContent="flex-end" mt={6}>
-              <Button type="submit" colorScheme="green" w="200px">
-                Create Account
-              </Button>
-            </Flex>
-          </form>
+          <Formik
+            initialValues={{
+              nip: "",
+              gender: "",
+              firstName: "",
+              lastName: "",
+              email: "",
+              phone: "",
+            }}
+            validationSchema={validationSchemaCreateAccountHr}
+            onSubmit={handleSubmit}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <Stack py={2} direction={{ base: "column", md: "row" }}>
+                  <Field name="nip">
+                    {({ field, form }) => (
+                      <FormControl
+                        isInvalid={form.errors.nip && form.touched.nip}
+                        isRequired
+                      >
+                        <FormLabel>NIP</FormLabel>
+                        <Input
+                          {...field}
+                          type="number"
+                          placeholder="Enter nip"
+                          focusBorderColor="green.500"
+                          _autofill={{
+                            boxShadow: "0 0 0 30px #9AE6B4 inset !important",
+                            textFillColor: "black !important",
+                          }}
+                        />
+                        <FormErrorMessage>{form.errors.nip}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Field name="gender">
+                    {({ field, form }) => (
+                      <FormControl
+                        isInvalid={form.errors.gender && form.touched.gender}
+                        isRequired
+                      >
+                        <FormLabel>Gender</FormLabel>
+                        <Select
+                          {...field}
+                          placeholder="Select gender"
+                          focusBorderColor="green.500"
+                        >
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                        </Select>
+                        <FormErrorMessage>
+                          {form.errors.gender}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                </Stack>
+                <Stack py={2} direction={{ base: "column", md: "row" }}>
+                  <Field name="firstName">
+                    {({ field, form }) => (
+                      <FormControl
+                        isInvalid={
+                          form.errors.firstName && form.touched.firstName
+                        }
+                        isRequired
+                      >
+                        <FormLabel>First Name</FormLabel>
+                        <Input
+                          {...field}
+                          type="text"
+                          placeholder="Enter first name"
+                          focusBorderColor="green.500"
+                          _autofill={{
+                            boxShadow: "0 0 0 30px #9AE6B4 inset !important",
+                            textFillColor: "black !important",
+                          }}
+                        />
+                        <FormErrorMessage>
+                          {form.errors.firstName}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Field name="lastName">
+                    {({ field, form }) => (
+                      <FormControl
+                        isInvalid={
+                          form.errors.lastName && form.touched.lastName
+                        }
+                        isRequired
+                      >
+                        <FormLabel>Last Name</FormLabel>
+                        <Input
+                          {...field}
+                          type="text"
+                          placeholder="Enter last name"
+                          focusBorderColor="green.500"
+                          _autofill={{
+                            boxShadow: "0 0 0 30px #9AE6B4 inset !important",
+                            textFillColor: "black !important",
+                          }}
+                        />
+                        <FormErrorMessage>
+                          {form.errors.lastName}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                </Stack>
+                <Stack py={2} direction={{ base: "column", md: "row" }}>
+                  <Field name="email">
+                    {({ field, form }) => (
+                      <FormControl
+                        isInvalid={form.errors.email && form.touched.email}
+                        isRequired
+                      >
+                        <FormLabel>Email Address</FormLabel>
+                        <Input
+                          {...field}
+                          type="email"
+                          placeholder="Enter email address"
+                          focusBorderColor="green.500"
+                          _autofill={{
+                            boxShadow: "0 0 0 30px #9AE6B4 inset !important",
+                            textFillColor: "black !important",
+                          }}
+                        />
+                        <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Field name="phone">
+                    {({ field, form }) => (
+                      <FormControl
+                        isInvalid={form.errors.phone && form.touched.phone}
+                        isRequired
+                      >
+                        <FormLabel>Phone Number</FormLabel>
+                        <Input
+                          {...field}
+                          type="number"
+                          placeholder="Enter phone number"
+                          focusBorderColor="green.500"
+                          _autofill={{
+                            boxShadow: "0 0 0 30px #9AE6B4 inset !important",
+                            textFillColor: "black !important",
+                          }}
+                        />
+                        <FormErrorMessage>{form.errors.phone}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                </Stack>
+                <Button
+                  colorScheme="green"
+                  float="right"
+                  mt={3}
+                  mb={3}
+                  type="submit"
+                  isLoading={isSubmitting}
+                >
+                  Create Account
+                </Button>
+              </Form>
+            )}
+          </Formik>
         </Box>
       </Flex>
-
-      {/* Alert dialog for invalid NIP */}
-      <AlertDialog
-        isOpen={isInvalidNIPAlertOpen}
-        onClose={closeInvalidNIPAlert}
-        leastDestructiveRef={undefined}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Invalid NIP
-            </AlertDialogHeader>
-
-            <AlertDialogBody>
-              NIP must be a 7-digit numeric value.
-            </AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button onClick={closeInvalidNIPAlert} colorScheme="blue">
-                Close
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
-
-      {/* Alert dialog for success */}
-      <AlertDialog
-        isOpen={isSuccessAlertOpen}
-        onClose={closeSuccessAlert}
-        leastDestructiveRef={undefined}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Success
-            </AlertDialogHeader>
-
-            <AlertDialogBody>
-              Successfully created account.
-            </AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button onClick={closeSuccessAlert} colorScheme="blue">
-                Close
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
     </AdminLayout>
   );
 };

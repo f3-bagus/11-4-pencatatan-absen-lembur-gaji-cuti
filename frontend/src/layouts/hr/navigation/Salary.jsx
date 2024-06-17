@@ -1,26 +1,21 @@
 import React, { useEffect, useState } from "react";
 import HrLayout from "../HrLayout";
-import {
-  useColorModeValue,
-  Flex,
-  Heading,
-  Box,
-  Text
-} from "@chakra-ui/react";
+import { useColorModeValue, Flex, Heading, Box, Text } from "@chakra-ui/react";
 import DataTable from "../../../components/hr/table/DataTabel";
-import axios from 'axios';
+import axios from "axios";
 
 const Salary = () => {
   const [data, setData] = useState([]);
 
   const getPayroll = () => {
-    axios.get('http://localhost:5000/api/payroll/data/employee')
+    axios
+      .get("http://localhost:5000/api/payroll/data/employee")
       .then((res) => {
         console.log("Response data:", res.data.data);
         const payrollData = res.data.data;
-        
+
         if (Array.isArray(payrollData)) {
-          const formattedData = payrollData.map(employee => ({
+          const formattedData = payrollData.map((employee) => ({
             nip: employee.nip,
             name: employee.name,
             division: employee.division,
@@ -63,6 +58,10 @@ const Salary = () => {
         ),
       },
       {
+        Header: "month",
+        accessor: "month",
+      },
+      {
         Header: "Basic Salary",
         accessor: "basic_salary",
       },
@@ -71,8 +70,8 @@ const Salary = () => {
         accessor: "deduction_permission",
       },
       {
-        Header: "Deduction Sick",
-        accessor: "deduction_sick",
+        Header: "Deduction Late",
+        accessor: "deduction_late",
       },
       {
         Header: "Deduction Absent",
@@ -107,6 +106,6 @@ const Salary = () => {
       </Flex>
     </HrLayout>
   );
-}
+};
 
 export default Salary;

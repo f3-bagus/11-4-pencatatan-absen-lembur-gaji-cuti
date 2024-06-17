@@ -31,6 +31,14 @@ const Attedance = () => {
     return `${year}-${month}-${day}`;
   };
 
+  const formatTimeToHHMM = (timeString) => {
+    if (!timeString) return "-";
+    const date = new Date(`1970-01-01T${timeString}Z`);
+    const hours = String(date.getUTCHours()).padStart(2, '0');
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -44,14 +52,27 @@ const Attedance = () => {
       {
         Header: "division",
         accessor: "division",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "clock in",
         accessor: "clock_in",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : formatTimeToHHMM(cell.value)}
+          </Text>
+        ),
       },
       {
         Header: "clock out",
         accessor: "clock_out",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : formatTimeToHHMM(cell.value)}
+          </Text>
+        ),
       },
       {
         Header: "date",
@@ -61,6 +82,9 @@ const Attedance = () => {
       {
         Header: "status",
         accessor: "status_attendance",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
     ],
     []

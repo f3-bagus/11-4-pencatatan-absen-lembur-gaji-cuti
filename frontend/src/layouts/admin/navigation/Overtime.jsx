@@ -34,41 +34,7 @@ const Overtime = () => {
     getDataOvertime();
   }, []);
 
-  const handleSubmit = async (values, { setSubmitting }) => {
-    setIsLoading(true);
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/admin/overtime",
-        values
-      );
-      toast({
-        position: "top-left",
-        title: "Overtime Applied",
-        description: "Overtime form has been submitted successfully.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-      console.log("Response:", response.data);
-    } catch (error) {
-      console.error(
-        "Error submitting overtime:",
-        error.response || error.message
-      );
-      toast({
-        position: "top-left",
-        title: "Error",
-        description:
-          error.response?.data?.message ||
-          "There was an error submitting your overtime application.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-    setIsLoading(false);
-    setSubmitting(false);
-  };
+ 
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

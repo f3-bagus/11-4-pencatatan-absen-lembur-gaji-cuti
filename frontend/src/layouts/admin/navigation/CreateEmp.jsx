@@ -11,6 +11,7 @@ import {
   useColorModeValue,
   Heading,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
 import AdminLayout from "../AdminLayout";
 import axios from "axios";
@@ -18,7 +19,12 @@ import { Formik, Form, Field } from "formik";
 import { validationSchemaCreateAccount } from "../../../utils/validationSchema";
 
 const CreateEmp = () => {
-  const handleSubmit = (values) => {
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    setIsLoading(true);
+
     const { firstName, lastName, ...rest } = values;
     const submitValues = {
       ...rest,
@@ -26,6 +32,38 @@ const CreateEmp = () => {
     };
     // Handle form submission with submitValues
     console.log(submitValues);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/admin/create-employee",
+        submitValues
+      );
+
+      toast({
+        position: "top-left",
+        title: "Account created",
+        description: "Employee account has been created successfully!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error submitting create account:", error.response || error.message);
+      toast({
+        position: "top-left",
+        title: "Error",
+        description:
+          error.response?.data?.message ||
+          "There was an error created account.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+
+    setIsLoading(false);
+    resetForm();
+    setSubmitting(false);
   };
 
   return (
@@ -251,7 +289,7 @@ const CreateEmp = () => {
                   mt={3}
                   mb={3}
                   type="submit"
-                  isLoading={isSubmitting}
+                  isLoading={isSubmitting || isLoading}
                   isDisabled={!isValid}
                 >
                   Create Account

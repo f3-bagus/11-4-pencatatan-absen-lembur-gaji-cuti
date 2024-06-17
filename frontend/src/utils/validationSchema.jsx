@@ -39,14 +39,17 @@ export const validationSchemaChangePassword = Yup.object().shape({
 });
 
 export const validationSchemaCreateAccount = Yup.object({
-  nip: Yup.number().required('NIP is required'),
-  gender: Yup.string().required('Gender is required'),
-  firstName: Yup.string().required('First Name is required'),
-  lastName: Yup.string().required('Last Name is required'),
-  division: Yup.string().required('Division is required'),
-  type: Yup.string().required('Type is required'),
-  email: Yup.string().email('Invalid email address').required('Email is required'),
-  phoneNumber: Yup.number().required('Phone Number is required'),
+  nip: Yup.number().required("NIP is required"),
+  gender: Yup.string().required("Gender is required"),
+  firstName: Yup.string().required("First Name is required"),
+  lastName: Yup.string().required("Last Name is required"),
+  division: Yup.string().required("Division is required"),
+  type: Yup.string().required("Type is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  phone: Yup.number()
+    .required("Phone Number is required"),
 });
 
 export const validationSchemaCreateAccountHr = Yup.object({
@@ -54,6 +57,9 @@ export const validationSchemaCreateAccountHr = Yup.object({
   gender: Yup.string().required("Gender is required"),
   firstName: Yup.string().required("First Name is required"),
   lastName: Yup.string().required("Last Name is required"),
-  email: Yup.string().email("Invalid email address").required("Email is required"),
-  phone: Yup.number().required("Phone number is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  phone: Yup.number()
+    .required("Phone number is required"),
 });

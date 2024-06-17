@@ -37,8 +37,8 @@ const Payroll = () => {
         accessor: "basic_salary",
       },
       {
-        Header: "Deduction Sick",
-        accessor: "deduction_sick",
+        Header: "Deduction Late",
+        accessor: "deduction_late",
       },
       {
         Header: "Deduction Permission",

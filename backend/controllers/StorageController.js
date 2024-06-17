@@ -11,7 +11,10 @@ const profilePhotoStorage = multer.diskStorage({
         cb(null, 'public/uploads/profile_photo');
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
+        const nip = req.user; // Asumsikan NIP diambil dari req.user
+        const date = Date.now();
+        const filename = `${nip}_profile_${date}_${file.originalname}`;
+        cb(null, filename);
     }
 });
 const uploadProfilePhoto = multer({ storage: profilePhotoStorage });
@@ -22,7 +25,10 @@ const leaveLetterStorage = multer.diskStorage({
         cb(null, 'public/uploads/leave_letter');
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
+        const nip = req.user; // Asumsikan NIP diambil dari req.user
+        const date = Date.now();
+        const filename = `${nip}_leaveletter_${date}_${file.originalname}`;
+        cb(null, filename);
     }
 });
 const uploadLeaveLetter = multer({ storage: leaveLetterStorage });
@@ -40,7 +46,7 @@ const downloadLeaveLetter = async (req, res) => {
             });
         }
 
-        const filename = path.basename(leave.leave_letter);
+        const filename = leave.leave_letter;
 
         if (!filename) {
             return res.status(404).json({ 
@@ -65,6 +71,7 @@ const downloadLeaveLetter = async (req, res) => {
         });
     }
 };
+
 
 module.exports = { 
     uploadProfilePhoto,

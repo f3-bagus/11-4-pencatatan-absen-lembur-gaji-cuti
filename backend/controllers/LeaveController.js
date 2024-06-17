@@ -121,7 +121,7 @@ const getEmployeeLeaves = async (req, res) => {
 const applyLeave = async (req, res) => {
   const { nip } = req.user;
   const { start_date, duration, type, reason } = req.body;
-  const leave_letter = req.file ? req.file.path : null;
+  const leave_letter = req.file ? req.file.filename : null;
 
   try {
       const user = await UserModel.findOne({ nip });

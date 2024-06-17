@@ -13,6 +13,7 @@ import {
   TabPanels,
   Button,
   useToast,
+  Text
 } from "@chakra-ui/react";
 import DataTable from "../../../components/employee/table/DataTabel";
 import axios from "axios";
@@ -67,8 +68,15 @@ const Overtime = () => {
         Cell: ({ value }) => formatDate(value),
       },
       {
+        Header: "hours",
+        accessor: "hours",
+      },
+      {
         Header: "reason",
         accessor: "reason",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "overtime rate",
@@ -103,13 +111,21 @@ const Overtime = () => {
       {
         Header: "hours",
         accessor: "hours",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : cell.value  }
+          </Text>
+        ),
       },
       {
         Header: "reason",
         accessor: "reason",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
-        Header: "overtime_rate",
+        Header: "overtime rate",
         accessor: "overtime_rate",
       },
     ],

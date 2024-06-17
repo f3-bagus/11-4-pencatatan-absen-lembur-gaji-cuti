@@ -99,10 +99,18 @@ const Overtime = () => {
       {
         Header: "nip",
         accessor: "nip",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : cell.value}
+          </Text>
+        ),
       },
       {
         Header: "division",
         accessor: "division",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "date",
@@ -112,14 +120,25 @@ const Overtime = () => {
       {
         Header: "hours",
         accessor: "hours",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : cell.value}
+          </Text>
+        ),
       },
       {
         Header: "reason",
         accessor: "reason",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "status overtime",
         accessor: "status_overtime",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "overtime rate",

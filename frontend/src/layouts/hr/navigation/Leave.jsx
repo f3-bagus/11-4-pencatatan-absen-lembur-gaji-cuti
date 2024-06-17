@@ -26,6 +26,7 @@ import {
   Icon,
   Button,
   Select,
+  Text
 } from "@chakra-ui/react";
 import { FaSearch } from "react-icons/fa";
 import { CSVLink } from "react-csv";
@@ -294,10 +295,16 @@ const Leave = () => {
       {
         Header: "type",
         accessor: "type",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "reason",
         accessor: "reason",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "leave_letter",
@@ -317,6 +324,9 @@ const Leave = () => {
       {
         Header: "status",
         accessor: "status_leave",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "Action",

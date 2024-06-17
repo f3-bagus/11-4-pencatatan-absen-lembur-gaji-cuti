@@ -5,6 +5,7 @@ import {
   Flex,
   Heading,
   Box,
+  Text
 } from "@chakra-ui/react";
 import DataTable from "../../../components/hr/table/DataTabel";
 import axios from 'axios';
@@ -57,6 +58,9 @@ const Salary = () => {
       {
         Header: "Division",
         accessor: "division",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "Basic Salary",

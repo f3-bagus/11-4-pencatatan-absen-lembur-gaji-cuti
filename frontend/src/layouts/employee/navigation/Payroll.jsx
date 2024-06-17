@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EmployeeLayout from "../EmployeeLayout";
-import { useColorModeValue, Flex, Heading, Box } from "@chakra-ui/react";
+import { useColorModeValue, Flex, Heading, Box, Text } from "@chakra-ui/react";
 import DataTable from "../../../components/employee/table/DataTabel";
 import axios from "axios";
 
@@ -12,15 +12,10 @@ const Payroll = () => {
       const response = await axios.get(
         "http://localhost:5000/api/payroll/data"
       );
+
+      //console.log(response.data.data);
       
-      setData([{
-        basic_salary: `Rp. ${response.data.data.basic_salary}`,
-        deduction_sick: `Rp. ${response.data.data.deduction_sick}`,
-        deduction_permission: `Rp. ${response.data.data.deduction_permission}`,
-        deduction_absent: `Rp. ${response.data.data.deduction_absent}`,
-        overtime_salary: `Rp. ${response.data.data.overtime_salary}`,
-        total_salary: `Rp. ${response.data.data.total_salary}`,
-      }]);
+      setData(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -35,26 +30,44 @@ const Payroll = () => {
       {
         Header: "Basic Salary",
         accessor: "basic_salary",
+        Cell: ({ value }) => (
+          <Text>Rp. {value}</Text>
+        ),
       },
       {
         Header: "Deduction Late",
         accessor: "deduction_late",
+        Cell: ({ value }) => (
+          <Text>Rp. {value}</Text>
+        ),
       },
       {
         Header: "Deduction Permission",
         accessor: "deduction_permission",
+        Cell: ({ value }) => (
+          <Text>Rp. {value}</Text>
+        ),
       },
       {
         Header: "Deduction Absent",
         accessor: "deduction_absent",
+        Cell: ({ value }) => (
+          <Text>Rp. {value}</Text>
+        ),
       },
       {
         Header: "Overtime Salary",
         accessor: "overtime_salary",
+        Cell: ({ value }) => (
+          <Text>Rp. {value}</Text>
+        ),
       },
       {
         Header: "Total Salary",
         accessor: "total_salary",
+        Cell: ({ value }) => (
+          <Text>Rp. {value}</Text>
+        ),
       },
     ],
     []

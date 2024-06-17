@@ -8,6 +8,7 @@ import {
   Heading,
   Box,
   Modal,
+  Text,
 } from "@chakra-ui/react";
 import DataTable from "../../../components/admin/table/DataTabel";
 import axios from "axios";
@@ -49,6 +50,11 @@ const Overtime = () => {
       {
         Header: "nip",
         accessor: "nip",
+        Cell: ({ cell }) => (
+          <Text>
+            {cell.value === null ? '-' : cell.value}
+          </Text>
+        ),
       },
       {
         Header: "name",
@@ -64,12 +70,16 @@ const Overtime = () => {
         Cell: ({ value }) => formatDate(value),
       },
       {
-        Header: "jobdesk",
-        accessor: "jobdesk",
+        Header: "reason",
+        accessor: "reason",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
       },
       {
         Header: "date",
         accessor: "date",
+        Cell: ({ value }) => formatDate(value),
       },
     ],
     []

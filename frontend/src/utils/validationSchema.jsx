@@ -14,11 +14,7 @@ export const validationSchema = Yup.object({
 export const validationSchemaOvertime = Yup.object().shape({
   division: Yup.string().required("Division is required"),
   date: Yup.date()
-    .required("Date is required")
-    .transform((value, originalValue) => {
-      return moment(originalValue).utc().startOf("day").toDate();
-    })
-    .typeError("Date must be in the format YYYY-MM-DD"),
+    .required("Date is required"),
   reason: Yup.string().required("Reason is required"),
   overtime_rate: Yup.number()
     .required("Overtime rate is required")

@@ -81,6 +81,7 @@ const Overtime = () => {
       {
         Header: "overtime rate",
         accessor: "overtime_rate",
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString('id-ID')}`
       },
       {
         Header: "Action",
@@ -127,6 +128,7 @@ const Overtime = () => {
       {
         Header: "overtime rate",
         accessor: "overtime_rate",
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString('id-ID')}`
       },
     ],
     []

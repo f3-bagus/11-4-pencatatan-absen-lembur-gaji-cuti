@@ -19,12 +19,14 @@ const Salary = () => {
             nip: employee.nip,
             name: employee.name,
             division: employee.division,
-            basic_salary: `Rp. ${employee.basic_salary}`,
-            deduction_sick: `Rp. ${employee.deduction_sick}`,
-            deduction_permission: `Rp. ${employee.deduction_permission}`,
-            deduction_absent: `Rp. ${employee.deduction_absent}`,
-            overtime_salary: `Rp. ${employee.overtime_salary}`,
-            total_salary: `Rp. ${employee.total_salary}`,
+            month: employee.month,
+            basic_salary: `Rp ${parseInt(employee.basic_salary).toLocaleString('id-ID')}`,
+            deduction_sick: `Rp ${parseInt(employee.deduction_sick).toLocaleString('id-ID')}`,
+            deduction_permission: `Rp ${parseInt(employee.deduction_permission).toLocaleString('id-ID')}`,
+            deduction_late: `Rp ${parseInt(employee.deduction_late).toLocaleString('id-ID')}`,
+            deduction_absent: `Rp ${parseInt(employee.deduction_absent).toLocaleString('id-ID')}`,
+            overtime_salary: `Rp ${parseInt(employee.overtime_salary).toLocaleString('id-ID')}`,
+            total_salary: `Rp ${parseInt(employee.total_salary).toLocaleString('id-ID')}`,
           }));
           setData(formattedData);
         } else {

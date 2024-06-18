@@ -84,6 +84,7 @@ const Overtime = () => {
       });
     }
     setIsLoading(false);
+    resetForm();
     setSubmitting(false);
   };
 
@@ -140,6 +141,7 @@ const Overtime = () => {
       {
         Header: "overtime rate",
         accessor: "overtime_rate",
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString('id-ID')}`
       },
     ],
     []
@@ -196,12 +198,10 @@ const Overtime = () => {
                             isInvalid={
                               form.errors.division && form.touched.division
                             }
+                            isRequired
                           >
                             <FormLabel>
-                              Division{" "}
-                              <Text as="span" color="red.500">
-                                *
-                              </Text>
+                              Division
                             </FormLabel>
                             <Select
                               {...field}
@@ -228,12 +228,10 @@ const Overtime = () => {
                           <FormControl
                             isInvalid={form.errors.date && form.touched.date}
                             mt={3}
+                            isRequired
                           >
                             <FormLabel>
-                              Date{" "}
-                              <Text as="span" color="red.500">
-                                *
-                              </Text>
+                              Date
                             </FormLabel>
                             <Input
                               {...field}
@@ -253,12 +251,10 @@ const Overtime = () => {
                           <FormControl
                             isInvalid={form.errors.hours && form.touched.hours}
                             mt={3}
+                            isRequired
                           >
                             <FormLabel>
-                              Hours{" "}
-                              <Text as="span" color="red.500">
-                                *
-                              </Text>
+                              Hours
                             </FormLabel>
                             <Input
                               {...field}
@@ -280,18 +276,20 @@ const Overtime = () => {
                               form.errors.reason && form.touched.reason
                             }
                             mt={3}
+                            isRequired
                           >
                             <FormLabel>
-                              Reason{" "}
-                              <Text as="span" color="red.500">
-                                *
-                              </Text>
+                              Reason
                             </FormLabel>
                             <Input
                               {...field}
                               type="text"
                               placeholder="Enter Reason"
                               focusBorderColor="green.500"
+                              _autofill={{
+                                boxShadow: "0 0 0 30px #9AE6B4 inset !important",
+                                textFillColor: "black !important",
+                              }}
                             />
                             <FormErrorMessage>
                               {form.errors.reason}
@@ -308,12 +306,10 @@ const Overtime = () => {
                               form.touched.overtime_rate
                             }
                             mt={3}
+                            isRequired
                           >
                             <FormLabel>
-                              Overtime Rate{" "}
-                              <Text as="span" color="red.500">
-                                *
-                              </Text>
+                              Overtime Rate
                             </FormLabel>
                             <Input
                               {...field}

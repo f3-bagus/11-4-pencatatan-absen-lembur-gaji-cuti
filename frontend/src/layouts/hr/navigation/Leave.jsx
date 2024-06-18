@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HrLayout from "../HrLayout";
+import Swal from "sweetalert2";
 import {
   useTable,
   useSortBy,
@@ -446,68 +447,92 @@ const Leave = () => {
     console.log("Rejecting leave for:", rowData);
     const { _id: leaveId } = rowData;
 
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/leave/reject/${leaveId}`
-      );
-      console.log(response.data);
-      toast({
-        position: "top-left",
-        title: "Leave Rejected",
-        description: "Leave has been rejected.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to reject this leave request?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, reject it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.put(
+            `http://localhost:5000/api/leave/reject/${leaveId}`
+          );
+          console.log(response.data);
+          toast({
+            position: "top-left",
+            title: "Leave Rejected",
+            description: "Leave has been rejected.",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
 
-      getDataLeave();
-      getDataPending();
-    } catch (error) {
-      console.error("Error reject leave:", error);
-      toast({
-        position: "top-left",
-        title: "Error",
-        description: "There was an error reject leave.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
+          getDataLeave();
+          getDataPending();
+        } catch (error) {
+          console.error("Error rejecting leave:", error);
+          toast({
+            position: "top-left",
+            title: "Error",
+            description: "There was an error rejecting the leave.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      }
+    });
   };
 
   const handleAccept = async (rowData) => {
     console.log("Accepting leave for:", rowData);
     const { _id: leaveId } = rowData;
 
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/leave/approve/${leaveId}`
-      );
-      console.log(response.data);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to accept this leave request?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, accept it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.put(
+            `http://localhost:5000/api/leave/approve/${leaveId}`
+          );
+          console.log(response.data);
 
-      toast({
-        position: "top-left",
-        title: "Leave Accepted",
-        description: "Leave has been accepted successfully.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
+          toast({
+            position: "top-left",
+            title: "Leave Accepted",
+            description: "Leave has been accepted successfully.",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
 
-      getDataLeave();
-      getDataPending();
-    } catch (error) {
-      console.error("Error accepting leave:", error);
+          getDataLeave();
+          getDataPending();
+        } catch (error) {
+          console.error("Error accepting leave:", error);
 
-      toast({
-        position: "top-left",
-        title: "Error",
-        description: "There was an error accepting leave.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
+          toast({
+            position: "top-left",
+            title: "Error",
+            description: "There was an error accepting leave.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      }
+    });
   };
 
   const handleDownload = async (rowData) => {

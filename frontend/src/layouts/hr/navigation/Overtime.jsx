@@ -87,7 +87,8 @@ const Overtime = () => {
         isClosable: true,
       });
       console.log("Response:", response.data);
-      resetForm();
+      getDataAvailable();
+      onClose();
     } catch (error) {
       console.error(
         "Error submitting overtime:",

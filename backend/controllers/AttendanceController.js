@@ -467,6 +467,9 @@ const getYearlyAttendanceReport = async (req, res) => {
                 }
             },
             {
+                $sort: { "_id.nip": 1 }
+            },
+            {
                 $project: {
                     _id: 0,
                     nip: "$_id.nip",
@@ -493,6 +496,7 @@ const getYearlyAttendanceReport = async (req, res) => {
         });
     }
 };
+
   
 module.exports = {
     getAllEmployeeAttendance,

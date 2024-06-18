@@ -1,5 +1,4 @@
-const moment = require('moment-timezone');
-moment.tz.setDefault('Asia/Jakarta');
+const moment = require('moment');
 const mongoose = require('mongoose');
 
 const HRSchema = new mongoose.Schema({    
@@ -38,18 +37,18 @@ const HRSchema = new mongoose.Schema({
     },
     created_at: { 
         type: Date, 
-        default: () => moment().toDate() 
+        default: () => moment().add(7, 'hours').toDate() 
     },
     updated_at: { 
         type: Date, 
-        default: () => moment().toDate() 
+        default: () => moment().add(7, 'hours').toDate() 
     }
 }, {
     collection: 'tbl_hrs' 
 });
 
 HRSchema.pre('save', function(next) {
-    this.updated_at = moment().toDate();
+    this.updated_at = moment().add(7, 'hours').toDate();
     next();
 });
 

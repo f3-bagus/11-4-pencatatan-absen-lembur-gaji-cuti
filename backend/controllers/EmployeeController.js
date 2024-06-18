@@ -1,4 +1,4 @@
-const moment = require('moment-timezone');
+const moment = require('moment');
 
 //* Import Controller *//
 const EmployeeModel = require('../models/Employee');
@@ -20,11 +20,11 @@ const clockIn = async (req, res) => {
           });
       }
 
-      const now = moment().tz('Asia/Jakarta');
-      const clockInTime = now.format('HH:mm:ss');
-      const startOfToday = moment().startOf('day').toDate();
-      const endOfToday = moment().endOf('day').toDate();
-      const todayDate = moment().toDate();
+      const now = moment().add(7, 'hours');
+      const clockInTime = moment().format('HH:mm:ss');
+      const startOfToday = moment().startOf('day').add(7, 'hours').toDate();
+      const endOfToday = moment().endOf('day').add(7, 'hours').toDate();
+      const todayDate = moment(now).toDate();
 
       if (now.isoWeekday() === 6 || now.isoWeekday() === 7) {
           return res.status(400).json({
@@ -97,12 +97,11 @@ const clockOut = async (req, res) => {
       });
     }
 
-    const now = moment();
-    const clockOutTime = now.format('HH:mm:ss');
+    const now = moment().add(7, 'hours');
+    const clockOutTime = moment().format('HH:mm:ss');
 
-    const startOfToday = moment().startOf('day').toDate();
-    const endOfToday = moment().endOf('day').toDate();
-    const todayDate = moment().toDate();
+    const startOfToday = moment().startOf('day').add(7, 'hours').toDate();
+    const endOfToday = moment().endOf('day').add(7, 'hours').toDate();
 
     // Check if today is Saturday or Sunday
     if (now.isoWeekday() === 6 || now.isoWeekday() === 7) {
@@ -158,9 +157,6 @@ const clockOut = async (req, res) => {
     });
   }
 };
-
-
-
 
 /* Admin & HR : Get All Employee Data */
 const getAllEmployeeData = async (req, res) => {

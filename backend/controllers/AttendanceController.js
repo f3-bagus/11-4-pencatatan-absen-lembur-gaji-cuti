@@ -207,28 +207,37 @@ const getSelfAttendance = async (req, res) => {
 
 /* Sistem : Auto Update Attendance */
 const updateAttendance = async () => {
-    const now = new Date();
-    const todayDate = formatDate(now);
+    const now = moment().add(7, 'hours');
+    const startOfToday = moment().startOf('day').add(7, 'hours').toDate();
+    const endOfToday = moment().endOf('day').add(7, 'hours').toDate();
+    const todayDate = moment(now).toDate();
 
     try {
-        const updateAttendance = await AttendanceModel.updateMany(
+        const attendanceToUpdate = await AttendanceModel.find(
             { 
-                date: todayDate, 
+                date: {
+                    $gte: startOfToday,
+                    $lt: endOfToday
+                },
                 clock_out: null, 
                 status_attendance: { 
-                    $in: ['clock-in ok', 'clock-in late'] 
-                } 
-            },
-            { 
-                $set: { 
-                    status_attendance: { $concat: ['$status_attendance', ' without clock out'] } 
+                    $in: ['clock in ok', 'clock in late'] 
                 } 
             }
         );
-        updatedCount = updateAttendance.nModified;
+
+        const updatePromises = attendanceToUpdate.map(async (attendance) => {
+            attendance.status_attendance += ' without clock out';
+            await attendance.save();
+        });
+
+        await Promise.all(updatePromises);
 
         const employeesWithAttendance = await AttendanceModel.find({
-            date: todayDate,
+            date: {
+                $gte: startOfToday,
+                $lt: endOfToday
+            },
             clock_in: { $ne: null }
         }).distinct('nip');
 
@@ -251,7 +260,7 @@ const updateAttendance = async () => {
             insertedCount = insertResult.length;
         }
 
-        console.log(`Attendance records updated successfully.\nUpdated: ${updatedCount}\nInserted: ${insertedCount}`);
+        console.log(`Attendance records updated successfully.\nUpdated: ${attendanceToUpdate.length}\nInserted: ${insertedCount}`);
     } catch (error) {
         console.error('Error updating attendance records:', error);
     }

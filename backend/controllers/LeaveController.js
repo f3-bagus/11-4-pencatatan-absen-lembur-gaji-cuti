@@ -128,7 +128,6 @@ const getPendingEmployeeLeaves = async (req, res) => {
 /* Admin & HR: Get All Employee Leave Data Rejected/Approved */
 const getApprovedRejectedEmployeeLeaves = async (req, res) => {
   try {
-      console.log("Starting aggregation query...");
 
       const takenOrOverdueEmployeeLeaveData = await LeaveModel.aggregate([
           {
@@ -179,8 +178,6 @@ const getApprovedRejectedEmployeeLeaves = async (req, res) => {
               $sort: { "start_date": -1, nip: 1 }
           }
       ]);
-
-      console.log('Aggregation result:', takenOrOverdueEmployeeLeaveData);
 
       if (!takenOrOverdueEmployeeLeaveData.length) {
           console.log('No leave data found');
@@ -292,7 +289,7 @@ const applyLeave = async (req, res) => {
           });
       }
 
-      const startDate = moment(start_date).startOf('day');
+      const startDate = moment(start_date).startOf('day').add(7, 'hours');
       let endDate = moment(startDate).add(duration - 1, 'days');
 
       // Adjust for weekends
@@ -307,8 +304,8 @@ const applyLeave = async (req, res) => {
 
       const leaveData = new LeaveModel({
           nip: nip, 
-          start_date: moment(start_date).toDate(),
-          end_date: endDate.toDate(),
+          start_date: moment(start_date).add(7, 'hours').toDate(),
+          end_date: endDate.add(7, 'hours').toDate(),
           type: type,
           reason: reason,
           leave_letter: leave_letter 

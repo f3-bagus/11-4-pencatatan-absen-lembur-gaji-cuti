@@ -41,7 +41,7 @@ cron.schedule('59 23 * * 1-5', () => {
 
 // Schedule the calculateAndUpdatePayroll function to run on the 1st of every month at 00:00
 const payrollController = require('./controllers/PayrollController');
-cron.schedule('06 17 17 6 *', () => {
+cron.schedule('0 0 1 * *', () => {
   console.log('Running the scheduled task: calculateAndUpdatePayroll');
   payrollController.calculateAndUpdatePayroll();
 }, {

@@ -1,5 +1,4 @@
-const moment = require('moment-timezone');
-moment.tz.setDefault('Asia/Jakarta');
+const moment = require('moment');
 const mongoose = require('mongoose');
 
 const LeaveSchema = new mongoose.Schema({
@@ -10,13 +9,13 @@ const LeaveSchema = new mongoose.Schema({
     start_date: {
         type: Date,
         default: () => {
-            return moment().startOf('day').toDate();
+            return moment().startOf('day').add(7, 'hours').toDate();
         }
     },
     end_date: {
         type: Date,
         default: () => {
-            return moment().endOf('day').toDate();
+            return moment().endOf('day').add(7, 'hours').toDate();
         }
     },
     type: { 
@@ -43,26 +42,18 @@ const LeaveSchema = new mongoose.Schema({
     },
     created_at: { 
         type: Date, 
-        default: () => moment().toDate() 
+        default: () => moment().add(7, 'hours').toDate() 
     },
     updated_at: { 
         type: Date, 
-        default: () => moment().toDate() 
+        default: () => moment().add(7, 'hours').toDate() 
     }
 }, { 
     collection: 'tbl_leaves' 
 });
 
 LeaveSchema.pre('save', function(next) {
-    if (this.start_date) {
-        this.start_date = moment(this.start_date).startOf('day').toDate();
-    }
-
-    if (this.end_date) {
-        this.end_date = moment(this.end_date).endOf('day').toDate();
-    }
-
-    this.updated_at = moment().toDate();
+    this.updated_at = moment().add(7, 'hours').toDate();
     next();
 });
 

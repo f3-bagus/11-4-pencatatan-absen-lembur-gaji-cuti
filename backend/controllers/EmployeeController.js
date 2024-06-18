@@ -275,14 +275,13 @@ const getAvailableOvertime = async (req, res) => {
       status_overtime: 'available'
     }).sort({ date: -1 });
 
-    const formattedOvertime = availableOvertime.map(overtime => ({
-      ...overtime.toObject(),
-      date: new Date(overtime.date).toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      }).replace(/\//g, '-')
-    }));
+    // Format the date to DD-MM-YYYY
+    const formattedOvertime = availableOvertime.map(overtime => {
+      return {
+        ...overtime.toObject(),
+        date: moment(overtime.date).format('DD-MM-YYYY')
+      };
+    });
 
     res.status(200).json({
       message: "Available overtime retrieved successfully",
@@ -305,14 +304,13 @@ const getAcceptedOvertimeHistory = async (req, res) => {
       status_overtime: 'taken'
     }).sort({ date: -1 });
 
-    const formattedOvertime = acceptedOvertime.map(overtime => ({
-      ...overtime.toObject(),
-      date: new Date(overtime.date).toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      }).replace(/\//g, '-')
-    }));
+    // Format the date to DD-MM-YYYY using moment
+    const formattedOvertime = acceptedOvertime.map(overtime => {
+      return {
+        ...overtime.toObject(),
+        date: moment(overtime.date).format('DD-MM-YYYY')
+      };
+    });
 
     res.status(200).json({
       message: "Accepted overtime history retrieved successfully",
@@ -324,7 +322,6 @@ const getAcceptedOvertimeHistory = async (req, res) => {
     });
   }
 };
-
 
 
 /* Employee: Accept Overtime */

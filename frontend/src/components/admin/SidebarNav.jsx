@@ -15,6 +15,8 @@ import { AiOutlineDollarCircle } from "react-icons/ai";
 import { LuMonitorCheck } from "react-icons/lu";
 import { FaRegClock } from "react-icons/fa";
 import { IoCreateOutline } from "react-icons/io5";
+import { AiOutlineUserDelete } from "react-icons/ai";
+import { MdLockReset } from "react-icons/md";
 
 const items = [
   {
@@ -25,23 +27,7 @@ const items = [
   },
   {
     type: "header",
-    label: "Attendance",
-  },
-  {
-    type: "link",
-    label: "Daily",
-    icon: LuMonitorCheck,
-    path: "/admin/attendance",
-  },
-  {
-    type: "link",
-    label: "Monthly",
-    icon: LuMonitorCheck,
-    path: "/admin/monthly",
-  },
-  {
-    type: "header",
-    label: "Create Account",
+    label: "Create User",
   },
   {
     type: "link",
@@ -57,19 +43,23 @@ const items = [
   },
   {
     type: "header",
-    label: "Employee",
+    label: "Reset User",
   },
   {
     type: "link",
-    label: "Salary",
-    icon: AiOutlineDollarCircle,
-    path: "/admin/payroll",
+    label: "Account",
+    icon: MdLockReset ,
+    path: "/admin/reset/account",
+  },
+  {
+    type: "header",
+    label: "Delete User",
   },
   {
     type: "link",
-    label: "Overtime",
-    icon: FaRegClock,
-    path: "/admin/overtime",
+    label: "Account",
+    icon: AiOutlineUserDelete,
+    path: "/admin/delete/account",
   },
 ];
 

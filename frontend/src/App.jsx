@@ -10,12 +10,8 @@ import PublicRoute from "./routes/PublicRoute";
 
 import {
   AdmDashboard,
-  AdmAttendance,
-  AdmOvertime,
-  AdmPayroll,
   AdmProfile,
   AdmCreatehr,
-  AdmMonthly,
   AdmCreateemp,
 } from "./layouts/admin/navigation";
 
@@ -50,13 +46,9 @@ function App() {
           </Route>
           <Route element={<ProtectedRoute role="admin" />}>
             <Route path="/admin" element={<AdmDashboard />} />
-            <Route path="/admin/attendance" element={<AdmAttendance />} />
-            <Route path="/admin/payroll" element={<AdmPayroll />} />
-            <Route path="/admin/overtime" element={<AdmOvertime />} />
             <Route path="/admin/profile" element={<AdmProfile />} />
             <Route path="/admin/create/hr" element={<AdmCreatehr />} />
             <Route path="/admin/create/employee" element={<AdmCreateemp />} />
-            <Route path="/admin/monthly" element={<AdmMonthly />} />
           </Route>
           <Route element={<ProtectedRoute role="hr" />}>
             <Route path="/hr" element={<HrDashboard />} />

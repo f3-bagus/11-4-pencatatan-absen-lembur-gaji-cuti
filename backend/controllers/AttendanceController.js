@@ -31,6 +31,13 @@ const getAllEmployeeAttendance = async (req, res) => {
                 }
             },
             {
+                $addFields: {
+                    formattedDate: {
+                        $dateToString: { format: "%d-%m-%Y", date: "$attendances.date" }
+                    }
+                }
+            },
+            {
                 $project: {
                     _id: 0,
                     name: "$name",
@@ -40,7 +47,7 @@ const getAllEmployeeAttendance = async (req, res) => {
                     division: "$division",
                     gender: "$gender",
                     type: "$type",
-                    date: "$attendances.date",
+                    date: "$formattedDate",
                     clock_in: "$attendances.clock_in",
                     clock_out: "$attendances.clock_out",
                     status_attendance: "$attendances.status_attendance"

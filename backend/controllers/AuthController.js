@@ -122,7 +122,7 @@ const login = async (req, res) => {
                 role: user.role
             };
     
-            const token = jwt.sign(payload, secretKey, { expiresIn: '12h' });
+            const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
     
             return res.json({
                 data: {

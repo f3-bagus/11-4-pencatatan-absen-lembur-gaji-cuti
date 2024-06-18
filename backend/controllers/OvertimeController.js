@@ -38,9 +38,16 @@ const getAvailableOvertime = async (req, res) => {
             });
         }
 
+        const formattedOvertime = availableOvertime.map(overtime => {
+            return {
+              ...overtime.toObject(),
+              date: moment(overtime.date).format('DD-MM-YYYY')
+            };
+          });
+
         res.status(200).json({
             message: "Available overtime data retrieved successfully",
-            data: availableOvertime
+            data: formattedOvertime
         });
     } catch (error) {
         res.status(500).json({
@@ -61,9 +68,16 @@ const getTakenOrOverdueOvertime = async (req, res) => {
             });
         }
 
+        const formattedOvertime = takenOrOverdueOvertime.map(overtime => {
+            return {
+              ...overtime.toObject(),
+              date: moment(overtime.date).format('DD-MM-YYYY')
+            };
+          });
+
         res.status(200).json({
             message: "Taken or overdue overtime data retrieved successfully",
-            data: takenOrOverdueOvertime
+            data: formattedOvertime
         });
     } catch (error) {
         res.status(500).json({

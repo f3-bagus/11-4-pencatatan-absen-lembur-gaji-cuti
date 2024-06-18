@@ -122,7 +122,7 @@ const getApprovedRejectedEmployeeLeaves = async (req, res) => {
           {
               $match: {
                   archived: { $ne: 1 },
-                  status_leave: { $in: ["overdue", "approved"] }
+                  status_leave: { $in: ["rejected", "approved"] }
               }
           },
           {

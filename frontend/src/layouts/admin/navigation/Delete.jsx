@@ -30,6 +30,7 @@ import {
 } from "@chakra-ui/react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function GlobalFilter({
   preGlobalFilteredRows,
@@ -271,36 +272,48 @@ const Delete = () => {
 
   const handleDelete = async (rowData) => {
     console.log("Accepting data for:", rowData);
-    const { nip: nip } = rowData;
+    const { nip } = rowData;
 
-    try {
-      const response = await axios.delete(
-        `http://localhost:5000/api/admin/delete-user/${nip}`
-      );
-      console.log(response.data);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.delete(
+            `http://localhost:5000/api/admin/delete-user/${nip}`
+          );
+          console.log(response.data);
 
-      toast({
-        position: "top-left",
-        title: "Account Deleted",
-        description: "Account has been deleted.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
+          toast({
+            position: "top-left",
+            title: "Account Deleted",
+            description: "Account has been deleted.",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
 
-      //getDataAll();
-    } catch (error) {
-      console.error("Error deleting account:", error);
-      toast({
-        position: "top-left",
-        title: "Account Deleted",
-        description: "Account has been deleted.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      getDataAll();
-    }
+          //getDataAll();
+        } catch (error) {
+          console.error("Error deleting account:", error);
+          toast({
+            position: "top-left",
+            title: "Account Deleted",
+            description: "Account has been deleted.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+          getDataAll();
+        }
+      }
+    });
   };
 
   return (
@@ -315,10 +328,7 @@ const Delete = () => {
           borderRadius="2xl"
           shadow="lg"
         >
-          <DataTable
-            columns={dataColumns}
-            data={data}
-          />
+          <DataTable columns={dataColumns} data={data} />
         </Box>
       </Flex>
     </AdminLayout>

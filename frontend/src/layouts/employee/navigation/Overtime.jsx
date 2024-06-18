@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import EmployeeLayout from "../EmployeeLayout";
+import Swal from "sweetalert2";
 import {
   Flex,
   Heading,
@@ -13,7 +14,7 @@ import {
   TabPanels,
   Button,
   useToast,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import DataTable from "../../../components/employee/table/DataTabel";
 import axios from "axios";
@@ -80,7 +81,7 @@ const Overtime = () => {
       {
         Header: "overtime rate",
         accessor: "overtime_rate",
-        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString('id-ID')}`
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString("id-ID")}`,
       },
       {
         Header: "Action",
@@ -111,9 +112,7 @@ const Overtime = () => {
         Header: "hours",
         accessor: "hours",
         Cell: ({ cell }) => (
-          <Text>
-            {cell.value === null ? '-' : cell.value  }
-          </Text>
+          <Text>{cell.value === null ? "-" : cell.value}</Text>
         ),
       },
       {
@@ -126,7 +125,7 @@ const Overtime = () => {
       {
         Header: "overtime rate",
         accessor: "overtime_rate",
-        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString('id-ID')}`
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString("id-ID")}`,
       },
     ],
     []
@@ -137,33 +136,45 @@ const Overtime = () => {
 
     const { _id: overtimeId } = rowData;
 
-    try {
-      const response = await axios.post(
-        `http://localhost:5000/api/employee/accept-overtime/${overtimeId}`
-      );
-      console.log(response.data);
-      toast({
-        position: "top-left",
-        title: "Overtime Accepted",
-        description: "Overtime has been accepted successfully.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to accept this overtime request?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, accept it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.post(
+            `http://localhost:5000/api/employee/accept-overtime/${overtimeId}`
+          );
+          console.log(response.data);
+          toast({
+            position: "top-left",
+            title: "Overtime Accepted",
+            description: "Overtime has been accepted successfully.",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
 
-      getOvertime();
-      getHistory();
-    } catch (error) {
-      console.error("Error accepting overtime:", error);
-      toast({
-        position: "top-left",
-        title: "Error",
-        description: "There was an error accepting overtime.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
+          getOvertime();
+          getHistory();
+        } catch (error) {
+          console.error("Error accepting overtime:", error);
+          toast({
+            position: "top-left",
+            title: "Error",
+            description: "There was an error accepting overtime.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      }
+    });
   };
 
   return (

@@ -38,8 +38,7 @@ const getAllEmployeePayroll = async (req, res) => {
             },
             {
                 $group: {
-                    _id: { month: { $month: "$date" } },
-                    nip: { $first: "$nip" },
+                    _id: { month: { $month: "$date" }, nip: "$nip" },
                     name: { $first: "$employee.name" },
                     email: { $first: "$employee.email" },
                     phone: { $first: "$employee.phone" },
@@ -56,7 +55,7 @@ const getAllEmployeePayroll = async (req, res) => {
             {
                 $project: {
                     _id: 0,
-                    nip: 1,
+                    nip: "$_id.nip",
                     name: 1,
                     email: 1,
                     phone: 1,
@@ -90,11 +89,12 @@ const getAllEmployeePayroll = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({
-            message: `Failed to get monthly payroll data for employee with NIP '${nip}'`,
+            message: 'Failed to get monthly payroll data',
             error: error.message
         });
     }
 };
+
 
 /* Admin & HR : Get employee payroll data */
 const getEmployeePayroll = async (req, res) => {

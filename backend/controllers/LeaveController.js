@@ -82,6 +82,16 @@ const getPendingEmployeeLeaves = async (req, res) => {
               $unwind: "$employee"
           },
           {
+            $addFields: {
+                formattedStartDate: {
+                    $dateToString: { format: "%d-%m-%Y", start_date: "$start_date" }
+                },
+                formattedEndDate: {
+                    $dateToString: { format: "%d-%m-%Y", end_date: "$end_date" }
+                }
+            }
+          }, 
+          {
               $project: {
                   _id: 1,
                   name: "$employee.name",
@@ -91,8 +101,8 @@ const getPendingEmployeeLeaves = async (req, res) => {
                   division: "$employee.division",
                   gender: "$employee.gender",
                   type: "$employee.type",
-                  start_date: 1,
-                  end_date: 1,
+                  start_date: "$formattedStartDate",
+                  end_date: "$formattedEndDate",
                   reason: 1,
                   status_leave: 1,
                   leave_letter: 1
@@ -137,6 +147,16 @@ const getApprovedRejectedEmployeeLeaves = async (req, res) => {
               $unwind: "$employee"
           },
           {
+            $addFields: {
+                formattedStartDate: {
+                    $dateToString: { format: "%d-%m-%Y", date: "$start_date" }
+                },
+                formattedEndDate: {
+                    $dateToString: { format: "%d-%m-%Y", date: "$end_date" }
+                }
+            }
+          }, 
+          {
               $project: {
                   _id: 1,
                   name: "$employee.name",
@@ -146,8 +166,8 @@ const getApprovedRejectedEmployeeLeaves = async (req, res) => {
                   division: "$employee.division",
                   gender: "$employee.gender",
                   type: "$employee.type",
-                  start_date: 1,
-                  end_date: 1,
+                  start_date: "$formattedStartDate",
+                  end_date: "$formattedEndDate",
                   reason: 1,
                   status_leave: 1,
                   leave_letter: 1

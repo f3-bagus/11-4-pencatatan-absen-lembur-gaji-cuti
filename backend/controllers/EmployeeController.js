@@ -20,9 +20,11 @@ const clockIn = async (req, res) => {
           });
       }
 
-      const now = moment();
+      const now = moment().tz('Asia/Jakarta');
       const clockInTime = now.format('HH:mm:ss');
-      const todayDate = moment().startOf('day').toDate();
+      const startOfToday = moment().startOf('day').toDate();
+      const endOfToday = moment().endOf('day').toDate();
+      const todayDate = moment().toDate();
 
       if (now.isoWeekday() === 6 || now.isoWeekday() === 7) {
           return res.status(400).json({
@@ -30,11 +32,11 @@ const clockIn = async (req, res) => {
           });
       }
 
-      if (now.isAfter(moment().set({ hour: 16, minute: 30, second: 0 }))) {
-        return res.status(400).json({
-            message: `Clock in is not allowed after 16:30 (${clockInTime})`
-        });
-    }
+      if (now.isAfter(moment().tz('Asia/Jakarta').set({ hour: 16, minute: 30, second: 0 }))) {
+          return res.status(400).json({
+              message: `Clock in is not allowed after 16:30 (${clockInTime})`
+          });
+      }
 
       if (now.hour() < 6) {
           return res.status(400).json({
@@ -44,7 +46,10 @@ const clockIn = async (req, res) => {
 
       const attendanceToday = await AttendanceModel.findOne({
           nip,
-          date: todayDate
+          date: {
+            $gte: startOfToday,
+            $lt: endOfToday
+          }
       });
 
       if (attendanceToday) {
@@ -77,7 +82,7 @@ const clockIn = async (req, res) => {
           message: error.message
       });
   }
-}
+};
 
 
 /* Employee: clock Out */
@@ -94,7 +99,10 @@ const clockOut = async (req, res) => {
 
     const now = moment();
     const clockOutTime = now.format('HH:mm:ss');
-    const todayDate = moment().startOf('day').toDate();
+
+    const startOfToday = moment().startOf('day').toDate();
+    const endOfToday = moment().endOf('day').toDate();
+    const todayDate = moment().toDate();
 
     // Check if today is Saturday or Sunday
     if (now.isoWeekday() === 6 || now.isoWeekday() === 7) {
@@ -106,7 +114,10 @@ const clockOut = async (req, res) => {
     // Check if the employee has clocked in today
     const attendanceToday = await AttendanceModel.findOne({
       nip,
-      date: todayDate
+      date: {
+        $gte: startOfToday,
+        $lt: endOfToday
+      }
     });
 
     if (!attendanceToday) {
@@ -147,6 +158,8 @@ const clockOut = async (req, res) => {
     });
   }
 };
+
+
 
 
 /* Admin & HR : Get All Employee Data */

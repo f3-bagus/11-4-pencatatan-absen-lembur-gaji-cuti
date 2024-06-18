@@ -197,15 +197,26 @@ const getMonthlyOvertimeReport = async (req, res) => {
                 }
             },
             {
+                $sort: { "_id.month": 1 }
+            },
+            {
                 $project: {
                     _id: 0,
                     nip: 1,
                     name: 1,
                     division: 1,
-                    month: { $let: {
-                        vars: { monthsInString: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] },
-                        in: { $arrayElemAt: ["$$monthsInString", { $subtract: ["$_id.month", 1] }] }
-                    }},
+                    month: { 
+                        $let: {
+                            vars: { 
+                                monthsInString: [
+                                    "January", "February", "March", "April", 
+                                    "May", "June", "July", "August", 
+                                    "September", "October", "November", "December"
+                                ] 
+                            },
+                            in: { $arrayElemAt: ["$$monthsInString", { $subtract: ["$_id.month", 1] }] }
+                        }
+                    },
                     total_overtime: 1,
                     total_hours: 1
                 }
@@ -224,6 +235,7 @@ const getMonthlyOvertimeReport = async (req, res) => {
         });
     }
 };
+
 
 /* Admin & HR: Get Yearly Overtime Report  */
 const getYearlyOvertimeReport = async (req, res) => {
@@ -263,6 +275,9 @@ const getYearlyOvertimeReport = async (req, res) => {
                 }
             },
             {
+                $sort: { nip: 1 }
+            },
+            {
                 $project: {
                     _id: 0,
                     nip: 1,
@@ -286,6 +301,7 @@ const getYearlyOvertimeReport = async (req, res) => {
         });
     }
 };
+
 
 
 module.exports = {

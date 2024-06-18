@@ -308,12 +308,10 @@ const Leave = () => {
       {
         Header: "start date",
         accessor: "start_date",
-        Cell: ({ value }) => formatDate(value),
       },
       {
         Header: "end date",
         accessor: "end_date",
-        Cell: ({ value }) => formatDate(value),
       },
       {
         Header: "type",
@@ -391,12 +389,10 @@ const Leave = () => {
       {
         Header: "start date",
         accessor: "start_date",
-        Cell: ({ value }) => formatDate(value),
       },
       {
         Header: "end date",
         accessor: "end_date",
-        Cell: ({ value }) => formatDate(value),
       },
       {
         Header: "type",

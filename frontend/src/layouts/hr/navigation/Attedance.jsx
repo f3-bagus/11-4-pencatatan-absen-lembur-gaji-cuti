@@ -77,7 +77,6 @@ const Attedance = () => {
       {
         Header: "date",
         accessor: "date",
-        Cell: ({ value }) => formatDate(value),
       },
       {
         Header: "status",

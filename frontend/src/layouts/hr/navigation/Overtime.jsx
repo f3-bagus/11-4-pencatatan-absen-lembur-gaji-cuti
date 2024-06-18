@@ -136,7 +136,6 @@ const Overtime = () => {
       {
         Header: "date",
         accessor: "date",
-        Cell: ({ value }) => formatDate(value),
       },
       {
         Header: "hours",
@@ -187,7 +186,6 @@ const Overtime = () => {
       {
         Header: "date",
         accessor: "date",
-        Cell: ({ value }) => formatDate(value),
       },
       {
         Header: "hours",

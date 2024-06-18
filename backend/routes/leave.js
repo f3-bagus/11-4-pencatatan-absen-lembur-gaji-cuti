@@ -11,6 +11,12 @@ const { uploadLeaveLetter } = require('../controllers/StorageController');
 /* Admin & HR: Get All Employee Leave Data */
 router.get('/data', auth.authorizeRole(['admin', 'hr']), leaveController.getAllEmployeeLeaves);
 
+/* Admin & HR: Get All Employee Leave Pending Data */
+router.get('/data/pending', auth.authorizeRole(['admin', 'hr']), leaveController.getPendingEmployeeLeaves);
+
+/* Admin & HR: Get All Employee Leave Rejected or Approved Data */
+router.get('/data/approved-rejected', auth.authorizeRole(['admin', 'hr']), leaveController.getApprovedRejectedEmployeeLeaves);
+
 /* Admin & HR: Get Employee Leave Data by NIP */
 router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), leaveController.getEmployeeLeaves);
 

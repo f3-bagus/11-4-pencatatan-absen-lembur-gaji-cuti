@@ -60,6 +60,116 @@ const getAllEmployeeLeaves = async (req, res) => {
   }
 };
 
+/* Admin & HR: Get All Employee Leave Data Pending */
+const getPendingEmployeeLeaves = async (req, res) => {
+  try {
+      const availableEmployeeLeaveData = await LeaveModel.aggregate([
+          {
+              $match: {
+                  archived: { $ne: 1 },
+                  status_leave: "pending"
+              }
+          },
+          {
+              $lookup: {
+                  from: "tbl_employees",
+                  localField: "nip",
+                  foreignField: "nip",
+                  as: "employee"
+              }
+          },
+          {
+              $unwind: "$employee"
+          },
+          {
+              $project: {
+                  _id: 1,
+                  name: "$employee.name",
+                  nip: "$nip",
+                  email: "$employee.email",
+                  phone: "$employee.phone",
+                  division: "$employee.division",
+                  gender: "$employee.gender",
+                  type: "$employee.type",
+                  start_date: 1,
+                  end_date: 1,
+                  reason: 1,
+                  status_leave: 1,
+                  leave_letter: 1
+              }
+          },
+          {
+              $sort: { start_date: -1, nip: 1 }
+          }
+      ]);
+
+      res.status(200).json({
+          message: 'Success',
+          data: availableEmployeeLeaveData
+      });
+  } catch (error) {
+      res.status(500).json({
+          message: 'Failed to get available employee leave data',
+          error: error.message
+      });
+  }
+};
+
+/* Admin & HR: Get All Employee Leave Data Rejected/Approved */
+const getApprovedRejectedEmployeeLeaves = async (req, res) => {
+  try {
+      const takenOrOverdueEmployeeLeaveData = await LeaveModel.aggregate([
+          {
+              $match: {
+                  archived: { $ne: 1 },
+                  status_leave: { $in: ["overdue", "approved"] }
+              }
+          },
+          {
+              $lookup: {
+                  from: "tbl_employees",
+                  localField: "nip",
+                  foreignField: "nip",
+                  as: "employee"
+              }
+          },
+          {
+              $unwind: "$employee"
+          },
+          {
+              $project: {
+                  _id: 1,
+                  name: "$employee.name",
+                  nip: "$nip",
+                  email: "$employee.email",
+                  phone: "$employee.phone",
+                  division: "$employee.division",
+                  gender: "$employee.gender",
+                  type: "$employee.type",
+                  start_date: 1,
+                  end_date: 1,
+                  reason: 1,
+                  status_leave: 1,
+                  leave_letter: 1
+              }
+          },
+          {
+              $sort: { start_date: -1, nip: 1 }
+          }
+      ]);
+
+      res.status(200).json({
+          message: 'Success',
+          data: takenOrOverdueEmployeeLeaveData
+      });
+  } catch (error) {
+      res.status(500).json({
+          message: 'Failed to get taken or overdue employee leave data',
+          error: error.message
+      });
+  }
+};
+
 /* Admin & HR: Get Employee Leave Data by NIP */
 const getEmployeeLeaves = async (req, res) => {
   const { nip } = req.params;
@@ -319,6 +429,8 @@ module.exports = {
   getEmployeeLeaves,
   getLeaveHistory,
   getRemainingLeave,
+  getPendingEmployeeLeaves,
+  getApprovedRejectedEmployeeLeaves,
   applyLeave,
   approveLeave,
   rejectLeave

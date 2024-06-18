@@ -26,6 +26,52 @@ const getAllOvertime = async (req, res) => {
     }
 };
 
+/* Admin & HR: Get All Available Overtime */
+const getAvailableOvertime = async (req, res) => {
+    try {
+        const availableOvertime = await OvertimeModel.find({ status_overtime: "available" })
+            .sort({ date: -1, nip: 1 });
+
+        if (!availableOvertime || availableOvertime.length === 0) {
+            return res.status(404).json({
+                message: "No available overtime data found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Available overtime data retrieved successfully",
+            data: availableOvertime
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+/* Admin & HR: Get All Overdue or Taken Overtime */
+const getTakenOrOverdueOvertime = async (req, res) => {
+    try {
+        const takenOrOverdueOvertime = await OvertimeModel.find({ status_overtime: { $in: ["taken", "overdue"] } })
+            .sort({ date: -1, nip: 1 });
+
+        if (!takenOrOverdueOvertime || takenOrOverdueOvertime.length === 0) {
+            return res.status(404).json({
+                message: "No taken or overdue overtime data found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Taken or overdue overtime data retrieved successfully",
+            data: takenOrOverdueOvertime
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
 /* Admin & HR: Get Overtime Employee by NIP */
 const getOvertime = async (req, res) => {
     const { nip } = req.params;
@@ -233,4 +279,6 @@ module.exports = {
     getOvertime,
     getMonthlyOvertimeReport,
     getYearlyOvertimeReport,
+    getAvailableOvertime,
+    getTakenOrOverdueOvertime
 };

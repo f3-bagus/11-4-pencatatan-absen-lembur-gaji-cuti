@@ -17,6 +17,12 @@ router.get('/data/history', auth.authorizeRole('employee'), employeeController.g
 /* Admin & HR : Get All Employee Overtime Data */
 router.get('/data/all', auth.authorizeRole(['admin', 'hr']), overtimeController.getAllOvertime);
 
+/* Admin & HR : Get All Employee Overtime Data */
+router.get('/data/all/available', auth.authorizeRole(['admin', 'hr']), overtimeController.getAvailableOvertime);
+
+/* Admin & HR : Get All Employee Overtime Data */
+router.get('/data/all/taken-overdue', auth.authorizeRole(['admin', 'hr']), overtimeController.getTakenOrOverdueOvertime);
+
 /* Admin & HR : Get Employee Overtime Data by NIP */
 router.get('/data/:nip', auth.authorizeRole(['admin', 'hr']), overtimeController.getOvertime);
 

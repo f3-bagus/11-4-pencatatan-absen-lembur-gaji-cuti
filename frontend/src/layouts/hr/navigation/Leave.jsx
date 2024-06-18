@@ -7,6 +7,7 @@ import {
   useGlobalFilter,
 } from "react-table";
 import {
+  useColorMode,
   useColorModeValue,
   Flex,
   useToast,
@@ -26,13 +27,18 @@ import {
   Icon,
   Button,
   Select,
-  Text
+  Text,
+  Tab,
+  Tabs,
+  TabList,
+  TabPanel,
+  TabPanels,
 } from "@chakra-ui/react";
 import { FaSearch } from "react-icons/fa";
 import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import FileSaver from 'file-saver';
+import FileSaver from "file-saver";
 import axios from "axios";
 
 function GlobalFilter({
@@ -255,12 +261,28 @@ const DataTable = ({ columns, data, filename }) => {
 
 const Leave = () => {
   const [leave, setLeave] = useState([]);
+  const [pending, setPending] = useState([]);
+  const { colorMode } = useColorMode();
 
   const toast = useToast();
 
+  const getDataPending = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/leave/data/pending"
+      );
+      console.log(response.data.data);
+      setPending(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getDataLeave = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/leave/data");
+      const response = await axios.get(
+        "http://localhost:5000/api/leave/data/approved-rejected"
+      );
       console.log(response.data.data);
       setLeave(response.data.data);
     } catch (error) {
@@ -270,9 +292,10 @@ const Leave = () => {
 
   useEffect(() => {
     getDataLeave();
+    getDataPending();
   }, []);
 
-  const columns = React.useMemo(
+  const pendingColumns = React.useMemo(
     () => [
       {
         Header: "nip",
@@ -355,6 +378,66 @@ const Leave = () => {
     []
   );
 
+  const rejectColumns = React.useMemo(
+    () => [
+      {
+        Header: "nip",
+        accessor: "nip",
+      },
+      {
+        Header: "name",
+        accessor: "name",
+      },
+      {
+        Header: "start date",
+        accessor: "start_date",
+        Cell: ({ value }) => formatDate(value),
+      },
+      {
+        Header: "end date",
+        accessor: "end_date",
+        Cell: ({ value }) => formatDate(value),
+      },
+      {
+        Header: "type",
+        accessor: "type",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
+      },
+      {
+        Header: "reason",
+        accessor: "reason",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
+      },
+      {
+        Header: "leave_letter",
+        accessor: "leave_letter",
+        Cell: ({ row }) => (
+          <>
+            <Button
+              colorScheme="blue"
+              size="sm"
+              onClick={() => handleDownload(row.original)}
+            >
+              Download
+            </Button>
+          </>
+        ),
+      },
+      {
+        Header: "status",
+        accessor: "status_leave",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
+      },
+    ],
+    []
+  );
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -382,6 +465,7 @@ const Leave = () => {
       });
 
       getDataLeave();
+      getDataPending();
     } catch (error) {
       console.error("Error reject leave:", error);
       toast({
@@ -415,6 +499,7 @@ const Leave = () => {
       });
 
       getDataLeave();
+      getDataPending();
     } catch (error) {
       console.error("Error accepting leave:", error);
 
@@ -436,17 +521,15 @@ const Leave = () => {
       const response = await axios.get(
         `http://localhost:5000/api/employee/leave-letter/${leaveId}`,
         {
-          responseType: 'blob', // Ensure the response is treated as a Blob
+          responseType: "blob",
         }
       );
       console.log(response.data);
-  
-      // Create a new Blob object using the response data of the file
+
       const file = new Blob([response.data], {
-        type: response.headers['content-type'],
+        type: response.headers["content-type"],
       });
-  
-      // Use FileSaver to save the file
+
       FileSaver.saveAs(file, `leave-letter-${leaveId}.doc`);
 
       toast({
@@ -457,7 +540,6 @@ const Leave = () => {
         duration: 5000,
         isClosable: true,
       });
-
     } catch (error) {
       console.error("Error downloading file:", error);
       toast({
@@ -483,7 +565,30 @@ const Leave = () => {
           borderRadius="2xl"
           shadow="lg"
         >
-          <DataTable columns={columns} data={leave} filename={"table_leave"} />
+          <Tabs isFitted variant="soft-rounded" colorScheme="green">
+            <TabList mb="1em" flexDirection={{ base: "column", md: "row" }}>
+              <Tab color={colorMode === "light" ? "" : "white"}>Pending</Tab>
+              <Tab color={colorMode === "light" ? "" : "white"}>
+                Approved/Rejected
+              </Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <DataTable
+                  columns={pendingColumns}
+                  data={pending}
+                  filename={"pending_leave_report"}
+                />
+              </TabPanel>
+              <TabPanel>
+                <DataTable
+                  columns={rejectColumns}
+                  data={leave}
+                  filename={"rejected_leave_report"}
+                />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </Box>
       </Flex>
     </HrLayout>

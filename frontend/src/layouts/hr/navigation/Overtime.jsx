@@ -430,12 +430,6 @@ const Overtime = () => {
               </TabPanel>
             </TabPanels>
           </Tabs>
-
-          {/* <DataTable
-            columns={columns}
-            data={overtime}
-            filename={"table_overtime"}
-          /> */}
         </Box>
       </Flex>
     </HrLayout>

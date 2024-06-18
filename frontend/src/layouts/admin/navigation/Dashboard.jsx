@@ -8,6 +8,7 @@ import {
   Heading,
   useColorModeValue,
   Text,
+  Image,
   Button,
   AlertDialog,
   AlertDialogOverlay,
@@ -16,6 +17,7 @@ import {
   AlertDialogBody,
   AlertDialogFooter,
 } from "@chakra-ui/react";
+import images from "../../../assets/img/images-4.png";
 import { FaUserTie, FaUser } from "react-icons/fa";
 import { RiTeamFill } from "react-icons/ri";
 import axios from "axios";
@@ -173,6 +175,10 @@ const Dashboard = () => {
         accessor: "division",
       },
       {
+        Header: "Type",
+        accessor: "type",
+      },
+      {
         Header: "Action",
         accessor: "action",
         Cell: ({ row }) => (
@@ -202,112 +208,74 @@ const Dashboard = () => {
   return (
     <AdminLayout>
       <Flex direction="column" w="full" py="4">
-        {/* Greeting Box */}
-        <Box
-          w="full"
-          bg={useColorModeValue("white", "green.800")}
-          borderRadius="2xl"
-          shadow="lg"
-          p="3"
-          mb="4"
-        >
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Stack direction="column">
-              <Heading as="h1" size="xl">
-                {greeting}, {name}
-              </Heading>
-              <Text color="gray.500">{formatDate(currentTime)}</Text>
-            </Stack>
-          </Stack>
-        </Box>
-
         {/* Stack pertama dengan 3 kolom */}
         <Stack
           direction={{ base: "column", md: "row" }}
-          spacing="24px"
           w="full"
+          borderRadius="2xl"
+          shadow="lg"
+          p="3"
+          bg={useColorModeValue("white", "green.800")}
           mb="4"
           px="2"
         >
-          <Box
-            w="full"
-            h="100px"
-            bg={useColorModeValue("white", "green.800")}
-            borderRadius="2xl"
-            shadow="lg"
-            p="3"
-          >
+          <Box w="full" px="3" flexDirection="column">
+            <Heading as="h1" size="lg" mb={1}>
+              {greeting}, {name}
+            </Heading>
+            <Text color="gray.500" mb={8}>
+              It's {formatDate(currentTime)}
+            </Text>
             <Stack
-              direction="row"
-              justifyContent="space-around"
-              alignItems="center"
+              direction={{ base: "column", md: "row" }}
+              mb={3}
+              align="center"
             >
-              <Stack direction="column">
+              <Stack
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                borderRadius="full"
+                shadow="lg"
+                px={5}
+                marginRight={{ base: 0, md: 5 }}
+                bg={useColorModeValue("white", "green.700")}
+                w="250px"
+              >
                 <Heading as="h1" size="sm" color="gray.400">
-                  Total Employees
+                  Total <br /> Employees
                 </Heading>
-                <Heading as="h1" size="lg">{totalEmp}</Heading>
+                <Box p="3" borderRadius="full">
+                  <Heading as="h1" size="xl">
+                    {totalEmp}
+                  </Heading>
+                </Box>
               </Stack>
-              <Box bg="green.500" p="3" borderRadius="full">
-                <FaUser size={30} color="white" />
-              </Box>
+              <Stack
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                borderRadius="full"
+                shadow="lg"
+                px={5}
+                bg={useColorModeValue("white", "green.700")}
+                w="250px"
+              >
+                <Heading as="h1" size="sm" color="gray.400">
+                  Total 
+                  <br /> Division
+                </Heading>
+                <Box p="3" borderRadius="full">
+                  <Heading as="h1" size="xl">
+                    {totalDiv}
+                  </Heading>
+                </Box>
+              </Stack>
             </Stack>
           </Box>
-          <Box
-            w="full"
-            h="100px"
-            bg={useColorModeValue("white", "green.800")}
-            borderRadius="2xl"
-            shadow="lg"
-            p="3"
-          >
-            <Stack
-              direction="row"
-              justifyContent="space-around"
-              alignItems="center"
-            >
-              <Stack direction="column">
-                <Heading as="h1" size="sm" color="gray.400">
-                  Total Divisions
-                </Heading>
-                <Heading as="h1" size="lg">
-                  {totalDiv}
-                </Heading>
-              </Stack>
-              <Box bg="green.500" p="3" borderRadius="full">
-                <FaUserTie size={30} color="white" />
-              </Box>
-            </Stack>
-          </Box>
-          <Box
-            w="full"
-            h="100px"
-            bg={useColorModeValue("white", "green.800")}
-            borderRadius="2xl"
-            shadow="lg"
-            p="3"
-          >
-            <Stack
-              direction="row"
-              justifyContent="space-around"
-              alignItems="center"
-            >
-              <Stack direction="column">
-                <Heading as="h1" size="sm" color="gray.400">
-                  Type of Employee
-                </Heading>
-                <Text fontWeight="500">Permanent, Contract, Intern</Text>
-              </Stack>
-              <Box p="3">
-                <Heading as="h1" size="lg">
-                  3
-                </Heading>
-              </Box>
-            </Stack>
+
+          <Box w="full" px="3" align="right">
+            <Image w="250px" objectFit="cover" src={images} alt="Dan Abramov" />
           </Box>
         </Stack>
 

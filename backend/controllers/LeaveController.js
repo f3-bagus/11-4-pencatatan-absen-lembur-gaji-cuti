@@ -303,9 +303,17 @@ const getLeaveHistory = async (req, res) => {
   try {
     const leaveData = await LeaveModel.find({ nip }).sort({ start_date: -1 });;
 
+    const formattedLeave = leaveData.map(leave => {
+      return {
+        ...leave.toObject(),
+        start_date: moment(leave.start_date).format('DD-MM-YYYY'),
+        end_date: moment(leave.end_date).format('DD-MM-YYYY'),
+      };
+    });
+
     res.status(200).json({
       message: "Leave history retrieved successfully",
-      data: leaveData
+      data: formattedLeave
     });
   } catch (error) {
     res.status(500).json({

@@ -264,6 +264,9 @@ const getMonthlySelfPayroll = async (req, res) => {
                     deduction_absent: { $round: ["$deduction_absent", 2] },
                     total_salary: { $round: ["$total_salary", 2] }
                 }
+            },
+            {
+                $sort: { "month": 1 } // 1 for ascending, -1 for descending
             }
         ]);
 
@@ -284,7 +287,6 @@ const getMonthlySelfPayroll = async (req, res) => {
         });
     }
 };
-
 
 
 /* Sistem: Auto Calculate And Update All Employee Payroll  */

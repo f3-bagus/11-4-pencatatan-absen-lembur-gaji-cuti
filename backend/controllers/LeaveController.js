@@ -84,10 +84,10 @@ const getPendingEmployeeLeaves = async (req, res) => {
           {
             $addFields: {
                 formattedStartDate: {
-                    $dateToString: { format: "%d-%m-%Y", start_date: "$start_date" }
+                    $dateToString: { format: "%d-%m-%Y", date: "$start_date" }
                 },
                 formattedEndDate: {
-                    $dateToString: { format: "%d-%m-%Y", end_date: "$end_date" }
+                    $dateToString: { format: "%d-%m-%Y", date: "$end_date" }
                 }
             }
           }, 
@@ -151,10 +151,10 @@ const getApprovedRejectedEmployeeLeaves = async (req, res) => {
           {
               $addFields: {
                   formattedStartDate: {
-                      $dateToString: { format: "%d-%m-%Y", start_date: "$start_date" }
+                      $dateToString: { format: "%d-%m-%Y", date: "$start_date" }
                   },
                   formattedEndDate: {
-                      $dateToString: { format: "%d-%m-%Y", end_date: "$end_date" }
+                      $dateToString: { format: "%d-%m-%Y", date: "$end_date" }
                   }
               }
           },

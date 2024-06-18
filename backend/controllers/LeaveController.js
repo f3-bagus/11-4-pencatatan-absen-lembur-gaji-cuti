@@ -128,6 +128,8 @@ const getPendingEmployeeLeaves = async (req, res) => {
 /* Admin & HR: Get All Employee Leave Data Rejected/Approved */
 const getApprovedRejectedEmployeeLeaves = async (req, res) => {
   try {
+      console.log("Starting aggregation query...");
+
       const takenOrOverdueEmployeeLeaveData = await LeaveModel.aggregate([
           {
               $match: {
@@ -147,15 +149,15 @@ const getApprovedRejectedEmployeeLeaves = async (req, res) => {
               $unwind: "$employee"
           },
           {
-            $addFields: {
-                formattedStartDate: {
-                    $dateToString: { format: "%d-%m-%Y", date: "$start_date" }
-                },
-                formattedEndDate: {
-                    $dateToString: { format: "%d-%m-%Y", date: "$end_date" }
-                }
-            }
-          }, 
+              $addFields: {
+                  formattedStartDate: {
+                      $dateToString: { format: "%d-%m-%Y", start_date: "$start_date" }
+                  },
+                  formattedEndDate: {
+                      $dateToString: { format: "%d-%m-%Y", end_date: "$end_date" }
+                  }
+              }
+          },
           {
               $project: {
                   _id: 1,
@@ -174,21 +176,32 @@ const getApprovedRejectedEmployeeLeaves = async (req, res) => {
               }
           },
           {
-              $sort: { start_date: -1, nip: 1 }
+              $sort: { "start_date": -1, nip: 1 }
           }
       ]);
+
+      console.log('Aggregation result:', takenOrOverdueEmployeeLeaveData);
+
+      if (!takenOrOverdueEmployeeLeaveData.length) {
+          console.log('No leave data found');
+          return res.status(404).json({
+              message: 'No leave data found'
+          });
+      }
 
       res.status(200).json({
           message: 'Success',
           data: takenOrOverdueEmployeeLeaveData
       });
   } catch (error) {
+      console.error('Error during aggregation:', error);
       res.status(500).json({
           message: 'Failed to get taken or overdue employee leave data',
           error: error.message
       });
   }
 };
+
 
 /* Admin & HR: Get Employee Leave Data by NIP */
 const getEmployeeLeaves = async (req, res) => {

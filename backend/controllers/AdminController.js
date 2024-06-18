@@ -387,35 +387,56 @@ const getUser = async (req, res) => {
 
 const getDashboardAdmin = async (req, res) => {
     try {
-        const [totalEmployees, divisionCounts] = await Promise.all([
-          EmployeeModel.countDocuments(),
-          EmployeeModel.aggregate([
-              {
-                  $group: {
-                      _id: "$division",
-                      count: { $sum: 1 }
-                  }
-              },
-              {
-                  $project: {
-                      _id: 0,
-                      division: "$_id",
-                      count: 1
-                  }
-              }
-          ])
+        const [totalEmployees, divisionCounts, typeCounts] = await Promise.all([
+            EmployeeModel.countDocuments(),
+            EmployeeModel.aggregate([
+                {
+                    $group: {
+                        _id: "$division",
+                        count: { $sum: 1 }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        division: "$_id",
+                        count: 1
+                    }
+                }
+            ]),
+            EmployeeModel.aggregate([
+                {
+                    $group: {
+                        _id: "$type",
+                        count: { $sum: 1 }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        type: "$_id",
+                        count: 1
+                    }
+                }
+            ])
         ]);
-  
+
+        // Filter and map typeCounts to include only specific types (contract, permanent, intern)
+        const filteredTypeCounts = typeCounts.filter(type => ['contract', 'permanent', 'intern'].includes(type.type));
+
         res.json({
             total_employee: totalEmployees,
-            total_division: divisionCounts
+            total_division: divisionCounts,
+            total_types: filteredTypeCounts
         });
     } catch (error) {
         res.status(500).json({
             error: error.message
         });
     }
-  };
+};
+
+  
   
 
 module.exports = {

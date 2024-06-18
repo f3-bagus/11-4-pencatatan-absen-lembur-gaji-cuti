@@ -339,6 +339,9 @@ const getMonthlyAttendanceReport = async (req, res) => {
                 }
             },
             {
+                $sort: { "_id.month": 1 }
+            },
+            {
                 $project: {
                     _id: 0,
                     nip: 1,
@@ -370,6 +373,7 @@ const getMonthlyAttendanceReport = async (req, res) => {
         });
     }
 };
+
 
 /* Admin & HR: Get Yearly Attendance Report  */
 const getYearlyAttendanceReport = async (req, res) => {

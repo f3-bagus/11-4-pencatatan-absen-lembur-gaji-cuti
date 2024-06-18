@@ -116,10 +116,6 @@ const Attendance = () => {
   const columns = React.useMemo(
     () => [
       {
-        Header: "name",
-        accessor: "name",
-      },
-      {
         Header: "clock in",
         accessor: "clock_in",
         Cell: ({ cell }) => (

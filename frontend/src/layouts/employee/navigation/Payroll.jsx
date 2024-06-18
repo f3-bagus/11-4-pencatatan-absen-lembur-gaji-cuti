@@ -34,44 +34,32 @@ const Payroll = () => {
       {
         Header: "Basic Salary",
         accessor: "basic_salary",
-        Cell: ({ value }) => (
-          <Text>Rp. {value}</Text>
-        ),
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString("id-ID")}`,
       },
       {
         Header: "Deduction Late",
         accessor: "deduction_late",
-        Cell: ({ value }) => (
-          <Text>Rp. {value}</Text>
-        ),
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString("id-ID")}`,
       },
       {
         Header: "Deduction Permission",
         accessor: "deduction_permission",
-        Cell: ({ value }) => (
-          <Text>Rp. {value}</Text>
-        ),
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString("id-ID")}`,
       },
       {
         Header: "Deduction Absent",
         accessor: "deduction_absent",
-        Cell: ({ value }) => (
-          <Text>Rp. {value}</Text>
-        ),
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString("id-ID")}`,
       },
       {
         Header: "Overtime Salary",
         accessor: "overtime_salary",
-        Cell: ({ value }) => (
-          <Text>Rp. {value}</Text>
-        ),
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString("id-ID")}`,
       },
       {
         Header: "Total Salary",
         accessor: "total_salary",
-        Cell: ({ value }) => (
-          <Text>Rp. {value}</Text>
-        ),
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString("id-ID")}`,
       },
     ],
     []

@@ -35,20 +35,20 @@ const AbsenChart = () => {
         label: "# of total",
         data: datasets,
         backgroundColor: [
-          "#9AE6B4",
-          "#FBD38D",
-          "#FEB2B2",
-          "#D6BCFA",
-          "#E2E8F0",
-          "#90CDF4",
+          "rgba(75, 192, 192, 0.6)",
+          "rgba(255, 206, 86, 0.6)",
+          "rgba(255, 99, 132, 0.6)",
+          "rgba(54, 162, 235, 0.6)", // Blue
+          "rgba(153, 102, 255, 0.6)", // Purple
+          "rgba(201, 203, 207, 0.6)", // Grey
         ],
         borderColor: [
-          "#38A169",
-          "#DD6B20",
-          "#E53E3E",
-          "#805AD5",
-          "#718096",
-          "#3182CE",
+          "rgba(75, 192, 192, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)", // Blue
+          "rgba(153, 102, 255, 1)", // Purple
+          "rgba(201, 203, 207, 1)", // Grey
         ],
         borderWidth: 3,
       },
@@ -59,7 +59,7 @@ const AbsenChart = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        position: "left",
         labels: {
           color: colorMode === "light" ? "gray" : "white",
         },

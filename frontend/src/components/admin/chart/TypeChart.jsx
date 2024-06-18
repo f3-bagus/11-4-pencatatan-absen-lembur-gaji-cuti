@@ -8,6 +8,7 @@ import {
   Legend,
 } from "chart.js";
 import { useColorMode, Stack } from "@chakra-ui/react";
+import axios from "axios";
 
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 
@@ -22,37 +23,40 @@ const TypeChart = () => {
     getDataDashboard();
   }, []);
 
-  const getDataDashboard = () => {
-    // Using dummy data
-    const data = [
-      { division: "Permanent", count: 10 },
-      { division: "Contract", count: 15 },
-      { division: "Intern", count: 8 },
-    ];
+  const getDataDashboard = async () => {
+    await axios
+      .get("http://localhost:5000/api/admin/dashboard/data")
+      .then((res) => {
+        const data = res.data.total_types;
+        console.log(data);
 
-    const labels = data.map((item) => item.division);
-    const counts = data.map((item) => item.count);
+        const labels = data.map((item) => item.type);
+        const counts = data.map((item) => item.count);
 
-    setChartData({
-      labels,
-      datasets: [
-        {
-          label: "Number of People",
-          data: counts,
-          backgroundColor: [
-            "rgba(75, 192, 192, 0.6)",
-            "rgba(255, 99, 132, 0.6)",
-            "rgba(255, 206, 86, 0.6)",
+        setChartData({
+          labels,
+          datasets: [
+            {
+              label: "Number of People",
+              data: counts,
+              backgroundColor: [
+                "rgba(75, 192, 192, 0.6)",
+                "rgba(255, 99, 132, 0.6)",
+                "rgba(255, 206, 86, 0.6)",
+              ],
+              borderColor: [
+                "rgba(75, 192, 192, 1)",
+                "rgba(255, 99, 132, 1)",
+                "rgba(255, 206, 86, 1)",
+              ],
+              borderWidth: 1,
+            },
           ],
-          borderColor: [
-            "rgba(75, 192, 192, 1)",
-            "rgba(255, 99, 132, 1)",
-            "rgba(255, 206, 86, 1)",
-          ],
-          borderWidth: 1,
-        },
-      ],
-    });
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const options = {

@@ -239,6 +239,7 @@ const Profile = () => {
                             form.errors.oldPassword && form.touched.oldPassword
                           }
                           mb={2}
+                          isRequired
                         >
                           <FormLabel>Old Password</FormLabel>
                           <InputGroup>
@@ -271,6 +272,7 @@ const Profile = () => {
                             form.errors.newPassword && form.touched.newPassword
                           }
                           mb={2}
+                          isRequired
                         >
                           <FormLabel>New Password</FormLabel>
                           <InputGroup>
@@ -304,6 +306,7 @@ const Profile = () => {
                             form.touched.confirmPassword
                           }
                           mb={2}
+                          isRequired
                         >
                           <FormLabel>Confirm New Password</FormLabel>
                           <InputGroup>

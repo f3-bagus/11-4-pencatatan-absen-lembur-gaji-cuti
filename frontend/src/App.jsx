@@ -13,6 +13,8 @@ import {
   AdmProfile,
   AdmCreatehr,
   AdmCreateemp,
+  AdmDelete,
+  AdmReset
 } from "./layouts/admin/navigation";
 
 import {
@@ -49,6 +51,8 @@ function App() {
             <Route path="/admin/profile" element={<AdmProfile />} />
             <Route path="/admin/create/hr" element={<AdmCreatehr />} />
             <Route path="/admin/create/employee" element={<AdmCreateemp />} />
+            <Route path="/admin/delete/account" element={<AdmDelete />} />
+            <Route path="/admin/reset/account" element={<AdmReset />} />
           </Route>
           <Route element={<ProtectedRoute role="hr" />}>
             <Route path="/hr" element={<HrDashboard />} />

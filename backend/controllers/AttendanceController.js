@@ -38,6 +38,9 @@ const getAllEmployeeAttendance = async (req, res) => {
                 }
             },
             {
+                $sort: { "attendances.date": -1 }
+            },
+            {
                 $project: {
                     _id: 0,
                     name: "$name",
@@ -52,9 +55,6 @@ const getAllEmployeeAttendance = async (req, res) => {
                     clock_out: "$attendances.clock_out",
                     status_attendance: "$attendances.status_attendance"
                 }
-            },
-            {
-                $sort: { date: -1, nip: 1 }
             }
         ]);
 
@@ -172,6 +172,9 @@ const getSelfAttendance = async (req, res) => {
                 }
             },
             {
+                $sort: { "attendances.date": -1 }
+            },
+            {
                 $project: {
                     _id: 0,
                     name: "$name",
@@ -187,9 +190,6 @@ const getSelfAttendance = async (req, res) => {
                     status_attendance: "$attendances.status_attendance"
                 }
             },
-            {
-                $sort: { date: -1 }
-            }
         ]);
 
         res.status(200).json({

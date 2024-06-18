@@ -1,4 +1,3 @@
-const moment = require('moment');
 const mongoose = require('mongoose');
 
 const AttendanceSchema = new mongoose.Schema({    
@@ -30,18 +29,18 @@ const AttendanceSchema = new mongoose.Schema({
     },
     created_at: { 
         type: Date, 
-        default: () => moment().toDate() 
+        default: Date.now 
     },
     updated_at: { 
         type: Date, 
-        default: () => moment().toDate() 
+        default: Date.now 
     }
 }, {
     collection: 'tbl_attendances' 
 });
 
 AttendanceSchema.pre('save', function(next) {
-    this.updated_at = moment().toDate();
+    this.updated_at = new Date();
     next();
 });
 

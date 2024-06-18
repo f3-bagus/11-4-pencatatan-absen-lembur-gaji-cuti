@@ -158,6 +158,13 @@ const getSelfAttendance = async (req, res) => {
                 }
             },
             {
+                $addFields: {
+                    formattedDate: {
+                        $dateToString: { format: "%d-%m-%Y", date: "$attendances.date" }
+                    }
+                }
+            },
+            {
                 $project: {
                     _id: 0,
                     name: "$name",
@@ -167,14 +174,14 @@ const getSelfAttendance = async (req, res) => {
                     division: "$division",
                     gender: "$gender",
                     type: "$type",
-                    date: "$attendances.date",
+                    date: "$formattedDate",
                     clock_in: "$attendances.clock_in",
                     clock_out: "$attendances.clock_out",
                     status_attendance: "$attendances.status_attendance"
                 }
             },
             {
-                $sort: { date: -1 } 
+                $sort: { date: -1 }
             }
         ]);
 
@@ -189,6 +196,7 @@ const getSelfAttendance = async (req, res) => {
         });
     }
 };
+
 
 /* Sistem : Auto Update Attendance */
 const updateAttendance = async () => {

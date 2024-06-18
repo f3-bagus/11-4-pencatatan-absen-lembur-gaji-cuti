@@ -273,11 +273,21 @@ const getAvailableOvertime = async (req, res) => {
     const availableOvertime = await OvertimeModel.find({
       division: employee.division,
       status_overtime: 'available'
-    }).sort({ date: -1 });;
+    }).sort({ date: -1 });
+
+    // Format the date to DD-MM-YYYY
+    const formattedOvertime = availableOvertime.map(overtime => {
+      const date = new Date(overtime.date);
+      const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+      return {
+        ...overtime.toObject(),
+        date: formattedDate
+      };
+    });
 
     res.status(200).json({
       message: "Available overtime retrieved successfully",
-      data: availableOvertime
+      data: formattedOvertime
     });
   } catch (error) {
     res.status(500).json({
@@ -294,11 +304,19 @@ const getAcceptedOvertimeHistory = async (req, res) => {
     const acceptedOvertime = await OvertimeModel.find({
       nip,
       status_overtime: 'taken'
-    }).sort({ date: -1 });;
+    }).sort({ date: -1 });
+
+    // Format the date to DD-MM-YYYY using moment
+    const formattedOvertime = acceptedOvertime.map(overtime => {
+      return {
+        ...overtime.toObject(),
+        date: moment(overtime.date).format('DD-MM-YYYY')
+      };
+    });
 
     res.status(200).json({
       message: "Accepted overtime history retrieved successfully",
-      data: acceptedOvertime
+      data: formattedOvertime
     });
   } catch (error) {
     res.status(500).json({

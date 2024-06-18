@@ -163,6 +163,25 @@ const updateProfile = async (req, res) => {
             });
         }
 
+        // Check if email or phone already exists in the database
+        if (email) {
+            const existingEmail = await UserModel.findOne({ email, nip: { $ne: nip } });
+            if (existingEmail) {
+                return res.status(400).json({
+                    message: 'Email is already in use'
+                });
+            }
+        }
+
+        if (phone) {
+            const existingPhone = await UserModel.findOne({ phone, nip: { $ne: nip } });
+            if (existingPhone) {
+                return res.status(400).json({
+                    message: 'Phone number is already in use'
+                });
+            }
+        }
+
         if (name) userData.name = name;
         if (email) userData.email = email;
         if (phone) userData.phone = phone;

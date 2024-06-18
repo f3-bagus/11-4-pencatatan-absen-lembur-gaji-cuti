@@ -11,26 +11,53 @@ import {
   Heading,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Input,
   Button,
+  useToast,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { Formik, Form, Field } from "formik";
+import { BiShow, BiHide } from "react-icons/bi";
+import { validationSchemaChangePassword } from "../../../utils/validationSchema";
 
 const Profile = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+
   const [name, setName] = useState("");
   const [nip, setNip] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [photo, setPhoto] = useState("");
+
+  const toast = useToast();
+
+  const [formValues, setFormValues] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    profile_photo: "",
+  });
+
+  const validateForm = () => {
+    const { name, email, phone, profile_photo } = formValues;
+    return name && email && phone && profile_photo;
+  };
 
   const getProfile = () => {
     axios
       .get("http://localhost:5000/api/user/profile")
       .then((res) => {
-        //console.log(res.data.data);
+        //console.log(res.data.data.profile_photo);
         setName(res.data.data.name);
         setNip(res.data.data.nip);
         setEmail(res.data.data.email);
         setPhone(res.data.data.phone);
+        setPhoto(res.data.data.profile_photo);
       })
       .catch((err) => {
         console.log(err);
@@ -40,6 +67,103 @@ const Profile = () => {
   useEffect(() => {
     getProfile();
   }, []);
+
+  useEffect(() => {
+    setIsFormValid(validateForm());
+  }, [formValues]);
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (files) {
+      setFormValues({ ...formValues, [name]: files[0] });
+    } else {
+      setFormValues({ ...formValues, [name]: value });
+    }
+  };
+
+  const handlePasswordChange = async (values, { setSubmitting, resetForm }) => {
+    setIsLoading(true);
+    console.log(values);
+
+    try {
+      const response = await axios.put(
+        "http://localhost:5000/api/user/reset-password",
+        values
+      );
+
+      toast({
+        position: "top-left",
+        title: "Password Changed",
+        description: "Password has been changed successfully!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error submitting edit:", error.response || error.message);
+      toast({
+        position: "top-left",
+        title: "Error",
+        description:
+          error.response?.data?.message ||
+          "There was an error change your password.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+
+    setIsLoading(false);
+    resetForm();
+    setSubmitting(false);
+  };
+
+  const handleEditProfile = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const formData = new FormData();
+    Object.keys(formValues).forEach((key) => {
+      formData.append(key, formValues[key]);
+    });
+
+    try {
+      const response = await axios.put(
+        "http://localhost:5000/api/user/update/profile",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      window.location.reload();
+    } catch (error) {
+      console.error(
+        "Error submitting profile:",
+        error.response || error.message
+      );
+      toast({
+        position: "top-left",
+        title: "Error",
+        description:
+          error.response?.data?.message ||
+          "There was an error updating your profile information.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+    setIsLoading(false);
+    document.getElementById("update-profile").reset();
+  };
+
+  let photoUrl = "";
+  if (photo) {
+    const slicedPath = photo.substring(7);
+    photoUrl = `http://localhost:5000/${slicedPath}`;
+  }
 
   return (
     <AdminLayout>
@@ -59,7 +183,7 @@ const Profile = () => {
             <VStack mt="-12" spacing="3" mb={5}>
               <Avatar
                 size="2xl"
-                src=""
+                src={photoUrl}
                 borderColor="white"
                 bgColor="gray.500"
               />
@@ -67,10 +191,15 @@ const Profile = () => {
                 {name}
               </Text>
               <Text fontSize="md" color="gray.500">
-                Account type: <b>Admin</b>
+                Account type:{" "}
+                <Text as="span" fontWeight="bold" textTransform="capitalize">
+                  Admin
+                </Text>
               </Text>
             </VStack>
           </Box>
+
+          {/* edit password */}
           <Box
             w="full"
             borderRadius="2xl"
@@ -80,41 +209,135 @@ const Profile = () => {
           >
             <VStack align="flex-start" mb={8}>
               <Heading as="h2" size="lg">
-                Change password
+                Change Password
               </Heading>
               <Text fontSize="md" color="gray.500">
                 Here you can set your new password
               </Text>
             </VStack>
-            <Stack py={2} direction="column">
-              <FormControl>
-                <FormLabel>Old Password</FormLabel>
-                <Input
-                  type="text"
-                  focusBorderColor="green.500"
-                  placeholder="Old Password"
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>New Password</FormLabel>
-                <Input
-                  type="text"
-                  focusBorderColor="green.500"
-                  placeholder="New Password"
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>New Password Confirmation</FormLabel>
-                <Input
-                  type="text"
-                  focusBorderColor="green.500"
-                  placeholder="Confirm New Password"
-                />
-              </FormControl>
-            </Stack>
-            <Button colorScheme="green" float="right" mt={3}>
-              Change Password
-            </Button>
+            <Formik
+              initialValues={{
+                oldPassword: "",
+                newPassword: "",
+                confirmPassword: "",
+              }}
+              validationSchema={validationSchemaChangePassword}
+              onSubmit={handlePasswordChange}
+            >
+              {({ isSubmitting, isValid, errors, touched }) => (
+                <Form>
+                  <Stack py={2} direction="column">
+                    <Field name="oldPassword">
+                      {({ field, form }) => (
+                        <FormControl
+                          isInvalid={
+                            form.errors.oldPassword && form.touched.oldPassword
+                          }
+                          mb={2}
+                        >
+                          <FormLabel>Old Password</FormLabel>
+                          <InputGroup>
+                            <Input
+                              {...field}
+                              type={showPassword ? "text" : "password"}
+                              focusBorderColor="green.500"
+                              placeholder="Old Password"
+                            />
+                            <InputRightElement width="4.5rem">
+                              <Button
+                                h="1.75rem"
+                                size="md"
+                                onClick={() => setShowPassword(!showPassword)}
+                              >
+                                {showPassword ? <BiHide /> : <BiShow />}
+                              </Button>
+                            </InputRightElement>
+                          </InputGroup>
+                          <FormErrorMessage>
+                            {form.errors.oldPassword}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="newPassword">
+                      {({ field, form }) => (
+                        <FormControl
+                          isInvalid={
+                            form.errors.newPassword && form.touched.newPassword
+                          }
+                          mb={2}
+                        >
+                          <FormLabel>New Password</FormLabel>
+                          <InputGroup>
+                            <Input
+                              {...field}
+                              type={showPassword ? "text" : "password"}
+                              focusBorderColor="green.500"
+                              placeholder="New Password"
+                            />
+                            <InputRightElement width="4.5rem">
+                              <Button
+                                h="1.75rem"
+                                size="md"
+                                onClick={() => setShowPassword(!showPassword)}
+                              >
+                                {showPassword ? <BiHide /> : <BiShow />}
+                              </Button>
+                            </InputRightElement>
+                          </InputGroup>
+                          <FormErrorMessage>
+                            {form.errors.newPassword}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="confirmPassword">
+                      {({ field, form }) => (
+                        <FormControl
+                          isInvalid={
+                            form.errors.confirmPassword &&
+                            form.touched.confirmPassword
+                          }
+                          mb={2}
+                        >
+                          <FormLabel>Confirm New Password</FormLabel>
+                          <InputGroup>
+                            <Input
+                              {...field}
+                              type={showPassword ? "text" : "password"}
+                              focusBorderColor="green.500"
+                              placeholder="Confirm New Password"
+                            />
+                            <InputRightElement width="4.5rem">
+                              <Button
+                                h="1.75rem"
+                                size="md"
+                                onClick={() => setShowPassword(!showPassword)}
+                              >
+                                {showPassword ? <BiHide /> : <BiShow />}
+                              </Button>
+                            </InputRightElement>
+                          </InputGroup>
+                          <FormErrorMessage>
+                            {form.errors.confirmPassword}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                  </Stack>
+                  <Button
+                    colorScheme="green"
+                    float="right"
+                    mt={3}
+                    type="submit"
+                    isLoading={isSubmitting || isLoading}
+                    isDisabled={!isValid}
+                  >
+                    Change Password
+                  </Button>
+                </Form>
+              )}
+            </Formik>
           </Box>
         </Flex>
 
@@ -127,65 +350,94 @@ const Profile = () => {
           bg={useColorModeValue("white", "green.800")}
           p={5}
         >
-          <VStack align="flex-start" mb={8}>
-            <Heading as="h2" size="lg">
-              Account Settings
-            </Heading>
-            <Text fontSize="md" color="gray.500">
-              Here you can change user account information
-            </Text>
-          </VStack>
-          <Stack py={2} direction={{ base: "column", md: "row" }}>
-            <FormControl>
-              <FormLabel>NIP</FormLabel>
-              <Input
-                type="text"
-                focusBorderColor="green.500"
-                placeholder={nip}
-                disabled
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Fullname</FormLabel>
-              <Input
-                type="text"
-                focusBorderColor="green.500"
-                placeholder={name}
-              />
-            </FormControl>
-          </Stack>
-          <Stack py={2} direction={{ base: "column", md: "row" }}>
-            <FormControl>
-              <FormLabel>Email Address</FormLabel>
-              <Input
-                type="email"
-                focusBorderColor="green.500"
-                placeholder={email}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Phone Number</FormLabel>
-              <Input
-                type="number"
-                focusBorderColor="green.500"
-                placeholder={phone}
-              />
-            </FormControl>
-          </Stack>
-          <Stack py={2} direction={{ base: "column", md: "row" }}>
-            <FormControl>
-              <FormLabel>Profile Picture</FormLabel>
-              <Input
-                type="file"
-                focusBorderColor="green.500"
-                accept="image/jpeg, image/png, image/jpg"
-                alignContent="center"
-              />
-            </FormControl>
-          </Stack>
-          <Button colorScheme="green" float="right" mt={3}>
-            Edit
-          </Button>
+          <form onSubmit={handleEditProfile} id="update-profile">
+            <VStack align="flex-start" mb={8}>
+              <Heading as="h2" size="lg">
+                Account Settings
+              </Heading>
+              <Text fontSize="md" color="gray.500">
+                Here you can change user account information
+              </Text>
+            </VStack>
+            <Stack py={2} direction={{ base: "column", md: "row" }}>
+              <FormControl>
+                <FormLabel>NIP</FormLabel>
+                <Input
+                  type="text"
+                  placeholder={nip}
+                  focusBorderColor="green.500"
+                  isDisabled
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Fullname</FormLabel>
+                <Input
+                  type="text"
+                  name="name"
+                  placeholder={name}
+                  onChange={handleChange}
+                  focusBorderColor="green.500"
+                  _autofill={{
+                    boxShadow: "0 0 0 30px #9AE6B4 inset !important",
+                    textFillColor: "black !important",
+                  }}
+                />
+              </FormControl>
+            </Stack>
+            <Stack py={2} direction={{ base: "column", md: "row" }}>
+              <FormControl isRequired>
+                <FormLabel>Email Address</FormLabel>
+                <Input
+                  type="email"
+                  name="email"
+                  placeholder={email}
+                  onChange={handleChange}
+                  focusBorderColor="green.500"
+                  _autofill={{
+                    boxShadow: "0 0 0 30px #9AE6B4 inset !important",
+                    textFillColor: "black !important",
+                  }}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Phone Number</FormLabel>
+                <Input
+                  type="number"
+                  name="phone"
+                  placeholder={phone}
+                  onChange={handleChange}
+                  focusBorderColor="green.500"
+                  _autofill={{
+                    boxShadow: "0 0 0 30px #9AE6B4 inset !important",
+                    textFillColor: "black !important",
+                  }}
+                />
+              </FormControl>
+            </Stack>
+            <Stack py={2} direction={{ base: "column", md: "row" }}>
+              <FormControl>
+                <FormLabel>Profile Picture</FormLabel>
+                <Input
+                  type="file"
+                  name="profile_photo"
+                  accept="image/jpeg, image/png, image/jpg"
+                  onChange={handleChange}
+                  focusBorderColor="green.500"
+                  alignContent="center"
+                />
+              </FormControl>
+            </Stack>
+            <Button
+              colorScheme="green"
+              float="right"
+              mt={3}
+              type="submit"
+              isLoading={isLoading}
+              disabled={!isFormValid}
+            >
+              Edit
+            </Button>
+          </form>
         </Box>
       </Flex>
     </AdminLayout>

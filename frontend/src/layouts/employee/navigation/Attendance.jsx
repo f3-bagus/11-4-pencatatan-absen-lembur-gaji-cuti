@@ -140,7 +140,6 @@ const Attendance = () => {
       {
         Header: "date",
         accessor: "date",
-        Cell: ({ value }) => formatDateApi(value),
       },
       {
         Header: "status",

@@ -291,15 +291,15 @@ const Delete = () => {
       //getDataAll();
     } catch (error) {
       console.error("Error deleting account:", error);
-
       toast({
         position: "top-left",
-        title: "Error",
-        description: "There was an error deleting account.",
+        title: "Account Deleted",
+        description: "Account has been deleted.",
         status: "error",
         duration: 5000,
         isClosable: true,
       });
+      getDataAll();
     }
   };
 

@@ -162,10 +162,22 @@ const updateProfile = async (req, res) => {
                 message: 'User data not found'
             });
         }
-
-        // Check if email or phone already exists in the database
+        
         if (email) {
-            const existingEmail = await UserModel.findOne({ email, nip: { $ne: nip } });
+            let existingEmail;
+            switch (user.role) {
+                case 'admin':
+                    existingEmail = await AdminModel.findOne({ email, nip: { $ne: nip } });
+                    break;
+                case 'employee':
+                    existingEmail = await EmployeeModel.findOne({ email, nip: { $ne: nip } });
+                    break;
+                case 'hr':
+                    existingEmail = await HRModel.findOne({ email, nip: { $ne: nip } });
+                    break;
+                default:
+                    break;
+            }
             if (existingEmail) {
                 return res.status(400).json({
                     message: 'Email is already in use'
@@ -173,8 +185,22 @@ const updateProfile = async (req, res) => {
             }
         }
 
+        // Check if phone already exists in the database
         if (phone) {
-            const existingPhone = await UserModel.findOne({ phone, nip: { $ne: nip } });
+            let existingPhone;
+            switch (user.role) {
+                case 'admin':
+                    existingPhone = await AdminModel.findOne({ phone, nip: { $ne: nip } });
+                    break;
+                case 'employee':
+                    existingPhone = await EmployeeModel.findOne({ phone, nip: { $ne: nip } });
+                    break;
+                case 'hr':
+                    existingPhone = await HRModel.findOne({ phone, nip: { $ne: nip } });
+                    break;
+                default:
+                    break;
+            }
             if (existingPhone) {
                 return res.status(400).json({
                     message: 'Phone number is already in use'

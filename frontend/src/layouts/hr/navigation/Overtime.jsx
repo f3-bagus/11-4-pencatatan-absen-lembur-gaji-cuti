@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import HrLayout from "../HrLayout";
 import {
+  useColorMode,
   useColorModeValue,
   useDisclosure,
   useToast,
@@ -21,6 +22,11 @@ import {
   Select,
   FormErrorMessage,
   Text,
+  Tab,
+  Tabs,
+  TabList,
+  TabPanel,
+  TabPanels,
 } from "@chakra-ui/react";
 import DataTable from "../../../components/hr/table/DataTabel";
 import { IoIosAddCircleOutline } from "react-icons/io";
@@ -30,24 +36,39 @@ import axios from "axios";
 
 const Overtime = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [overtime, setOvertime] = useState([]);
+  const [available, setAvailable] = useState([]);
+  const [taken, setTaken] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
+  const { colorMode } = useColorMode();
 
-  const getDataOvertime = async () => {
+  const getDataTaken = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/overtime/data/all"
+        "http://localhost:5000/api/overtime/data/all/taken-overdue"
       );
       console.log(response.data.data);
-      setOvertime(response.data.data);
+      setTaken(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getDataAvailable = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/overtime/data/all/available"
+      );
+      console.log(response.data.data);
+      setAvailable(response.data.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getDataOvertime();
+    getDataTaken();
+    getDataAvailable();
   }, []);
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -96,7 +117,7 @@ const Overtime = () => {
     return `${year}-${month}-${day}`;
   };
 
-  const columns = React.useMemo(
+  const takenColumns = React.useMemo(
     () => [
       {
         Header: "nip",
@@ -141,7 +162,58 @@ const Overtime = () => {
       {
         Header: "overtime rate",
         accessor: "overtime_rate",
-        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString('id-ID')}`
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString("id-ID")}`,
+      },
+    ],
+    []
+  );
+
+  const availableColumns = React.useMemo(
+    () => [
+      {
+        Header: "nip",
+        accessor: "nip",
+        Cell: ({ cell }) => (
+          <Text>{cell.value === null ? "-" : cell.value}</Text>
+        ),
+      },
+      {
+        Header: "division",
+        accessor: "division",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
+      },
+      {
+        Header: "date",
+        accessor: "date",
+        Cell: ({ value }) => formatDate(value),
+      },
+      {
+        Header: "hours",
+        accessor: "hours",
+        Cell: ({ cell }) => (
+          <Text>{cell.value === null ? "-" : cell.value}</Text>
+        ),
+      },
+      {
+        Header: "reason",
+        accessor: "reason",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
+      },
+      {
+        Header: "status overtime",
+        accessor: "status_overtime",
+        Cell: ({ cell }) => (
+          <Text textTransform="capitalize">{cell.value}</Text>
+        ),
+      },
+      {
+        Header: "overtime rate",
+        accessor: "overtime_rate",
+        Cell: ({ value }) => `Rp ${parseInt(value).toLocaleString("id-ID")}`,
       },
     ],
     []
@@ -200,9 +272,7 @@ const Overtime = () => {
                             }
                             isRequired
                           >
-                            <FormLabel>
-                              Division
-                            </FormLabel>
+                            <FormLabel>Division</FormLabel>
                             <Select
                               {...field}
                               placeholder="Select division"
@@ -230,9 +300,7 @@ const Overtime = () => {
                             mt={3}
                             isRequired
                           >
-                            <FormLabel>
-                              Date
-                            </FormLabel>
+                            <FormLabel>Date</FormLabel>
                             <Input
                               {...field}
                               type="date"
@@ -253,9 +321,7 @@ const Overtime = () => {
                             mt={3}
                             isRequired
                           >
-                            <FormLabel>
-                              Hours
-                            </FormLabel>
+                            <FormLabel>Hours</FormLabel>
                             <Input
                               {...field}
                               type="number"
@@ -278,16 +344,15 @@ const Overtime = () => {
                             mt={3}
                             isRequired
                           >
-                            <FormLabel>
-                              Reason
-                            </FormLabel>
+                            <FormLabel>Reason</FormLabel>
                             <Input
                               {...field}
                               type="text"
                               placeholder="Enter Reason"
                               focusBorderColor="green.500"
                               _autofill={{
-                                boxShadow: "0 0 0 30px #9AE6B4 inset !important",
+                                boxShadow:
+                                  "0 0 0 30px #9AE6B4 inset !important",
                                 textFillColor: "black !important",
                               }}
                             />
@@ -308,9 +373,7 @@ const Overtime = () => {
                             mt={3}
                             isRequired
                           >
-                            <FormLabel>
-                              Overtime Rate
-                            </FormLabel>
+                            <FormLabel>Overtime Rate</FormLabel>
                             <Input
                               {...field}
                               type="number"
@@ -343,11 +406,36 @@ const Overtime = () => {
             </ModalContent>
           </Modal>
 
-          <DataTable
+          <Tabs isFitted variant="soft-rounded" colorScheme="green">
+            <TabList mb="1em" flexDirection={{ base: "column", md: "row" }}>
+              <Tab color={colorMode === "light" ? "" : "white"}>Available</Tab>
+              <Tab color={colorMode === "light" ? "" : "white"}>
+                Taken/Overdue
+              </Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <DataTable
+                  columns={availableColumns}
+                  data={available}
+                  filename={"available_overtime_report"}
+                />
+              </TabPanel>
+              <TabPanel>
+                <DataTable
+                  columns={takenColumns}
+                  data={taken}
+                  filename={"taken_overtime_report"}
+                />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+
+          {/* <DataTable
             columns={columns}
             data={overtime}
             filename={"table_overtime"}
-          />
+          /> */}
         </Box>
       </Flex>
     </HrLayout>

@@ -32,7 +32,7 @@ const clockIn = async (req, res) => {
           });
       }
 
-      if (now.isAfter(moment().tz('Asia/Jakarta').set({ hour: 21, minute: 30, second: 0 }))) {
+      if (now.isAfter(moment().tz('Asia/Jakarta').set({ hour: 16, minute: 30, second: 0 }))) {
           return res.status(400).json({
               message: `Clock in is not allowed after 16:30 (${clockInTime})`
           });

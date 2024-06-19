@@ -274,6 +274,7 @@ const Leave = () => {
                     <Input
                       type="number"
                       name="duration"
+                      placeholder="Enter duration"
                       value={formValues.duration}
                       onChange={handleChange}
                       focusBorderColor="green.500"

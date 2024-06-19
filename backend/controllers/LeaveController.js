@@ -90,7 +90,10 @@ const getPendingEmployeeLeaves = async (req, res) => {
                     $dateToString: { format: "%d-%m-%Y", date: "$end_date" }
                 }
             }
-          }, 
+          },
+          {
+              $sort: { "start_date": -1, nip: 1 }
+          },
           {
               $project: {
                   _id: 1,
@@ -107,9 +110,6 @@ const getPendingEmployeeLeaves = async (req, res) => {
                   status_leave: 1,
                   leave_letter: 1
               }
-          },
-          {
-              $sort: { start_date: -1, nip: 1 }
           }
       ]);
 
@@ -158,6 +158,9 @@ const getApprovedRejectedEmployeeLeaves = async (req, res) => {
               }
           },
           {
+              $sort: { "start_date": -1, nip: 1 }
+          },
+          {
               $project: {
                   _id: 1,
                   name: "$employee.name",
@@ -173,9 +176,6 @@ const getApprovedRejectedEmployeeLeaves = async (req, res) => {
                   status_leave: 1,
                   leave_letter: 1
               }
-          },
-          {
-              $sort: { "start_date": -1, nip: 1 }
           }
       ]);
 

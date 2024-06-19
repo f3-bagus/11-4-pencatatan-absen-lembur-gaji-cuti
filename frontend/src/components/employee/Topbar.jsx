@@ -59,7 +59,6 @@ export default function Topbar() {
         try {
           await logout();
           Swal.fire("Logged Out!", "You have been logged out.", "success");
-          navigate("/");
         } catch (error) {
           console.error("Logout failed", error);
           Swal.fire("Error!", "There was a problem logging out.", "error");

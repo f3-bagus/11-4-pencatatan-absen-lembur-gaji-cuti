@@ -37,8 +37,8 @@ const clockIn = async (req, res) => {
               message: `Clock in is not allowed after 16:30 (${clockInTime})`
           });
       }
-
-      if (now.hour() < 6) {
+ 
+      if (moment().hour() < 6) {
           return res.status(400).json({
               message: `It is not yet time to clock in today (${clockInTime})`
           });
@@ -99,7 +99,6 @@ const clockOut = async (req, res) => {
 
     const now = moment().add(7, 'hours');
     const clockOutTime = moment().format('HH:mm:ss');
-
     const startOfToday = moment().startOf('day').add(7, 'hours').toDate();
     const endOfToday = moment().endOf('day').add(7, 'hours').toDate();
 
@@ -131,7 +130,7 @@ const clockOut = async (req, res) => {
       });
     }
 
-    const clockOutLimit = moment().set({ hour: 23, minute: 30, second: 0 });
+    const clockOutLimit = moment().set({ hour: 16, minute: 30, second: 0 });
     if (now.isBefore(clockOutLimit)) {
       return res.status(400).json({
         message: `It is not yet time to clock out today (${clockOutTime})`

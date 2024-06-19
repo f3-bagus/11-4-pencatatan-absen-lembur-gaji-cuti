@@ -463,6 +463,9 @@ const getMonthlyPointsReport = async (req, res) => {
             }
         },
         {
+            $sort: { "_id.month": -1, "_id.nip": 1 }
+        },
+        {
             $project: {
                 _id: 0,
                 nip: "$_id.nip",

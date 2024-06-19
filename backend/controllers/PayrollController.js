@@ -243,6 +243,9 @@ const getMonthlySelfPayroll = async (req, res) => {
                 }
             },
             {
+                $sort: { "_id.month": -1 }
+            },
+            {
                 $project: {
                     _id: 0,
                     nip: 1,

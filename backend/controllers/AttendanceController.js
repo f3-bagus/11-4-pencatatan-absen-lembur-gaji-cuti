@@ -355,7 +355,7 @@ const getMonthlyAttendanceReport = async (req, res) => {
                 }
             },
             {
-                $sort: { "_id.month": 1 }
+                $sort: { "_id.month": -1, nip: 1 }
             },
             {
                 $project: {

@@ -102,6 +102,7 @@ const Salary = () => {
           p="3"
           borderRadius="2xl"
           shadow="lg"
+          overflow="auto"
         >
           <DataTable columns={columns} data={data} filename={"table_payroll"} />
         </Box>

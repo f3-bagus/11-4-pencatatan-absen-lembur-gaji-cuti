@@ -49,7 +49,7 @@ const AdminLayout = ({ children }) => {
           as="main"
           w="full"
           h="full"
-          flexDirection="column"
+          flexDirection="row"
           bg={useColorModeValue("gray.100", "green.900")}
           borderRadius="2xl"
           overflow="scroll"

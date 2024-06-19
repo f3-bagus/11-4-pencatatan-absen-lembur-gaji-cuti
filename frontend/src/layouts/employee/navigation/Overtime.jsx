@@ -188,6 +188,7 @@ const Overtime = () => {
           p="3"
           borderRadius="2xl"
           shadow="lg"
+          overflow="auto"
         >
           <Tabs isFitted variant="soft-rounded" colorScheme="green">
             <TabList mb="1em" flexDirection={{ base: "column", md: "row" }}>

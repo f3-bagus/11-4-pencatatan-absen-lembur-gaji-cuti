@@ -42,15 +42,14 @@ const Attendance = () => {
     });
   };
 
-  
   const formatTimeToHHMM = (timeString) => {
     if (!timeString) return "-";
     const date = new Date(`1970-01-01T${timeString}Z`);
-    const hours = String(date.getUTCHours()).padStart(2, '0');
-    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    const hours = String(date.getUTCHours()).padStart(2, "0");
+    const minutes = String(date.getUTCMinutes()).padStart(2, "0");
     return `${hours}:${minutes}`;
   };
-  
+
   const formatDateApi = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -120,7 +119,7 @@ const Attendance = () => {
         accessor: "clock_in",
         Cell: ({ cell }) => (
           <Text>
-            {cell.value === null ? '-' : formatTimeToHHMM(cell.value)}
+            {cell.value === null ? "-" : formatTimeToHHMM(cell.value)}
           </Text>
         ),
       },
@@ -129,7 +128,7 @@ const Attendance = () => {
         accessor: "clock_out",
         Cell: ({ cell }) => (
           <Text>
-            {cell.value === null ? '-' : formatTimeToHHMM(cell.value)}
+            {cell.value === null ? "-" : formatTimeToHHMM(cell.value)}
           </Text>
         ),
       },
@@ -150,11 +149,10 @@ const Attendance = () => {
 
   return (
     <EmployeeLayout>
-      <Heading as="h1" size="xl" pt={5} px={5}>
-        Live Attendance
-      </Heading>
-      <Flex w="full" p="5" direction={{ base: "column", md: "row" }} gap={5}>
-        <Flex w="full" direction="column" gap={5}>
+      <Flex w="full" px="5" py="5" direction="column" gap={5}>
+          <Heading as="h1" size="xl">
+            Live Attendance
+          </Heading>
           <Box
             w="full"
             borderRadius="2xl"
@@ -202,13 +200,12 @@ const Attendance = () => {
               </Heading>
             </VStack>
             <DataTable
-            columns={columns}
-            data={attendance}
-            filename={"attendance_history"}
-          />
+              columns={columns}
+              data={attendance}
+              filename={"attendance_history"}
+            />
           </Box>
         </Flex>
-      </Flex>
     </EmployeeLayout>
   );
 };

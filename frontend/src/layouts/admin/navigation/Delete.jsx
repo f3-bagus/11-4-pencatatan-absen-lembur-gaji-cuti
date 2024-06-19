@@ -327,6 +327,7 @@ const Delete = () => {
           p="3"
           borderRadius="2xl"
           shadow="lg"
+          overflow="auto"
         >
           <DataTable columns={dataColumns} data={data} />
         </Box>

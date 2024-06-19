@@ -148,7 +148,7 @@ const DataTable = ({ columns, data, filename }) => {
         </Flex>
       </Flex>
 
-      <TableContainer py="3" w="940px">
+      <TableContainer py="3" w="910px">
         <Table {...getTableProps()}>
           <Thead>
             {headerGroups.map((headerGroup) => {
@@ -585,6 +585,7 @@ const Leave = () => {
           p="3"
           borderRadius="2xl"
           shadow="lg"
+          overflow="auto"
         >
           <Tabs isFitted variant="soft-rounded" colorScheme="green">
             <TabList mb="1em" flexDirection={{ base: "column", md: "row" }}>

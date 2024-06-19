@@ -76,6 +76,7 @@ const Payroll = () => {
           p="3"
           borderRadius="2xl"
           shadow="lg"
+          overflow="auto"
         >
           <DataTable columns={columns} data={data} filename={"payroll_report"} />
         </Box>

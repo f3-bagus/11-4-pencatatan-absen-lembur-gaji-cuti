@@ -49,8 +49,8 @@ const EmployeeLayout = ({ children }) => {
           as="main"
           w="full"
           h="full"
+          flexDirection="row"
           bg={useColorModeValue("gray.100", "green.900")}
-          flexDirection="column"
           borderRadius="2xl"
           overflow="scroll"
         >

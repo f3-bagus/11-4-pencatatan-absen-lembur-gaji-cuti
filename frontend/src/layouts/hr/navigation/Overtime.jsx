@@ -229,6 +229,7 @@ const Overtime = () => {
           p="3"
           borderRadius="2xl"
           shadow="lg"
+          overflow="auto"
         >
           <Button
             leftIcon={<IoIosAddCircleOutline size={25} />}

@@ -100,6 +100,7 @@ const Attedance = () => {
           p="3"
           borderRadius="2xl"
           shadow="lg"
+          overflow="auto"
         >
           <DataTable
             columns={columns}

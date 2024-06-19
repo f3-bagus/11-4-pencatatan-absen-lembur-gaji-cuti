@@ -69,7 +69,7 @@ const clockIn = async (req, res) => {
       } else {
           attendance.status_attendance = 'clock in late';
       }
-
+ 
       await attendance.save();
 
       res.status(200).json({

@@ -64,7 +64,7 @@ const clockIn = async (req, res) => {
           clock_in: clockInTime
       });
 
-      if (now.hour() < 8) {
+      if (moment().hour() < 8) {
           attendance.status_attendance = 'clock in ok';
       } else {
           attendance.status_attendance = 'clock in late';

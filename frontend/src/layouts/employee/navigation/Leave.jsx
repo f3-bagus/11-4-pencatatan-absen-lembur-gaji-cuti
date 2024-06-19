@@ -253,7 +253,7 @@ const Leave = () => {
           >
             <ModalOverlay />
             <ModalContent bg={useColorModeValue("white", "green.900")}>
-              <ModalHeader>Apply for Overtime</ModalHeader>
+              <ModalHeader>Apply for Leave</ModalHeader>
               <ModalCloseButton />
 
               <form onSubmit={handleSubmit}>

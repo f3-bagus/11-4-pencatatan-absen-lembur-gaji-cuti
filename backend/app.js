@@ -17,6 +17,13 @@ const connectToDatabase = require('./library/dbconfig');
 
 connectToDatabase();
 
+const mongoose = require('mongoose');
+const mongoURI = process.env.MONGO_URI;
+
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected...'))
+  .catch(err => console.log(err));
+
 
 app.use(logger('dev'));
 app.use(express.json());

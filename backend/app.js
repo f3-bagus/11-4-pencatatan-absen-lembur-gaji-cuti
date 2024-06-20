@@ -36,6 +36,10 @@ app.use(cors({
   credentials: true
 }));
 
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
 // Import Routes
 const routes = require('./routes');
 app.use('/api/', routes);

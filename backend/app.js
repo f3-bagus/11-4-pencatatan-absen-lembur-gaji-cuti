@@ -12,8 +12,11 @@ var app = express();
 const port = process.env.PORT || 5000;
 
 // Connect to MongoDB
+require('dotenv').config();
 const connectToDatabase = require('./library/dbconfig');
+
 connectToDatabase();
+
 
 app.use(logger('dev'));
 app.use(express.json());

@@ -28,7 +28,7 @@ const Overtime = () => {
   const getOvertime = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/overtime/data"
+        "http://localhost:4493/api/overtime/data"
       );
       setOvertime(response.data.data);
     } catch (error) {
@@ -39,9 +39,8 @@ const Overtime = () => {
   const getHistory = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/overtime/data/history"
+        "http://localhost:4493/api/overtime/data/history"
       );
-      console.log(response.data);
       setHistory(response.data.data);
     } catch (error) {
       console.log(error);
@@ -132,7 +131,6 @@ const Overtime = () => {
   );
 
   const handleAccept = async (rowData) => {
-    console.log("Accepting overtime for:", rowData);
 
     const { _id: overtimeId } = rowData;
 
@@ -148,9 +146,8 @@ const Overtime = () => {
       if (result.isConfirmed) {
         try {
           const response = await axios.post(
-            `http://localhost:5000/api/employee/accept-overtime/${overtimeId}`
+            `http://localhost:4493/api/employee/accept-overtime/${overtimeId}`
           );
-          console.log(response.data);
           toast({
             position: "top-left",
             title: "Overtime Accepted",

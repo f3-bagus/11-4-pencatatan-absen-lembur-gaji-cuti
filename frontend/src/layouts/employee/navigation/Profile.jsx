@@ -51,9 +51,8 @@ const Profile = () => {
 
   const getProfile = () => {
     axios
-      .get("http://localhost:5000/api/user/profile")
+      .get("http://localhost:4493/api/user/profile")
       .then((res) => {
-        //console.log(res.data.data.profile_photo);
         setName(res.data.data.name);
         setNip(res.data.data.nip);
         setEmail(res.data.data.email);
@@ -85,11 +84,10 @@ const Profile = () => {
 
   const handlePasswordChange = async (values, { setSubmitting, resetForm }) => {
     setIsLoading(true);
-    console.log(values);
 
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/user/reset-password",
+        "http://localhost:4493/api/user/reset-password",
         values
       );
 
@@ -131,7 +129,7 @@ const Profile = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/user/update/profile",
+        "http://localhost:4493/api/user/update/profile",
         formData,
         {
           headers: {
@@ -164,7 +162,7 @@ const Profile = () => {
   let photoUrl = "";
   if (photo) {
     const slicedPath = photo.substring(7);
-    photoUrl = `http://localhost:5000/${slicedPath}`;
+    photoUrl = `http://localhost:4493/${slicedPath}`;
   }
 
   return (

@@ -45,9 +45,8 @@ const Overtime = () => {
   const getDataTaken = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/overtime/data/all/taken-overdue"
+        "http://localhost:4493/api/overtime/data/all/taken-overdue"
       );
-      console.log(response.data.data);
       setTaken(response.data.data);
     } catch (error) {
       console.log(error);
@@ -57,9 +56,8 @@ const Overtime = () => {
   const getDataAvailable = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/overtime/data/all/available"
+        "http://localhost:4493/api/overtime/data/all/available"
       );
-      console.log(response.data.data);
       setAvailable(response.data.data);
     } catch (error) {
       console.log(error);
@@ -75,7 +73,7 @@ const Overtime = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/hr/overtime",
+        "http://localhost:4493/api/hr/overtime",
         values
       );
       toast({
@@ -86,7 +84,6 @@ const Overtime = () => {
         duration: 5000,
         isClosable: true,
       });
-      console.log("Response:", response.data);
       getDataAvailable();
       onClose();
     } catch (error) {

@@ -61,9 +61,8 @@ const Attendance = () => {
   const getDataAttendance = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/employee/attendance"
+        "http://localhost:4493/api/employee/attendance"
       );
-      //console.log(response.data.data);
       setAttendance(response.data.data);
     } catch (error) {
       console.log(error);
@@ -73,12 +72,11 @@ const Attendance = () => {
   const handleClockIn = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/attendance/clock-in"
+        "http://localhost:4493/api/attendance/clock-in"
       );
       Swal.fire("Clocked In!", response.data.message, "success").then(() => {
         window.location.reload();
       });
-      console.log(response.data);
     } catch (error) {
       Swal.fire("Error!", error.response.data.message, "error");
     }
@@ -97,14 +95,13 @@ const Attendance = () => {
       if (result.isConfirmed) {
         try {
           const response = await axios.post(
-            "http://localhost:5000/api/attendance/clock-out"
+            "http://localhost:4493/api/attendance/clock-out"
           );
           Swal.fire("Clocked Out!", response.data.message, "success").then(
             () => {
               window.location.reload();
             }
           );
-          console.log(response.data);
         } catch (error) {
           Swal.fire("Error!", error.response.data.message, "error");
         }

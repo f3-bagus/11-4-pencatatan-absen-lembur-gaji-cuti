@@ -32,7 +32,7 @@ const LemburChart = () => {
 
   const getDataDashboard = () => {
     axios
-      .get("http://localhost:5000/api/hr/dashboard/data")
+      .get("http://localhost:4493/api/hr/dashboard/data")
       .then((res) => {
         const data = res.data;
         setIt(data.data_overtime.datasets[0].data);
@@ -41,7 +41,7 @@ const LemburChart = () => {
         setLabels(data.data_overtime.labels)
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 

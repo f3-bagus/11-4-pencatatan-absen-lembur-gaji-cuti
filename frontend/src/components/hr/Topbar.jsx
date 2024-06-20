@@ -69,7 +69,7 @@ export default function Topbar() {
 
   const getProfile = () => {
     axios
-      .get("http://localhost:5000/api/user/profile")
+      .get("http://localhost:4493/api/user/profile")
       .then((res) => {
         setAvatarUrl(res.data.data.profile_photo);
         setName(res.data.data.name);
@@ -82,7 +82,7 @@ export default function Topbar() {
   let photoUrl = "";
   if (avatarUrl) {
     const slicedPath = avatarUrl.substring(7);
-    photoUrl = `http://localhost:5000/${slicedPath}`;
+    photoUrl = `http://localhost:4493/${slicedPath}`;
   }
 
   return (

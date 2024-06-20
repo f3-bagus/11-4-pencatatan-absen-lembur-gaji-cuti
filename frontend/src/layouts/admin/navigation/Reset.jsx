@@ -225,8 +225,7 @@ const Reset = () => {
 
   const getDataAll = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/user/data");
-      console.log(response.data.data);
+      const response = await axios.get("http://localhost:4493/api/user/data");
       setData(response.data.data);
     } catch (error) {
       console.log(error);
@@ -271,7 +270,6 @@ const Reset = () => {
   );
 
   const handleReset = async (rowData) => {
-    console.log("Accepting data for:", rowData);
     const { nip } = rowData;
 
     Swal.fire({
@@ -286,9 +284,8 @@ const Reset = () => {
       if (result.isConfirmed) {
         try {
           const response = await axios.post(
-            `http://localhost:5000/api/admin/reset-password/${nip}`
+            `http://localhost:4493/api/admin/reset-password/${nip}`
           );
-          console.log(response.data);
 
           toast({
             position: "top-left",

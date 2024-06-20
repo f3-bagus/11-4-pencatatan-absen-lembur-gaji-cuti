@@ -25,10 +25,9 @@ const TypeChart = () => {
 
   const getDataDashboard = async () => {
     await axios
-      .get("http://localhost:5000/api/admin/dashboard/data")
+      .get("http://localhost:4493/api/admin/dashboard/data")
       .then((res) => {
         const data = res.data.total_types;
-        console.log(data);
 
         const labels = data.map((item) => item.type);
         const counts = data.map((item) => item.count);

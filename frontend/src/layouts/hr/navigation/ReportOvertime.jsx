@@ -24,7 +24,7 @@ const ReportOvertime = () => {
   const getReportMonthly = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/report/overtime/monthly"
+        "http://localhost:4493/api/report/overtime/monthly"
       );
       setMonthly(response.data.data.reportMonthly);
     } catch (error) {
@@ -35,10 +35,9 @@ const ReportOvertime = () => {
   const getReportYearly = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/report/overtime/yearly"
+        "http://localhost:4493/api/report/overtime/yearly"
       );
       setYearly(response.data.data.reportYearly);
-      console.log(response.data.data.reportYearly);
     } catch (error) {
       console.log(error);
     }

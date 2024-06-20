@@ -9,9 +9,8 @@ const Attedance = () => {
 
   const getAttendance = () => {
     axios
-      .get("http://localhost:5000/api/attendance/data")
+      .get("http://localhost:4493/api/attendance/data")
       .then((res) => {
-        //console.log(res.data.data);
         setData(res.data.data);
       })
       .catch((err) => {

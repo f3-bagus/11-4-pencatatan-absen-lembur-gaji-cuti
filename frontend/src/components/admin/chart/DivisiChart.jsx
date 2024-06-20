@@ -34,7 +34,7 @@ const DivisiChart = () => {
 
   const getDataDashboard = async () => {
     await axios
-      .get("http://localhost:5000/api/admin/dashboard/data")
+      .get("http://localhost:4493/api/admin/dashboard/data")
       .then((res) => {
         const data = res.data.total_division;
 

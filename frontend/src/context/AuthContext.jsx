@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
   const login = async (nip, password, rememberMe) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "http://localhost:4493/api/auth/login",
         { nip, password }
       );
       const userData = response.data;
@@ -74,7 +74,7 @@ const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post("http://localhost:5000/api/auth/logout");
+      await axios.post("http://localhost:4493/api/auth/logout");
       setUser(null);
       setIsLogin(false);
       localStorage.removeItem("user");

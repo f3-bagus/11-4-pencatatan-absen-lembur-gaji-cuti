@@ -32,9 +32,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://fe-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/',
   credentials: true
 }));
+
+// app.use(cors({
+//   origin: 'http://localhost:5173',
+//   credentials: true
+// }));
 
 app.get("/", (req, res) => {
   res.send("Hello World");

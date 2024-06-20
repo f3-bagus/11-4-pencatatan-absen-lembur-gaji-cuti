@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 //* Import Controller *//
 const UserModel = require('../models/User');

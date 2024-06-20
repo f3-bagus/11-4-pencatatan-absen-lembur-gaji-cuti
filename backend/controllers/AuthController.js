@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.secret;
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const blacklist = new Set();
 
 //* Import Controller *//
@@ -138,7 +138,7 @@ const login = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({ 
-            message: error
+            message: error.message // pastikan untuk mengirimkan pesan error yang tepat
         });
     }
 };

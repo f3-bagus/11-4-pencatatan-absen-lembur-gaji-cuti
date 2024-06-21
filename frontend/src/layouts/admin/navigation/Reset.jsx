@@ -28,6 +28,7 @@ import {
   Icon,
   Button,
   Select,
+  Text
 } from "@chakra-ui/react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
@@ -249,6 +250,9 @@ const Reset = () => {
       {
         Header: "role",
         accessor: "role",
+        Cell: ({value}) => (
+          <Text textTransform="capitalize">{value}</Text>
+        ),
       },
       {
         Header: "Action",

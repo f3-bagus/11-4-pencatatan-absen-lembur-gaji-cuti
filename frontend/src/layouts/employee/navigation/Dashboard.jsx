@@ -9,7 +9,7 @@ import {
   Text,
   Image,
 } from "@chakra-ui/react";
-import images from "../../../assets/img/images.png";
+import images from "../../../assets/img/images-2.png";
 import GajiChart from "../../../components/employee/chart/GajiChart";
 import AbsenChart from "../../../components/employee/chart/AbsenChart";
 import axios from "axios";

@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
   const login = async (nip, password, rememberMe) => {
     try {
       const response = await axios.post(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id//api/auth/login",
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/auth/login",
         { nip, password }
       );
       const userData = response.data;
@@ -75,7 +75,7 @@ const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await axios.post(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id//api/auth/logout"
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/auth/logout"
       );
       setUser(null);
       setIsLogin(false);

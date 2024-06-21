@@ -147,7 +147,7 @@ const Dashboard = () => {
           </Box>
 
           <Box w="full" px="3" align="right">
-            <Image w="250px" objectFit="cover" src={images} alt="Dan Abramov" />
+            <Image w="250px" objectFit="cover" src="https://ouch-cdn2.icons8.com/uZVLKzsyMULqmJtzTut9qmDdScFq23wXiVEMtduHr2k/rs:fit:368:319/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9zdmcvOTM1/LzRlNmM4Y2M5LTM5/YzktNDIyMy04Mjgz/LWY2YTg3MWY4NTVh/MC5zdmc.png" alt="Dan Abramov" />
           </Box>
         </Stack>
 

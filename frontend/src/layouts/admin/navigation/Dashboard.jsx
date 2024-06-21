@@ -32,7 +32,9 @@ const Dashboard = () => {
 
   const getProfile = () => {
     axios
-      .get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/user/profile")
+      .get(
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/user/profile"
+      )
       .then((res) => {
         setName(res.data.data.name);
       })
@@ -43,7 +45,9 @@ const Dashboard = () => {
 
   const getData = () => {
     axios
-      .get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/admin/dashboard/data")
+      .get(
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/admin/dashboard/data"
+      )
       .then((res) => {
         setTotalEmp(res.data.total_employee);
         setTotalDiv(res.data.total_division.length);
@@ -145,7 +149,12 @@ const Dashboard = () => {
           </Box>
 
           <Box w="full" px="3" align="right">
-            <Image w="180px" objectFit="cover" src={images} alt="Dan Abramov" />
+            <Image
+              w="240px"
+              objectFit="cover"
+              src="https://ouch-cdn2.icons8.com/I0J_kDgKZS42GOt-7PZ1wqDRPpBBFXgnEZ5o_jFM3a0/rs:fit:368:319/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9zdmcvODU2/LzhhYTE0ZmJlLTM1/NGEtNGIyZS05NzQz/LTA5NGJjZTA5ZjYw/Yi5zdmc.png"
+              alt="Dan Abramov"
+            />
           </Box>
         </Stack>
 
@@ -167,7 +176,7 @@ const Dashboard = () => {
             <Heading as="h1" size="sm" mb={6}>
               Employment Type
             </Heading>
-            <TypeChart/>
+            <TypeChart />
           </Box>
           <Box
             w="full"
@@ -180,7 +189,7 @@ const Dashboard = () => {
             <Heading as="h1" size="sm" mb={6}>
               Member Each Division
             </Heading>
-            <DivisiChart/>
+            <DivisiChart />
           </Box>
         </Stack>
       </Flex>

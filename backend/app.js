@@ -9,15 +9,14 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 var app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4493;
 
 // Connect to MongoDB
-require("dotenv").config();
-const connectToDatabase = require("./library/dbconfig");
+const connectToDatabase = require('./library/dbconfig');
 
 connectToDatabase();
 
-app.use(logger("dev"));
+app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -31,6 +30,15 @@ app.use(
     credentials: true, 
   })
 );
+
+// app.use(
+//   cors({
+//     origin: ["http://localhost:5173", "https://fe-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id"],
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//     credentials: true, //
+//   })
+// )
 
 app.get("/", (req, res) => {
   res.send("Hello World");

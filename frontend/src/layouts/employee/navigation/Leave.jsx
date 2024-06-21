@@ -39,9 +39,8 @@ const Leave = () => {
   const getDataHistory = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/leave/history"
+        "http://localhost:4493/api/leave/history"
       );
-      //console.log(response.data.data);
       setHistory(response.data.data);
     } catch (error) {
       console.log(error.message);
@@ -51,9 +50,8 @@ const Leave = () => {
   const getDataRemaining = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/leave/remaining"
+        "http://localhost:4493/api/leave/remaining"
       );
-      console.log(response.data.remaining_leave);
       setRemaining(response.data.remaining_leave);
     } catch (error) {
       console.log(error.message);
@@ -102,7 +100,7 @@ const Leave = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/leave/apply",
+        "http://localhost:4493/api/leave/apply",
         formData,
         {
           headers: {

@@ -32,16 +32,17 @@ const LemburChart = () => {
 
   const getDataDashboard = () => {
     axios
-      .get("http://localhost:5000/api/hr/dashboard/data")
+      .get("http://localhost:4493/api/hr/dashboard/data")
       .then((res) => {
         const data = res.data;
-        setIt(data.data_overtime.datasets[0].data);
+        console.log(data.data_overtime);
+        //setIt(data.data_overtime.datasets[0].data);
+        setMarketing(data.data_overtime.datasets[0].data);
         setSales(data.data_overtime.datasets[1].data);
-        setMarketing(data.data_overtime.datasets[2].data);
         setLabels(data.data_overtime.labels)
       })
       .catch((err) => {
-        console.log(err);
+        //console.error(err);
       });
   };
 
@@ -52,14 +53,14 @@ const LemburChart = () => {
   const data = {
     labels: labels,
     datasets: [
-      {
-        label: "IT",
-        data: it,
-        fill: false,
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        tension: 0.1,
-      },
+      // {
+      //   label: "IT",
+      //   data: it,
+      //   fill: false,
+      //   backgroundColor: "rgba(75, 192, 192, 0.6)",
+      //   borderColor: "rgba(75, 192, 192, 1)",
+      //   tension: 0.1,
+      // },
       {
         label: "Sales",
         data: sales,

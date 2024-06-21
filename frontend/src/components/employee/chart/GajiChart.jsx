@@ -33,9 +33,8 @@ const GajiChart = () => {
 
   const getDataDashboard = () => {
     axios
-      .get("http://localhost:5000/api/employee/dashboard/data")
+      .get("http://localhost:4493/api/employee/dashboard/data")
       .then((res) => {
-        console.log(res.data.data_salary);
         setLabels(res.data.data_salary.labels);
         setBasicSalary(res.data.data_salary.datasets[0].data);
         setTotalSalary(res.data.data_salary.datasets[1].data);
@@ -43,7 +42,7 @@ const GajiChart = () => {
         setDeduction(res.data.data_salary.datasets[3].data);
       })
       .catch((err) => {
-        console.log(err.message);
+        console.error(err.message);
       });
   };
 

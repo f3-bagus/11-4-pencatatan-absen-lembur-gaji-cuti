@@ -9,8 +9,7 @@ const ReportAll = () => {
 
   const getReportAll = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/report/all");
-      console.log(response.data.data.reports);
+      const response = await axios.get("http://localhost:4493/api/report/all");
       setReport(response.data.data.reports);
     } catch (error) {
       console.log(error);

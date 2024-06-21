@@ -270,9 +270,8 @@ const Leave = () => {
   const getDataPending = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/leave/data/pending"
+        "http://localhost:4493/api/leave/data/pending"
       );
-      console.log(response.data.data);
       setPending(response.data.data);
     } catch (error) {
       console.log(error);
@@ -282,9 +281,8 @@ const Leave = () => {
   const getDataLeave = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/leave/data/approved-rejected"
+        "http://localhost:4493/api/leave/data/approved-rejected"
       );
-      console.log(response.data.data);
       setLeave(response.data.data);
     } catch (error) {
       console.log(error);
@@ -444,7 +442,6 @@ const Leave = () => {
   };
 
   const handleReject = async (rowData) => {
-    console.log("Rejecting leave for:", rowData);
     const { _id: leaveId } = rowData;
 
     Swal.fire({
@@ -459,9 +456,8 @@ const Leave = () => {
       if (result.isConfirmed) {
         try {
           const response = await axios.put(
-            `http://localhost:5000/api/leave/reject/${leaveId}`
+            `http://localhost:4493/api/leave/reject/${leaveId}`
           );
-          console.log(response.data);
           toast({
             position: "top-left",
             title: "Leave Rejected",
@@ -489,7 +485,6 @@ const Leave = () => {
   };
 
   const handleAccept = async (rowData) => {
-    console.log("Accepting leave for:", rowData);
     const { _id: leaveId } = rowData;
 
     Swal.fire({
@@ -504,9 +499,8 @@ const Leave = () => {
       if (result.isConfirmed) {
         try {
           const response = await axios.put(
-            `http://localhost:5000/api/leave/approve/${leaveId}`
+            `http://localhost:4493/api/leave/approve/${leaveId}`
           );
-          console.log(response.data);
 
           toast({
             position: "top-left",
@@ -540,12 +534,11 @@ const Leave = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/employee/leave-letter/${leaveId}`,
+        `http://localhost:4493/api/employee/leave-letter/${leaveId}`,
         {
           responseType: "blob",
         }
       );
-      console.log(response.data);
 
       const file = new Blob([response.data], {
         type: response.headers["content-type"],

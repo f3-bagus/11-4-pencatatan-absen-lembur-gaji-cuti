@@ -9,9 +9,8 @@ const Salary = () => {
 
   const getPayroll = () => {
     axios
-      .get("http://localhost:5000/api/payroll/data/employee")
+      .get("http://localhost:4493/api/payroll/data/employee")
       .then((res) => {
-        console.log("Response data:", res.data.data);
         const payrollData = res.data.data;
 
         if (Array.isArray(payrollData)) {

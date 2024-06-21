@@ -30,12 +30,10 @@ const CreateEmp = () => {
       ...rest,
       name: `${firstName} ${lastName}`,
     };
-    // Handle form submission with submitValues
-    console.log(submitValues);
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/admin/create-employee",
+        "http://localhost:4493/api/admin/create-employee",
         submitValues
       );
 

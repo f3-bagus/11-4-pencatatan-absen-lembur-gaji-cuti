@@ -10,10 +10,8 @@ const Payroll = () => {
   const getPayrollData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/payroll/data"
+        "http://localhost:4493/api/payroll/data"
       );
-
-      //console.log(response.data.data);
       
       setData(response.data.data);
     } catch (error) {

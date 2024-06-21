@@ -23,7 +23,7 @@ const Dashboard = () => {
 
   const getProfile = () => {
     axios
-      .get("http://localhost:5000/api/user/profile")
+      .get("http://localhost:4493/api/user/profile")
       .then((res) => {
         setName(res.data.data.name);
       })
@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   const getDataDashboard = () => {
     axios
-      .get("http://localhost:5000/api/hr/dashboard/data")
+      .get("http://localhost:4493/api/hr/dashboard/data")
       .then((res) => {
         const data = res.data;
         setTotalEmp(data.total_employee);

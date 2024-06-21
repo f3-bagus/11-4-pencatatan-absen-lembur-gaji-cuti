@@ -30,17 +30,16 @@ const CutiChart = () => {
 
   const getDataDashboard = () => {
     axios
-      .get("http://localhost:5000/api/hr/dashboard/data")
+      .get("http://localhost:4493/api/hr/dashboard/data")
       .then((res) => {
         const data = res.data;
-        //console.log(data.data_leave);
-        setIt(data.data_overtime.datasets[0].data);
+        //setIt(data.data_overtime.datasets[0].data);
+        setMarketing(data.data_overtime.datasets[0].data);
         setSales(data.data_overtime.datasets[1].data);
-        setMarketing(data.data_overtime.datasets[2].data);
         setLabels(data.data_overtime.labels);
       })
       .catch((err) => {
-        console.log(err);
+        //console.error(err);
       });
   };
 
@@ -51,14 +50,14 @@ const CutiChart = () => {
   const data = {
     labels: labels,
     datasets: [
-      {
-        label: "IT",
-        data: it,
-        fill: false,
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1.5,
-      },
+      // {
+      //   label: "IT",
+      //   data: it,
+      //   fill: false,
+      //   backgroundColor: "rgba(75, 192, 192, 0.6)",
+      //   borderColor: "rgba(75, 192, 192, 1)",
+      //   borderWidth: 1.5,
+      // },
       {
         label: "Sales",
         data: sales,

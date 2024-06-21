@@ -32,7 +32,7 @@ const Dashboard = () => {
 
   const getProfile = () => {
     axios
-      .get("http://localhost:5000/api/user/profile")
+      .get("http://localhost:4493/api/user/profile")
       .then((res) => {
         setName(res.data.data.name);
       })
@@ -43,9 +43,8 @@ const Dashboard = () => {
 
   const getData = () => {
     axios
-      .get("http://localhost:5000/api/admin/dashboard/data")
+      .get("http://localhost:4493/api/admin/dashboard/data")
       .then((res) => {
-        console.log(res.data);
         setTotalEmp(res.data.total_employee);
         setTotalDiv(res.data.total_division.length);
       })

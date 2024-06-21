@@ -25,12 +25,13 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   cors({
-    origin: true,
+    origin: [
+      "https://fe-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/",
+      "http://localhost:5173",
+    ],
     credentials: true,
   })
 );
-
-app.options('*', cors()); 
 
 app.get("/", (req, res) => {
   res.send("Hello World");

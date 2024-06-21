@@ -28,7 +28,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://fe-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/",
+      "https://fe-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id",
     ],
     credentials: true,
   })

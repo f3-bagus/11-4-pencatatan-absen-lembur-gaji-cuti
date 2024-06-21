@@ -33,7 +33,9 @@ const GajiChart = () => {
 
   const getDataDashboard = () => {
     axios
-      .get("http://localhost:4493/api/employee/dashboard/data")
+      .get(
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/employee/dashboard/data"
+      )
       .then((res) => {
         setLabels(res.data.data_salary.labels);
         setBasicSalary(res.data.data_salary.datasets[0].data);

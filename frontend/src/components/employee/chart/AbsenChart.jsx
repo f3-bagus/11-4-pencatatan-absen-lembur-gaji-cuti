@@ -13,7 +13,7 @@ const AbsenChart = () => {
 
   const getDataDashboard = () => {
     axios
-      .get("http://localhost:4493/api/employee/dashboard/data")
+      .get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/employee/dashboard/data")
       .then((res) => {
         setDatasets(res.data.data_attendance.data.datasets[0].data);
         setLabels(res.data.data_attendance.data.labels);

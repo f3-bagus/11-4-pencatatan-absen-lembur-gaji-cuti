@@ -226,7 +226,7 @@ const Delete = () => {
 
   const getDataAll = async () => {
     try {
-      const response = await axios.get("http://localhost:4493/api/user/data");
+      const response = await axios.get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/user/data");
       setData(response.data.data);
     } catch (error) {
       console.log(error);
@@ -288,7 +288,7 @@ const Delete = () => {
       if (result.isConfirmed) {
         try {
           const response = await axios.delete(
-            `http://localhost:4493/api/admin/delete-user/${nip}`
+            `https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/admin/delete-user/${nip}`
           );
 
           toast({

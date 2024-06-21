@@ -28,7 +28,7 @@ const Overtime = () => {
   const getOvertime = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4493/api/overtime/data"
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/overtime/data"
       );
       setOvertime(response.data.data);
     } catch (error) {
@@ -39,7 +39,7 @@ const Overtime = () => {
   const getHistory = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4493/api/overtime/data/history"
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/overtime/data/history"
       );
       setHistory(response.data.data);
     } catch (error) {
@@ -131,7 +131,6 @@ const Overtime = () => {
   );
 
   const handleAccept = async (rowData) => {
-
     const { _id: overtimeId } = rowData;
 
     Swal.fire({
@@ -146,7 +145,7 @@ const Overtime = () => {
       if (result.isConfirmed) {
         try {
           const response = await axios.post(
-            `http://localhost:4493/api/employee/accept-overtime/${overtimeId}`
+            `https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/employee/accept-overtime/${overtimeId}`
           );
           toast({
             position: "top-left",

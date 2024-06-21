@@ -9,7 +9,9 @@ const ReportAll = () => {
 
   const getReportAll = async () => {
     try {
-      const response = await axios.get("http://localhost:4493/api/report/all");
+      const response = await axios.get(
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/report/all"
+      );
       setReport(response.data.data.reports);
     } catch (error) {
       console.log(error);
@@ -45,45 +47,35 @@ const ReportAll = () => {
         Header: "Points Attendance",
         accessor: "PointsAttendance",
         Cell: ({ cell }) => (
-          <Text>
-            {cell.value === null ? '-' : cell.value  }
-          </Text>
+          <Text>{cell.value === null ? "-" : cell.value}</Text>
         ),
       },
       {
         Header: "Points Overtime",
         accessor: "PointsOvertime",
         Cell: ({ cell }) => (
-          <Text>
-            {cell.value === null ? '-' : cell.value  }
-          </Text>
+          <Text>{cell.value === null ? "-" : cell.value}</Text>
         ),
       },
       {
         Header: "MinPoint Overtime",
         accessor: "MinPointOvertime",
         Cell: ({ cell }) => (
-          <Text>
-            {cell.value === null ? '-' : cell.value  }
-          </Text>
+          <Text>{cell.value === null ? "-" : cell.value}</Text>
         ),
       },
       {
         Header: "MaxPoints Attendance",
         accessor: "MaxPointsAttendance",
         Cell: ({ cell }) => (
-          <Text>
-            {cell.value === null ? '-' : cell.value  }
-          </Text>
+          <Text>{cell.value === null ? "-" : cell.value}</Text>
         ),
       },
       {
         Header: "TotalPoint Overtime Division",
         accessor: "TotalPointOvertimeDivision",
         Cell: ({ cell }) => (
-          <Text>
-            {cell.value === null ? '-' : cell.value  }
-          </Text>
+          <Text>{cell.value === null ? "-" : cell.value}</Text>
         ),
       },
       {

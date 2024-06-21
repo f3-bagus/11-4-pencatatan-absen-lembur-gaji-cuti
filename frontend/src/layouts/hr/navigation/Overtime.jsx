@@ -45,7 +45,7 @@ const Overtime = () => {
   const getDataTaken = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4493/api/overtime/data/all/taken-overdue"
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/overtime/data/all/taken-overdue"
       );
       setTaken(response.data.data);
     } catch (error) {
@@ -56,7 +56,7 @@ const Overtime = () => {
   const getDataAvailable = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4493/api/overtime/data/all/available"
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/overtime/data/all/available"
       );
       setAvailable(response.data.data);
     } catch (error) {
@@ -73,7 +73,7 @@ const Overtime = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:4493/api/hr/overtime",
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/hr/overtime",
         values
       );
       toast({

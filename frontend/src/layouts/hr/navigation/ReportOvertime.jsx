@@ -24,7 +24,7 @@ const ReportOvertime = () => {
   const getReportMonthly = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4493/api/report/overtime/monthly"
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/report/overtime/monthly"
       );
       setMonthly(response.data.data.reportMonthly);
     } catch (error) {
@@ -35,7 +35,7 @@ const ReportOvertime = () => {
   const getReportYearly = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4493/api/report/overtime/yearly"
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/report/overtime/yearly"
       );
       setYearly(response.data.data.reportYearly);
     } catch (error) {

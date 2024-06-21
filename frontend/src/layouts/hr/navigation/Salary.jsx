@@ -9,7 +9,7 @@ const Salary = () => {
 
   const getPayroll = () => {
     axios
-      .get("http://localhost:4493/api/payroll/data/employee")
+      .get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/payroll/data/employee")
       .then((res) => {
         const payrollData = res.data.data;
 

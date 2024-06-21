@@ -19,6 +19,7 @@ import { Formik, Form, Field } from "formik";
 import { BiShow, BiHide } from "react-icons/bi";
 import { validationSchema } from "../utils/validationSchema";
 import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -49,6 +50,20 @@ const LoginPage = () => {
     if (localStorage.getItem("nip") && localStorage.getItem("password")) {
       setRememberMe(true);
     }
+  }, []);
+
+  const getData = async () => {
+    try {
+      const response = await axios.get(
+        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id"
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getData();
   }, []);
 
   return (

@@ -24,10 +24,12 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   cors({
-    origin: "*",
-    credentials: true,
+    origin: "https://fe-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, 
   })
-)
+);
 
 // app.use(
 //   cors({

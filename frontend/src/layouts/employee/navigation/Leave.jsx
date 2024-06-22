@@ -27,6 +27,7 @@ import DataTable from "../../../components/employee/table/DataTabel";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaFileDownload } from "react-icons/fa";
 import axios from "axios";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 const Leave = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,7 +40,7 @@ const Leave = () => {
   const getDataHistory = async () => {
     try {
       const response = await axios.get(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/leave/history"
+        `${BASE_URL}/api/leave/history`
       );
       setHistory(response.data.data);
     } catch (error) {
@@ -50,7 +51,7 @@ const Leave = () => {
   const getDataRemaining = async () => {
     try {
       const response = await axios.get(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/leave/remaining"
+        `${BASE_URL}/api/leave/remaining`
       );
       setRemaining(response.data.remaining_leave);
     } catch (error) {
@@ -100,7 +101,7 @@ const Leave = () => {
 
     try {
       const response = await axios.post(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/leave/apply",
+        `${BASE_URL}/api/leave/apply`,
         formData,
         {
           headers: {

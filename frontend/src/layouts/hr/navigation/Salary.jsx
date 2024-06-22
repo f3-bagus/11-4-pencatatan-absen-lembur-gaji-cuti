@@ -3,13 +3,14 @@ import HrLayout from "../HrLayout";
 import { useColorModeValue, Flex, Heading, Box, Text } from "@chakra-ui/react";
 import DataTable from "../../../components/hr/table/DataTabel";
 import axios from "axios";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 const Salary = () => {
   const [data, setData] = useState([]);
 
   const getPayroll = () => {
     axios
-      .get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/payroll/data/employee")
+      .get(`${BASE_URL}/api/payroll/data/employee`)
       .then((res) => {
         const payrollData = res.data.data;
 

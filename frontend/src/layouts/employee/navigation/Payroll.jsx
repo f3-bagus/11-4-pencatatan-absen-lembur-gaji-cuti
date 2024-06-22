@@ -3,6 +3,7 @@ import EmployeeLayout from "../EmployeeLayout";
 import { useColorModeValue, Flex, Heading, Box, Text } from "@chakra-ui/react";
 import DataTable from "../../../components/employee/table/DataTabel";
 import axios from "axios";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 const Payroll = () => {
   const [data, setData] = useState([]);
@@ -10,7 +11,7 @@ const Payroll = () => {
   const getPayrollData = async () => {
     try {
       const response = await axios.get(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/payroll/data"
+        `${BASE_URL}/api/payroll/data`
       );
       
       setData(response.data.data);

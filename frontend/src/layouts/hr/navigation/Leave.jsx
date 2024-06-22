@@ -41,6 +41,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import FileSaver from "file-saver";
 import axios from "axios";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 function GlobalFilter({
   preGlobalFilteredRows,
@@ -270,7 +271,7 @@ const Leave = () => {
   const getDataPending = async () => {
     try {
       const response = await axios.get(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/leave/data/pending"
+        `${BASE_URL}/api/leave/data/pending`
       );
       setPending(response.data.data);
     } catch (error) {
@@ -281,7 +282,7 @@ const Leave = () => {
   const getDataLeave = async () => {
     try {
       const response = await axios.get(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/leave/data/approved-rejected"
+        `${BASE_URL}/api/leave/data/approved-rejected`
       );
       setLeave(response.data.data);
     } catch (error) {
@@ -456,7 +457,7 @@ const Leave = () => {
       if (result.isConfirmed) {
         try {
           const response = await axios.put(
-            `https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/leave/reject/${leaveId}`
+            `${BASE_URL}/api/leave/reject/${leaveId}`
           );
           toast({
             position: "top-left",
@@ -499,7 +500,7 @@ const Leave = () => {
       if (result.isConfirmed) {
         try {
           const response = await axios.put(
-            `https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/leave/approve/${leaveId}`
+            `${BASE_URL}/api/leave/approve/${leaveId}`
           );
 
           toast({
@@ -534,7 +535,7 @@ const Leave = () => {
 
     try {
       const response = await axios.get(
-        `https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/employee/leave-letter/${leaveId}`,
+        `${BASE_URL}/api/employee/leave-letter/${leaveId}`,
         {
           responseType: "blob",
         }

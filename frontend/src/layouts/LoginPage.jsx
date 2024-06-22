@@ -52,19 +52,19 @@ const LoginPage = () => {
     }
   }, []);
 
-  const getData = async () => {
-    try {
-      const response = await axios.get(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/"
-      );
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getData();
-  }, []);
+  // const getData = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/"
+  //     );
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   return (
     <Stack

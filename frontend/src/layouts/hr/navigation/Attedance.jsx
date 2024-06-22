@@ -3,13 +3,14 @@ import HrLayout from "../HrLayout";
 import DataTable from "../../../components/hr/table/DataTabel";
 import { Flex, Heading, Box, useColorModeValue, Text } from "@chakra-ui/react";
 import axios from "axios";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 const Attedance = () => {
   const [data, setData] = useState([]);
 
   const getAttendance = () => {
     axios
-      .get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/attendance/data")
+      .get(`${BASE_URL}/api/attendance/data`)
       .then((res) => {
         setData(res.data.data);
       })

@@ -13,6 +13,7 @@ import images from "../../../assets/img/images-2.png";
 import LemburChart from "../../../components/hr/chart/LemburChart";
 import CutiChart from "../../../components/hr/chart/CutiChart";
 import axios from "axios";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -23,7 +24,7 @@ const Dashboard = () => {
 
   const getProfile = () => {
     axios
-      .get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/user/profile")
+      .get(`${BASE_URL}/api/user/profile`)
       .then((res) => {
         setName(res.data.data.name);
       })
@@ -34,7 +35,7 @@ const Dashboard = () => {
 
   const getDataDashboard = () => {
     axios
-      .get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/hr/dashboard/data")
+      .get(`${BASE_URL}/api/hr/dashboard/data`)
       .then((res) => {
         const data = res.data;
         setTotalEmp(data.total_employee);

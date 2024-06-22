@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import DataTable from "../../../components/employee/table/DataTabel";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 const Attendance = () => {
   const [attendance, setAttendance] = useState([]);
@@ -61,7 +62,7 @@ const Attendance = () => {
   const getDataAttendance = async () => {
     try {
       const response = await axios.get(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/employee/attendance"
+        `${BASE_URL}/api/employee/attendance`
       );
       setAttendance(response.data.data);
     } catch (error) {
@@ -72,7 +73,7 @@ const Attendance = () => {
   const handleClockIn = async () => {
     try {
       const response = await axios.post(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/attendance/clock-in"
+        `${BASE_URL}/api/attendance/clock-in`
       );
       Swal.fire("Clocked In!", response.data.message, "success").then(() => {
         window.location.reload();
@@ -95,7 +96,7 @@ const Attendance = () => {
       if (result.isConfirmed) {
         try {
           const response = await axios.post(
-            "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/attendance/clock-out"
+            `${BASE_URL}/api/attendance/clock-out`
           );
           Swal.fire("Clocked Out!", response.data.message, "success").then(
             () => {

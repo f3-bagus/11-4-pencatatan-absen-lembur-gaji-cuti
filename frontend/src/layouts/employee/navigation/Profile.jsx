@@ -22,6 +22,7 @@ import axios from "axios";
 import { Formik, Form, Field } from "formik";
 import { BiShow, BiHide } from "react-icons/bi";
 import { validationSchemaChangePassword } from "../../../utils/validationSchema";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 const Profile = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +52,7 @@ const Profile = () => {
 
   const getProfile = () => {
     axios
-      .get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/user/profile")
+      .get(`${BASE_URL}/api/user/profile`)
       .then((res) => {
         setName(res.data.data.name);
         setNip(res.data.data.nip);
@@ -87,7 +88,7 @@ const Profile = () => {
 
     try {
       const response = await axios.put(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/user/reset-password",
+        `${BASE_URL}/api/user/reset-password`,
         values
       );
 
@@ -129,7 +130,7 @@ const Profile = () => {
 
     try {
       const response = await axios.put(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/user/update/profile",
+        `${BASE_URL}/api/user/update/profile`,
         formData,
         {
           headers: {
@@ -162,7 +163,7 @@ const Profile = () => {
   let photoUrl = "";
   if (photo) {
     const slicedPath = photo.substring(7);
-    photoUrl = `https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/${slicedPath}`;
+    photoUrl = `${BASE_URL}/${slicedPath}`;
   }
 
   return (

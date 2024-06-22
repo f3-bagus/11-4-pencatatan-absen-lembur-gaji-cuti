@@ -31,6 +31,7 @@ import { SidebarNav } from "./SidebarNav";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
+import { BASE_URL } from "../../api/BASE_URL";
 
 export default function Topbar() {
   const [name, setName] = useState("");
@@ -69,7 +70,7 @@ export default function Topbar() {
 
   const getProfile = () => {
     axios
-      .get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/user/profile")
+      .get(`${BASE_URL}/api/user/profile`)
       .then((res) => {
         setAvatarUrl(res.data.data.profile_photo);
         setName(res.data.data.name);
@@ -82,7 +83,7 @@ export default function Topbar() {
   let photoUrl = "";
   if (avatarUrl) {
     const slicedPath = avatarUrl.substring(7);
-    photoUrl = `https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/${slicedPath}`;
+    photoUrl = `${BASE_URL}/${slicedPath}`;
   }
 
   return (

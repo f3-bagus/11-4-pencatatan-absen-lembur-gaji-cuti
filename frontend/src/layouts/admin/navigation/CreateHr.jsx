@@ -17,6 +17,7 @@ import AdminLayout from "../AdminLayout";
 import { Formik, Form, Field } from "formik";
 import { validationSchemaCreateAccountHr } from "../../../utils/validationSchema";
 import axios from "axios";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 const CreateHr = () => {
   const toast = useToast();
@@ -33,7 +34,7 @@ const CreateHr = () => {
 
     try {
       const response = await axios.post(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/admin/create-hr",
+        `${BASE_URL}/api/admin/create-hr`,
         submitValues
       );
 

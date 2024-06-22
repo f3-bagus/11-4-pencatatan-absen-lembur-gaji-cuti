@@ -13,6 +13,7 @@ import images from "../../../assets/img/images-2.png";
 import GajiChart from "../../../components/employee/chart/GajiChart";
 import AbsenChart from "../../../components/employee/chart/AbsenChart";
 import axios from "axios";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -24,7 +25,7 @@ const Dashboard = () => {
   const getProfile = () => {
     axios
       .get(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/user/profile"
+        `${BASE_URL}/api/user/profile`
       )
       .then((res) => {
         setName(res.data.data.name);
@@ -37,7 +38,7 @@ const Dashboard = () => {
   const getDataDashboard = () => {
     axios
       .get(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/employee/dashboard/data"
+        `${BASE_URL}/api/employee/dashboard/data`
       )
       .then((res) => {
         setRemainingLeave(res.data.remaining_leave);

@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
+import { BASE_URL } from "../api/BASE_URL"; 
 
 const AuthContext = createContext();
 
@@ -16,9 +17,7 @@ const AuthProvider = ({ children }) => {
     const savedUser = JSON.parse(localStorage.getItem("user"));
     if (savedUser) {
       setUser(savedUser);
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${savedUser.token}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${savedUser.token}`;
     }
     setLoading(false);
   }, []);
@@ -41,10 +40,7 @@ const AuthProvider = ({ children }) => {
 
   const login = async (nip, password, rememberMe) => {
     try {
-      const response = await axios.post(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/auth/login",
-        { nip, password }
-      );
+      const response = await axios.post(`${BASE_URL}/api/auth/login`, { nip, password });
       const userData = response.data;
       setUser(userData);
       setIsLogin(true);
@@ -55,9 +51,7 @@ const AuthProvider = ({ children }) => {
       }
 
       localStorage.setItem("user", JSON.stringify(userData));
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${userData.token}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${userData.token}`;
       navigate(`/${userData.data.role}`);
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Login failed";
@@ -74,9 +68,7 @@ const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/auth/logout"
-      );
+      await axios.post(`${BASE_URL}/api/auth/logout`);
       setUser(null);
       setIsLogin(false);
       localStorage.removeItem("user");
@@ -95,8 +87,26 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const fetchData = async (endpoint) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/${endpoint}`);
+      return response.data;
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "Fetch data failed";
+      toast({
+        title: "Fetch data failed.",
+        description: errorMessage,
+        position: "top-left",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, fetchData }}>
       {children}
     </AuthContext.Provider>
   );

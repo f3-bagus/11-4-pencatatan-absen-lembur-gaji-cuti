@@ -9,6 +9,7 @@ import {
 } from "chart.js";
 import { useColorMode, Stack } from "@chakra-ui/react";
 import axios from "axios";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 
@@ -25,7 +26,7 @@ const TypeChart = () => {
 
   const getDataDashboard = async () => {
     await axios
-      .get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/admin/dashboard/data")
+      .get(`${BASE_URL}/api/admin/dashboard/data`)
       .then((res) => {
         const data = res.data.total_types;
 

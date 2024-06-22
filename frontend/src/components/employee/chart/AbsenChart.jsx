@@ -3,6 +3,7 @@ import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { useColorMode, Stack } from "@chakra-ui/react";
 import axios from "axios";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -13,7 +14,7 @@ const AbsenChart = () => {
 
   const getDataDashboard = () => {
     axios
-      .get("https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/employee/dashboard/data")
+      .get(`${BASE_URL}/api/employee/dashboard/data`)
       .then((res) => {
         setDatasets(res.data.data_attendance.data.datasets[0].data);
         setLabels(res.data.data_attendance.data.labels);

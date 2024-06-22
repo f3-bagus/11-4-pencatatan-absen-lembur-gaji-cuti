@@ -15,6 +15,7 @@ import images from "../../../assets/img/images-3.png";
 import axios from "axios";
 import DivisiChart from "../../../components/admin/chart/DivisiChart";
 import TypeChart from "../../../components/admin/chart/TypeChart";
+import { BASE_URL } from "../../../api/BASE_URL";
 
 const Dashboard = () => {
   const [totalEmp, setTotalEmp] = useState("");
@@ -33,7 +34,7 @@ const Dashboard = () => {
   const getProfile = () => {
     axios
       .get(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/user/profile"
+        `${BASE_URL}/api/user/profile`
       )
       .then((res) => {
         setName(res.data.data.name);
@@ -46,7 +47,7 @@ const Dashboard = () => {
   const getData = () => {
     axios
       .get(
-        "https://api-msib-6-pencatatan-absen-lembur-gaji-cuti-04.educalab.id/api/admin/dashboard/data"
+        `${BASE_URL}/api/admin/dashboard/data`
       )
       .then((res) => {
         setTotalEmp(res.data.total_employee);
